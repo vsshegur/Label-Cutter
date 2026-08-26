@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shegur's Ecommerce Engine | Advanced Automation</title>
+  <title>Shegur's Ecommerce Suite | Advanced Automation</title>
   
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%234f46e5%22/><text x=%2250%22 y=%2270%22 font-family=%22Arial, sans-serif%22 font-size=%2265%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22>S</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } };</script>
   
+  <!-- Core Engines -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.1/qrcode.min.js"></script>
@@ -26,23 +27,30 @@
     ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
     input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
   </style>
-</head>
-<body class="min-h-screen pb-32 overflow-x-hidden bg-slate-950 text-slate-200 selection:bg-indigo-500 selection:text-white relative">
 
-  <!-- Automated Error Banner -->
-  <div id="syntaxErrorBanner" class="hidden bg-rose-600 text-white text-center py-4 px-6 shadow-2xl z-[999] relative font-bold text-sm tracking-wide"></div>
+  <!-- Auto-Catcher for Typos -->
   <script>
     window.addEventListener('error', function(e) {
         const banner = document.getElementById('syntaxErrorBanner');
-        if(banner) { banner.classList.remove('hidden'); banner.innerHTML = "⚠️ <b>SYSTEM CRASH:</b> " + e.message + "<br/><span class='text-xs font-medium'>Did you make a typo when pasting your Firebase Keys? Fix it and redeploy.</span>"; }
+        if(banner) {
+            banner.classList.remove('hidden');
+            banner.innerHTML = "⚠️ <b>SYSTEM CRASH:</b> " + e.message + "<br/><span class='text-xs font-medium'>Did you make a typo when pasting your Firebase Keys? Fix it and redeploy.</span>";
+        }
     });
   </script>
+</head>
+<body class="min-h-screen pb-32 overflow-x-hidden bg-slate-950 text-slate-200 selection:bg-indigo-500 selection:text-white relative">
 
+  <!-- Error Banner -->
+  <div id="syntaxErrorBanner" class="hidden bg-rose-600 text-white text-center py-4 px-6 shadow-2xl z-[999] relative font-bold text-sm tracking-wide"></div>
+
+  <!-- Ambient Glow Background -->
   <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
     <div class="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-indigo-600/10 rounded-full blur-[150px] animate-pulse"></div>
     <div class="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-rose-600/10 rounded-full blur-[150px] animate-pulse" style="animation-delay: 2s;"></div>
   </div>
 
+  <!-- Premium Header -->
   <header class="glass-panel sticky top-0 z-50 shadow-2xl mb-8 border-b border-white/5">
     <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
       <div class="flex items-center gap-4 w-full md:w-auto justify-center md:justify-start">
@@ -56,15 +64,23 @@
       </div>
       
       <div class="flex items-center gap-4 w-full md:w-auto justify-center">
+        <!-- App Navigation Selector -->
         <div id="appSelectorContainer" class="hidden relative">
             <select id="appSelector" class="appearance-none bg-slate-900 border border-slate-700 text-white text-xs font-black uppercase tracking-widest rounded-xl py-3.5 pl-5 pr-12 outline-none shadow-inner cursor-pointer focus:ring-2 focus:border-indigo-500 transition-all hover:bg-slate-800">
                 <option value="labelCutter">✂️ Thermal Label Cutter</option>
                 <option value="fkPnlCalculator">🔵 Flipkart Profit Engine</option>
                 <option value="msPnlCalculator">🛍️ Meesho Profit Engine</option>
             </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-indigo-400"><svg class="fill-current h-5 w-5" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg></div>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-indigo-400">
+                <svg class="fill-current h-5 w-5" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            </div>
         </div>
 
+        <button id="themeToggle" type="button" class="p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-400 hover:text-white transition-colors btn-hover hidden md:block">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        </button>
+
+        <!-- User Profile Dropdown -->
         <div id="userInfo" class="hidden flex items-center gap-4 bg-slate-900 border border-slate-700 p-2 pr-5 rounded-2xl shadow-inner">
            <img id="userAvatar" class="w-9 h-9 rounded-xl shadow-md" src="" alt="Profile">
            <div class="flex flex-col text-left hidden sm:flex">
@@ -82,7 +98,7 @@
   <main class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
 
     <!-- ============================================== -->
-    <!-- SaaS LANDING PAGE / AUTH PANEL                 -->
+    <!-- SaaS LANDING PAGE & AUTH PANEL                 -->
     <!-- ============================================== -->
     <div id="authPanel" class="glass-panel rounded-[2rem] shadow-2xl p-8 md:p-16 mb-10 border border-slate-700/50 relative overflow-hidden">
         <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] -z-10"></div>
@@ -90,7 +106,7 @@
         
         <div id="authWarning" class="flex flex-col items-center text-center max-w-4xl mx-auto mb-16 relative z-10">
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-[10px] font-black uppercase tracking-widest mb-8 shadow-inner">
-                <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span> E-Commerce Intelligence
+                <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span> Cloud-Powered Seller Tools
             </div>
             <h2 class="text-5xl md:text-7xl font-black text-white tracking-tight mb-8 leading-[1.1]">
                 Scale Your Operations <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">Without The Chaos</span>
@@ -251,7 +267,7 @@
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/90 p-5 rounded-2xl border border-slate-700 shadow-md">
             <div class="flex items-center gap-3 w-full sm:w-auto">
                 <div class="bg-indigo-500/20 p-2 rounded-lg text-indigo-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
-                <label class="text-xs font-bold text-white uppercase tracking-widest pl-2">Bulk Fill Missing Costs (₹):</label>
+                <label class="text-xs font-bold text-white uppercase tracking-widest">Bulk Fill Missing Costs (₹):</label>
             </div>
             <div class="flex items-center gap-3 w-full sm:w-auto">
                 <input type="number" id="fk_bulkCostInput" placeholder="e.g. 150" class="bg-slate-950 border border-slate-600 px-4 py-3 rounded-xl text-white font-black outline-none focus:border-blue-500 w-full sm:w-32 shadow-inner" />
@@ -928,20 +944,17 @@
     function ms_reconcile() {
       const subOrderMap = new Map(); const skuMap = new Map();
       
-      // Base Map from Orders File
       ms_state.ord.forEach(row => {
           const sid = ms_cleanId(ms_findVal(row, ['suborderno', 'suborder', 'subordernumber', 'orderno', 'orderid']));
           if (sid) subOrderMap.set(sid, { sku: String(ms_findVal(row, ['sku', 'skuid', 'productsku']) || 'MISC_SKU').trim(), qty: parseInt(ms_findVal(row, ['quantity', 'qty', 'units'])) || 1, status: String(ms_findVal(row, ['status', 'orderstatus', 'deliverystatus']) || '').toUpperCase(), settlement: 0, returnType: '' });
       });
 
-      // Add Payouts
       ms_state.pay.forEach(row => {
           const sid = ms_cleanId(ms_findVal(row, ['suborderno', 'suborder', 'subordernumber', 'orderno', 'orderid']));
           const net = parseFloat(String(ms_findVal(row, ['finalsettlementamount', 'netsettlementamount', 'banksettlementamount', 'totalpayout', 'netpayout', 'settlementamount'])).replace(/[^0-9.-]/g, '')) || 0;
           if (sid && subOrderMap.has(sid)) { subOrderMap.get(sid).settlement += net; } else if (sid) { subOrderMap.set(sid, { sku: String(ms_findVal(row, ['sku', 'productsku', 'skuid']) || 'UNMAPPED_SKU').trim(), qty: 1, status: net >= 0 ? 'DELIVERED' : 'RETURNED', settlement: net, returnType: net < 0 ? 'CUSTOMER' : '' }); }
       });
       
-      // Safe Returns Filtering (Only apply if order exists in the time range)
       ms_state.ret.forEach(row => {
           const sid = ms_cleanId(ms_findVal(row, ['suborderno', 'suborder', 'subordernumber', 'orderid', 'orderno']));
           if (sid && subOrderMap.has(sid)) subOrderMap.get(sid).returnType = String(ms_findVal(row, ['returntype', 'typeofreturn', 'trackingtype']) || '').toUpperCase().includes('CUSTOMER') ? 'CUSTOMER' : 'RTO';
@@ -951,14 +964,7 @@
         if (!skuMap.has(val.sku)) skuMap.set(val.sku, { sku: val.sku, disp: 0, del: 0, cr: 0, rto: 0, can: 0, set: 0, cost: app_userSavedSkus[val.sku] || 0 });
         const item = skuMap.get(val.sku); 
         item.set += val.settlement;
-        
-        // Accurate Tracking
-        if (val.status.includes('CANCEL')) {
-            item.can += val.qty;
-        } else {
-            item.disp += val.qty;
-        }
-        
+        if (val.status.includes('CANCEL')) { item.can += val.qty; } else { item.disp += val.qty; }
         if (val.returnType === 'CUSTOMER' || val.status.includes('CUSTOMER') || (val.settlement < 0 && !val.status.includes('RTO'))) item.cr += val.qty;
         else if (val.returnType === 'RTO' || val.status.includes('RTO')) item.rto += val.qty;
         else if (val.status.includes('DELIVERED') || val.settlement > 0) item.del += val.qty;
