@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shegur's Ecommerce Suite | Advanced Automation</title>
+  <title>Shegur's Ecommerce Engine | Advanced Automation</title>
   
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%234f46e5%22/><text x=%2250%22 y=%2270%22 font-family=%22Arial, sans-serif%22 font-size=%2265%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22>S</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } };</script>
   
-  <!-- Core Engines -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.1/qrcode.min.js"></script>
@@ -18,7 +17,7 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap');
     body { font-family: 'Inter', sans-serif; transition: background-color 0.2s, color 0.2s; }
-    .glass-panel { backdrop-filter: blur(24px); background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255,255,255,0.05); }
+    .glass-panel { backdrop-filter: blur(24px); background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(255,255,255,0.05); }
     .btn-hover { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
     .btn-hover:hover { transform: translateY(-3px); box-shadow: 0 20px 40px -5px rgba(99, 102, 241, 0.25); }
     .btn-hover:active { transform: translateY(0px); }
@@ -28,7 +27,6 @@
     input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
   </style>
 
-  <!-- Auto-Catcher for Typos -->
   <script>
     window.addEventListener('error', function(e) {
         const banner = document.getElementById('syntaxErrorBanner');
@@ -41,16 +39,13 @@
 </head>
 <body class="min-h-screen pb-32 overflow-x-hidden bg-slate-950 text-slate-200 selection:bg-indigo-500 selection:text-white relative">
 
-  <!-- Error Banner -->
   <div id="syntaxErrorBanner" class="hidden bg-rose-600 text-white text-center py-4 px-6 shadow-2xl z-[999] relative font-bold text-sm tracking-wide"></div>
 
-  <!-- Ambient Glow Background -->
   <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
     <div class="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-indigo-600/10 rounded-full blur-[150px] animate-pulse"></div>
     <div class="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-rose-600/10 rounded-full blur-[150px] animate-pulse" style="animation-delay: 2s;"></div>
   </div>
 
-  <!-- Premium Header -->
   <header class="glass-panel sticky top-0 z-50 shadow-2xl mb-8 border-b border-white/5">
     <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
       <div class="flex items-center gap-4 w-full md:w-auto justify-center md:justify-start">
@@ -64,7 +59,6 @@
       </div>
       
       <div class="flex items-center gap-4 w-full md:w-auto justify-center">
-        <!-- App Navigation Selector -->
         <div id="appSelectorContainer" class="hidden relative">
             <select id="appSelector" class="appearance-none bg-slate-900 border border-slate-700 text-white text-xs font-black uppercase tracking-widest rounded-xl py-3.5 pl-5 pr-12 outline-none shadow-inner cursor-pointer focus:ring-2 focus:border-indigo-500 transition-all hover:bg-slate-800">
                 <option value="labelCutter">✂️ Thermal Label Cutter</option>
@@ -80,7 +74,6 @@
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
         </button>
 
-        <!-- User Profile Dropdown -->
         <div id="userInfo" class="hidden flex items-center gap-4 bg-slate-900 border border-slate-700 p-2 pr-5 rounded-2xl shadow-inner">
            <img id="userAvatar" class="w-9 h-9 rounded-xl shadow-md" src="" alt="Profile">
            <div class="flex flex-col text-left hidden sm:flex">
@@ -140,7 +133,6 @@
             </div>
         </div>
 
-        <!-- Expired Warning overlay -->
         <div id="expiredWarning" class="hidden absolute inset-0 glass-panel z-20 flex flex-col items-center justify-center text-center p-12 bg-slate-950/90 backdrop-blur-xl border border-rose-500/30">
             <div class="bg-rose-500/20 p-6 rounded-full mb-6 shadow-[0_0_30px_rgba(244,63,94,0.3)]"><svg class="w-14 h-14 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
             <h2 class="text-4xl font-black text-white mb-4">Subscription Expired</h2>
@@ -311,7 +303,6 @@
             Intelligent 3-Way Reconciliation
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Orders Drop -->
             <div class="relative bg-slate-950 p-8 rounded-2xl border-[3px] border-dashed border-slate-700 hover:border-pink-500 transition-colors text-center cursor-pointer shadow-inner group">
                 <input type="file" id="ms_ordInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer" />
                 <div class="bg-slate-800 w-14 h-14 mx-auto rounded-full flex items-center justify-center text-slate-400 group-hover:text-pink-400 group-hover:bg-pink-500/20 transition-colors mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div>
@@ -319,7 +310,6 @@
                 <p id="ms_labelOrd" class="text-[10px] text-pink-500 font-bold uppercase tracking-widest mt-2">Required: Sets the Base</p>
             </div>
             
-            <!-- Payments Drop -->
             <div class="relative bg-slate-950 p-8 rounded-2xl border-[3px] border-dashed border-slate-700 hover:border-pink-500 transition-colors text-center cursor-pointer shadow-inner group">
                 <input type="file" id="ms_payInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer" />
                 <div class="bg-slate-800 w-14 h-14 mx-auto rounded-full flex items-center justify-center text-slate-400 group-hover:text-pink-400 group-hover:bg-pink-500/20 transition-colors mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
@@ -327,7 +317,6 @@
                 <p id="ms_labelPay" class="text-[10px] text-pink-500 font-bold uppercase tracking-widest mt-2">Required: Maps Settled ₹</p>
             </div>
             
-            <!-- Returns Drop -->
             <div class="relative bg-slate-950 p-8 rounded-2xl border-[3px] border-dashed border-slate-700 hover:border-pink-500 transition-colors text-center cursor-pointer shadow-inner group">
                 <input type="file" id="ms_retInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer" />
                 <div class="bg-slate-800 w-14 h-14 mx-auto rounded-full flex items-center justify-center text-slate-400 group-hover:text-pink-400 group-hover:bg-pink-500/20 transition-colors mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg></div>
@@ -413,18 +402,11 @@
     // =========================================================================
 
     let app, auth, db;
-    const provider = new GoogleAuthProvider();
-    const ADMIN_EMAIL = "vsshegur@gmail.com";
-    const CHROME_EXTENSION_ID = "YOUR_EXTENSION_ID_HERE";
-
-    let app_currentUserData = null; let app_isAppUnlocked = false; let app_currentApp = 'labelCutter'; 
-    let currentPlatform = 'flipkart'; let app_userSavedSkus = {}; 
-    const DEFAULT_BRAND_LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAABLCAMAAAD9JUoRAAAAP1BMVEXoEhK2AgLhFxfhFxfgFhZ/AAAAAADdFhbjFxfcFhbcFhbYFxfdFhbcFhbbFhbcFhYAAAAAAAAAAAAAAAAAAACY8OZZAAAAEHRSTlMPA85QoAIA/f6xUhTPbi+Pff8FGgAACahJREFUeNrtnIl24yoMhuWkNTu8/9teViNAeMltmp5MPOdMZ2LHhg8hxC+5sF4+FiucWv/FA65+QUnBOJcfWMeHdZpzxj6w1kVZGQ9LzzKIRsXYBxZIpz2FeDAmTOIlKxVlNIuk3goWgAoHqAuwQN4SKC2ccyJgcfZ7XYXI563LRvVmsEzulDwPy4pIgmsJlQ0T0uoMy3GE6p1giTSXxHIalkzziwtkjDbdpsC6sbeEtehkJHDaZ5nstduvKBeWvTINlRXsDaehjZ062x3Px+YZxm13ztMqsPD0fidYMvbGnV4NQWdWgy2C4BgWovU2sEKXzk7CAEtmBARf21jWhvWNYLlLETYsosAy1L1Ef+u3ghWGn7vTuxhQxW9TAGwLy7wCFizPu7fv/PlJGKLRzQ8ZivyLYVkjbu6Jt7+mCSBYgorZXgpLhW0D2a4f8+/8ylAgWIzYH0n5QlgQ9xXPhOW4vqLMga3BkzseiN+ElRffJ8Ly8fuljiBYpNd6IawQE/OnTkPlzLXhq8HTMa1fhRWcrxZCELDUbAGzduZsfkQHh2YXcxBzELDgbpw/pN35Yr7G3K3atXEZL3NGAiTDMuGnktB1XDBBPS0I3sxSN3Ya+yaQuck7FuSvSY3xzTHSqtgiD0thPYELewFWaHfRC4Wkcakir4aLbmY69C5oaFFM8z+1sd7iqWvVXYcbjdSjNsnHuZGeX78BrjR5Mj2SCso2TSr+Q8fhgWaDHNZEA2dhSZ111XTPL2pU4zXM9903OvggRiWGIHU0m7WK4plghE/IEiRnQJ8YHIn90unzDEshYY6Epb5ip5KaFzXUANv/sQkWiIbWjnE1sJTgNyeldNsWQA9fVCI+V5b/hKtu/VWLSUkQ125vmZYTG+1h1RMtLPx5giWxgyZDpfIEDCF+K8NasY+Pd3H2GJa98WyDVm+0usenM9sIZvGoY6qKSqtwgJXaoRrrqzaBYeHcAILVCuGJjOGNxwEqSM1R1NIHMQVW7e4BLgTLoikPm221z0+DgFYzR4iM5dnNpLC8tdU+BVBhtScqLBDt5wFWQIFm4TjNS0eG/aJFsEZa3s2oHVjMNOFc/dy2AXj3mR2ZVjVNEWJQ+VSxNgVQYfXJgQ2WHmCZcKkOKaxZjsLx2c5PIFjZnzS49B3msDrnoKmnmGxHy3id7IH22wez3VAl7+M0oy3rLhhpWX5FaR1UcAIm+OzkZQmXBXoKS2JYcZnocQ3LG5JKW0PdhgS1wOYsCKaa0VTTmoW5cpgsIJFnahy8FZMxBIe+4SfP5izDRCJcVnUng2xjG1jtSrGFEVNYk74h2y4ttdQN7KYnURN4m7ANfstIB98s560jQtIua/bM3sSJnTDUrstB+GphRUGkN642ojeT1qK+mW6YWmuXnSqLbqh6VW7s/vTx5NXtIHb5GEtFWYDMpA9bRAcrhHDDXMSpRNRaMTNg113bWrTsnMJmEr3hI5uo06U+pQ9K3QSWqrOlsyRBRFmAJjrvYnNYe1jrInWHq+mFmS27VZsWg3uiLDD3tvZlB1adPXU16GHNGvaN3Fk7z6X4XqcOPi1wYzwAwxarp4Uc4VR1GGGVT9oBrXrQAawV9fIELDkbRTGdC2ovjszhk7OwC2t0Xd025CQsS1q/bT3oDiz907DOKFeq63nc0S97sPp1kVcDvgBLnoEFp6Yh/ASsc2UycoyfmKjei5QYlGllmwdgGTLYlN0NHOGZdhz847A4s2czGIwN4XnBNdFj5I3anj8Ai/kNBjp4OUy/tNtZMCDXH4F1UiqVbKAVcMk9WG1YLK/DqjG9oI68OUBL+ywoRfPzN2CtTbVQF3BOlT5FhMWPwBIHTuIgmsSf/wosHz61gkVxJ7BXrVw3EZvfeQTWQXZ8AtVRos/vwAo5A8H44Ordbmm3HcLyh3yWPUqkEr2pwpJafx9WK7IiZwQn8hP/C9ZR1qzIHU03y16p2Wz9JiyClx84uMOOaT3us/ZLKNpsxaCrJ7/vvapaXwcry7DItiTshLbQK74PRPAnIpwlpX3qlFPpAyFnXvS3YLW4vP/cq3AQnSR1ARaKKg9KKDwaJ2O5zM2oZf3OmUEiD/lsWIrKPNSI069Ve9MkV2boB4JSFJzvm5anGorQc2pT6/i3I5OX11WHa7As6V+RFgE7tyn63SPbneq0yJxTEyQUmPnVITstBXCzJVb8DCxm9ly3h7WzH4eezBVYgHW378EVqBqfnC+RMpNtMcyUUjI5MDdyJva8kZ+GO401fZrvCqwmFdTVm9hax+ADh/OwZiWdhrOfsCxg9FVuS7PMPXDZuMlj14DyIpSk22ahwfvMMjOhZMZr/UoppgnVNOp4TDrx2Ex2IWdUB5igKLAMzIWxbFjI48ykbnrf22QLQp2FJwHKxjQ8oO6HhG54k81TEjoXsOTSHN2tT7TTcnxWvYgwylOwyMtyIp1ZSOr81OabSTIVaas3x71wnUobRZq465KNraRTGVK3228D03EHFgdVm0kIDOerGtPVY33OZs/+DhEW42MhEFHFgUSmbnI7ch6AG7oey2WQxysNGTAd5pckeoiVkySZm2WFpwsaYVvZsLzf9RG8jOFzGwOCSUPetHRq7haFudgSwZHaEGrOt54wwrQW0gnF5Evwf36xkHTGC6vE/Pg3BgBZFGPyp0Gi8aZg+5A5BtGxOgQpbz7yx4dLNY+wLp0Ire+o5DP0pctyt+Vf5hBWu/Smcu9NVszlZNg9ppTMt7WmlfH8ZJX7b/dCrSECNN5hfG8pZxDmjTI6vfJrQlDo3WyaFmgszE1Xv1u8b7gDiOGEP1MNMtX914LDzoKbNXMGq9VpTLlhek05jqdlbcNMWGapQx44+NqDjIIlO1JZ6IJcpnJrH+iaAl8Pa5CGIywrxhPihmN2JYUulZlOLmN8cmxbnT5vxFbpWRopv5rnG29Zdzked9gXZXzQ4vu1LTbpGVR2B2y8VIjDuuLLhwIbDrUQ2z1tO9loG6+dlUyl+8H6jANCcyE1uX3Gc553+pB+Yiy15jkQypaKax/F+jeOF8PK9RkhII1HKDlfsqGLD6wu3hNnkhkaPrDCKiYOth8fWEhuEyfyZJ9pmC1Ln0gvcfeBFX0WO/Gu0J95ff3Vq+Gu1ThOKu7/KizJud1DeboO7V+A5ffFc1VZcvKNoH8WVkxYTGwrvyal7fqBhTQn6r1OiMWa/C+xej2s+Iqn7t9hVumVSPpdzn8Y1qq+opYWkqsq/AY+G7LTaVv99YfM6m/ACnJkeuEtZTSq+PXXfnXsX9l13d0muQaVxkn7B3/J7n94d0MQBQOGIgAAAABJRU5ErkJggg==";
-
+    
     // Safety Catch for Missing Firebase Keys
     if (!firebaseConfig.apiKey || firebaseConfig.apiKey.trim() === "") {
         document.getElementById('googleSignInBtn').addEventListener('click', () => {
-            alert("⚠️ SYSTEM ERROR: Firebase API keys are missing! \n\nPlease open index.html, scroll to the bottom (Line 354), and paste your Firebase keys into the 'firebaseConfig' section before logging in.");
+            alert("⚠️ SYSTEM ERROR: Firebase API keys are missing! \n\nPlease open index.html, scroll to the bottom (Line 330), and paste your Firebase keys into the 'firebaseConfig' section before logging in.");
         });
     } else {
         try {
@@ -435,6 +417,14 @@
             console.error("Firebase Config Error:", err.message);
         }
     }
+
+    const provider = new GoogleAuthProvider();
+    const ADMIN_EMAIL = "vsshegur@gmail.com";
+    const CHROME_EXTENSION_ID = "YOUR_EXTENSION_ID_HERE";
+
+    let app_currentUserData = null; let app_isAppUnlocked = false; let app_currentApp = 'labelCutter'; 
+    let currentPlatform = 'flipkart'; let app_userSavedSkus = {}; 
+    const DEFAULT_BRAND_LOGO = "data:image/png;base64,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";
 
     function broadcastToExtension(isUnlocked) {
         if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.sendMessage) {
@@ -448,7 +438,7 @@
     document.getElementById('appSelector').addEventListener('change', (e) => {
         if (!app_isAppUnlocked) return;
         app_currentApp = e.target.value;
-        document.getElementById('landingPage').classList.add('hidden');
+        document.getElementById('authPanel').classList.add('hidden');
         document.getElementById('labelWorkspace').classList.add('hidden');
         document.getElementById('fkPnlWorkspace').classList.add('hidden');
         document.getElementById('msPnlWorkspace').classList.add('hidden');
@@ -491,7 +481,7 @@
                 const isAdmin = app_currentUserData.role === 'admin'; const now = Date.now(); const isExpired = !isAdmin && (now > app_currentUserData.expiresAt || !app_currentUserData.isActive);
                 if (isAdmin) {
                     document.getElementById('userPlan').textContent = "ADMINISTRATOR"; document.getElementById('userPlan').className = "text-[9px] font-black uppercase text-indigo-400";
-                    document.getElementById('adminToggleBtn').classList.remove('hidden'); document.getElementById('authPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.remove('hidden'); document.getElementById('adminPanel').classList.remove('hidden'); document.getElementById('landingPage').classList.add('hidden');
+                    document.getElementById('adminToggleBtn').classList.remove('hidden'); document.getElementById('appSelectorContainer').classList.remove('hidden'); document.getElementById('adminPanel').classList.remove('hidden'); document.getElementById('authPanel').classList.add('hidden');
                     broadcastToExtension(true); loadAdminUsers();
                 } else {
                     document.getElementById('adminToggleBtn').classList.add('hidden');
@@ -500,10 +490,10 @@
                     else { document.getElementById('userPlan').textContent = "PLAN EXPIRED"; document.getElementById('userPlan').className = "text-[9px] font-black uppercase text-rose-500"; }
                     
                     if (isExpired) {
-                        document.getElementById('authPanel').classList.remove('hidden'); document.getElementById('authWarning').classList.add('hidden'); document.getElementById('expiredWarning').classList.remove('hidden'); document.getElementById('appSelectorContainer').classList.add('hidden'); document.getElementById('landingPage').classList.remove('hidden');
+                        document.getElementById('authPanel').classList.remove('hidden'); document.getElementById('authWarning').classList.add('hidden'); document.getElementById('expiredWarning').classList.remove('hidden'); document.getElementById('appSelectorContainer').classList.add('hidden'); 
                         broadcastToExtension(false);
                     } else {
-                        app_isAppUnlocked = true; document.getElementById('authPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.remove('hidden'); document.getElementById('landingPage').classList.add('hidden');
+                        app_isAppUnlocked = true; document.getElementById('authPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.remove('hidden');
                         document.getElementById('appSelector').value = "labelCutter"; document.getElementById('labelWorkspace').classList.remove('hidden'); lc_setPlatform('flipkart'); lc_loadRecoveredPdfs(); broadcastToExtension(true);
                     }
                 }
@@ -512,7 +502,6 @@
                 document.getElementById('authPanel').classList.remove('hidden'); document.getElementById('authWarning').classList.remove('hidden'); document.getElementById('authFeatures').classList.remove('hidden'); document.getElementById('expiredWarning').classList.add('hidden'); 
                 document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); document.getElementById('msPnlWorkspace').classList.add('hidden');
                 document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.add('hidden'); document.getElementById('userInfo').classList.add('hidden');
-                document.getElementById('landingPage').classList.remove('hidden');
                 
                 const btn = document.getElementById('googleSignInBtn');
                 btn.innerHTML = `<svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Secure Login`;
@@ -521,7 +510,6 @@
             }
         });
 
-        // The Bulletproof Login Button
         document.getElementById('googleSignInBtn').addEventListener('click', () => { 
             const btn = document.getElementById('googleSignInBtn');
             btn.innerHTML = `<svg class="animate-spin h-5 w-5 mr-3 text-indigo-500" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Connecting...`;
@@ -540,7 +528,7 @@
     // -------------------------------------------------------------------------
     document.getElementById('adminToggleBtn').addEventListener('click', async () => {
         if (document.getElementById('adminPanel').classList.contains('hidden')) {
-            document.getElementById('landingPage').classList.add('hidden'); document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); document.getElementById('msPnlWorkspace').classList.add('hidden');
+            document.getElementById('authPanel').classList.add('hidden'); document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); document.getElementById('msPnlWorkspace').classList.add('hidden');
             document.getElementById('adminPanel').classList.remove('hidden'); document.getElementById('adminToggleBtn').textContent = "Back to App"; await loadAdminUsers();
         } else {
             document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('adminToggleBtn').textContent = "Admin Panel";
