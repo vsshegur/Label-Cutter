@@ -9,7 +9,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } };</script>
   
-  <!-- Core Engines -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.1/qrcode.min.js"></script>
@@ -27,29 +26,23 @@
     ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
     input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
   </style>
-
-  <!-- Auto-Catcher for Typos -->
-  <script>
-    window.addEventListener('error', function(e) {
-        const banner = document.getElementById('syntaxErrorBanner');
-        if(banner) {
-            banner.classList.remove('hidden');
-            banner.innerHTML = "⚠️ <b>SYSTEM CRASH:</b> " + e.message + "<br/><span class='text-xs font-medium'>Did you make a typo when pasting your Firebase Keys? Fix it and redeploy.</span>";
-        }
-    });
-  </script>
 </head>
 <body class="min-h-screen pb-32 overflow-x-hidden bg-slate-950 text-slate-200 selection:bg-indigo-500 selection:text-white relative">
 
+  <!-- Automated Error Banner -->
   <div id="syntaxErrorBanner" class="hidden bg-rose-600 text-white text-center py-4 px-6 shadow-2xl z-[999] relative font-bold text-sm tracking-wide"></div>
+  <script>
+    window.addEventListener('error', function(e) {
+        const banner = document.getElementById('syntaxErrorBanner');
+        if(banner) { banner.classList.remove('hidden'); banner.innerHTML = "⚠️ <b>SYSTEM CRASH:</b> " + e.message + "<br/><span class='text-xs font-medium'>Did you make a typo when pasting your Firebase Keys? Fix it and redeploy.</span>"; }
+    });
+  </script>
 
-  <!-- Animated Ambient Background -->
   <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
     <div class="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-indigo-600/10 rounded-full blur-[150px] animate-pulse"></div>
     <div class="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-rose-600/10 rounded-full blur-[150px] animate-pulse" style="animation-delay: 2s;"></div>
   </div>
 
-  <!-- Premium Header -->
   <header class="glass-panel sticky top-0 z-50 shadow-2xl mb-8 border-b border-white/5">
     <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
       <div class="flex items-center gap-4 w-full md:w-auto justify-center md:justify-start">
@@ -63,19 +56,15 @@
       </div>
       
       <div class="flex items-center gap-4 w-full md:w-auto justify-center">
-        <!-- App Navigation Selector -->
         <div id="appSelectorContainer" class="hidden relative">
             <select id="appSelector" class="appearance-none bg-slate-900 border border-slate-700 text-white text-xs font-black uppercase tracking-widest rounded-xl py-3.5 pl-5 pr-12 outline-none shadow-inner cursor-pointer focus:ring-2 focus:border-indigo-500 transition-all hover:bg-slate-800">
                 <option value="labelCutter">✂️ Thermal Label Cutter</option>
                 <option value="fkPnlCalculator">🔵 Flipkart Profit Engine</option>
                 <option value="msPnlCalculator">🛍️ Meesho Profit Engine</option>
             </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-indigo-400">
-                <svg class="fill-current h-5 w-5" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-            </div>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-indigo-400"><svg class="fill-current h-5 w-5" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg></div>
         </div>
 
-        <!-- User Profile Dropdown -->
         <div id="userInfo" class="hidden flex items-center gap-4 bg-slate-900 border border-slate-700 p-2 pr-5 rounded-2xl shadow-inner">
            <img id="userAvatar" class="w-9 h-9 rounded-xl shadow-md" src="" alt="Profile">
            <div class="flex flex-col text-left hidden sm:flex">
@@ -93,13 +82,13 @@
   <main class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
 
     <!-- ============================================== -->
-    <!-- SaaS LANDING PAGE & AUTH PANEL                 -->
+    <!-- SaaS LANDING PAGE / AUTH PANEL                 -->
     <!-- ============================================== -->
-    <div id="landingPage" class="glass-panel rounded-[2rem] shadow-2xl p-8 md:p-16 mb-10 border border-slate-700/50 relative overflow-hidden">
+    <div id="authPanel" class="glass-panel rounded-[2rem] shadow-2xl p-8 md:p-16 mb-10 border border-slate-700/50 relative overflow-hidden">
         <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] -z-10"></div>
         <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] -z-10"></div>
         
-        <div class="flex flex-col items-center text-center max-w-4xl mx-auto mb-16 relative z-10">
+        <div id="authWarning" class="flex flex-col items-center text-center max-w-4xl mx-auto mb-16 relative z-10">
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-[10px] font-black uppercase tracking-widest mb-8 shadow-inner">
                 <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span> E-Commerce Intelligence
             </div>
@@ -117,7 +106,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-slate-800 relative z-10">
+        <div id="authFeatures" class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-slate-800 relative z-10">
             <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-700/50 shadow-xl hover:border-blue-500/50 transition-all hover:-translate-y-1 group">
                 <div class="bg-blue-500/10 w-14 h-14 rounded-2xl flex items-center justify-center text-blue-400 mb-6 border border-blue-500/20 group-hover:bg-blue-500/20 transition-colors"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg></div>
                 <h3 class="text-white font-black text-xl mb-3">A.I. Label Cutter</h3>
@@ -134,15 +123,15 @@
                 <p class="text-slate-400 text-sm font-medium leading-relaxed">Orders File driven. Smartly filters return dumps to perfectly reconcile Dispatched, Cancelled, and RTO units on your active payout.</p>
             </div>
         </div>
-    </div>
 
-    <!-- Expired Warning overlay -->
-    <div id="expiredWarning" class="hidden glass-panel rounded-3xl shadow-2xl p-12 mb-10 border border-rose-500/50 text-center flex flex-col items-center">
-        <div class="bg-rose-500/20 p-6 rounded-full mb-6 shadow-[0_0_30px_rgba(244,63,94,0.3)]"><svg class="w-14 h-14 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
-        <h2 class="text-4xl font-black text-white mb-4">Subscription Expired</h2>
-        <p class="text-slate-400 max-w-lg mb-8 text-base">Your access to Shegur's Ecommerce Suite has concluded. Renew your plan to unlock automated labels and P&L tools.</p>
-        <a href="https://wa.me/919970836509" target="_blank" class="bg-emerald-500 hover:bg-emerald-400 text-white font-black py-4 px-12 rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.4)] btn-hover text-sm tracking-widest uppercase mb-6 transition-all">Renew via WhatsApp</a>
-        <button id="expiredLogoutBtn" class="text-slate-500 hover:text-white font-bold text-xs uppercase tracking-widest transition-colors cursor-pointer border border-slate-700 px-6 py-2 rounded-lg">Sign out</button>
+        <!-- Expired Warning overlay -->
+        <div id="expiredWarning" class="hidden absolute inset-0 glass-panel z-20 flex flex-col items-center justify-center text-center p-12 bg-slate-950/90 backdrop-blur-xl border border-rose-500/30">
+            <div class="bg-rose-500/20 p-6 rounded-full mb-6 shadow-[0_0_30px_rgba(244,63,94,0.3)]"><svg class="w-14 h-14 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
+            <h2 class="text-4xl font-black text-white mb-4">Subscription Expired</h2>
+            <p class="text-slate-400 max-w-lg mb-8 text-base">Your access to Shegur's Ecommerce Suite has concluded. Renew your plan to unlock automated labels and P&L tools.</p>
+            <a href="https://wa.me/919970836509" target="_blank" class="bg-emerald-500 hover:bg-emerald-400 text-white font-black py-4 px-12 rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.4)] btn-hover text-sm tracking-widest uppercase mb-6 transition-all">Renew via WhatsApp</a>
+            <button id="expiredLogoutBtn" class="text-slate-500 hover:text-white font-bold text-xs uppercase tracking-widest transition-colors cursor-pointer border border-slate-700 px-6 py-2 rounded-lg">Sign out</button>
+        </div>
     </div>
 
     <!-- Admin Panel -->
@@ -262,7 +251,7 @@
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/90 p-5 rounded-2xl border border-slate-700 shadow-md">
             <div class="flex items-center gap-3 w-full sm:w-auto">
                 <div class="bg-indigo-500/20 p-2 rounded-lg text-indigo-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
-                <label class="text-xs font-bold text-white uppercase tracking-widest">Bulk Fill Missing Costs (₹):</label>
+                <label class="text-xs font-bold text-white uppercase tracking-widest pl-2">Bulk Fill Missing Costs (₹):</label>
             </div>
             <div class="flex items-center gap-3 w-full sm:w-auto">
                 <input type="number" id="fk_bulkCostInput" placeholder="e.g. 150" class="bg-slate-950 border border-slate-600 px-4 py-3 rounded-xl text-white font-black outline-none focus:border-blue-500 w-full sm:w-32 shadow-inner" />
@@ -397,14 +386,13 @@
     // ⚠️ PASTE YOUR FIREBASE CONFIGURATION BETWEEN THE QUOTES BELOW ⚠️
     // =========================================================================
     const firebaseConfig = {
-  apiKey: "AIzaSyDSksHc8RucBx0qW_A6OBP6Ccn1g3hGKKE",
-  authDomain: "labelcutter-f7eb6.firebaseapp.com",
-  projectId: "labelcutter-f7eb6",
-  storageBucket: "labelcutter-f7eb6.firebasestorage.app",
-  messagingSenderId: "66842510048",
-  appId: "1:66842510048:web:02697d801892172e9d0685",
-  measurementId: "G-M42PECLE2Y"
-};
+      apiKey: "",
+      authDomain: "",
+      projectId: "",
+      storageBucket: "",
+      messagingSenderId: "",
+      appId: ""
+    };
     // =========================================================================
 
     let app, auth, db;
@@ -466,6 +454,8 @@
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 document.getElementById('authWarning').classList.add('hidden');
+                document.getElementById('authFeatures').classList.add('hidden');
+                
                 const userRef = doc(db, 'users', user.uid);
                 const userSnap = await getDoc(userRef);
                 if (!userSnap.exists()) {
@@ -493,7 +483,7 @@
                     else { document.getElementById('userPlan').textContent = "PLAN EXPIRED"; document.getElementById('userPlan').className = "text-[9px] font-black uppercase text-rose-500"; }
                     
                     if (isExpired) {
-                        document.getElementById('authPanel').classList.remove('hidden'); document.getElementById('authWarning').classList.add('hidden'); document.getElementById('expiredWarning').classList.remove('hidden'); document.getElementById('appSelectorContainer').classList.add('hidden'); document.getElementById('landingPage').classList.add('hidden');
+                        document.getElementById('authPanel').classList.remove('hidden'); document.getElementById('authWarning').classList.add('hidden'); document.getElementById('expiredWarning').classList.remove('hidden'); document.getElementById('appSelectorContainer').classList.add('hidden'); document.getElementById('landingPage').classList.remove('hidden');
                         broadcastToExtension(false);
                     } else {
                         app_isAppUnlocked = true; document.getElementById('authPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.remove('hidden'); document.getElementById('landingPage').classList.add('hidden');
@@ -502,10 +492,14 @@
                 }
             } else {
                 app_currentUserData = null; app_userSavedSkus = {}; app_isAppUnlocked = false;
-                document.getElementById('authPanel').classList.remove('hidden'); document.getElementById('authWarning').classList.remove('hidden'); document.getElementById('expiredWarning').classList.add('hidden'); 
+                document.getElementById('authPanel').classList.remove('hidden'); document.getElementById('authWarning').classList.remove('hidden'); document.getElementById('authFeatures').classList.remove('hidden'); document.getElementById('expiredWarning').classList.add('hidden'); 
                 document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); document.getElementById('msPnlWorkspace').classList.add('hidden');
                 document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.add('hidden'); document.getElementById('userInfo').classList.add('hidden');
                 document.getElementById('landingPage').classList.remove('hidden');
+                
+                const btn = document.getElementById('googleSignInBtn');
+                btn.innerHTML = `<svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Secure Login`;
+                
                 broadcastToExtension(false);
             }
         });
@@ -520,8 +514,8 @@
                 btn.innerHTML = `<svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Secure Login`;
             });
         });
-        document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(()=>location.reload()); });
-        document.getElementById('expiredLogoutBtn').addEventListener('click', () => { signOut(auth).then(()=>location.reload()); });
+        document.getElementById('logoutBtn').addEventListener('click', () => { if(auth) signOut(auth).then(()=>location.reload()); });
+        document.getElementById('expiredLogoutBtn').addEventListener('click', () => { if(auth) signOut(auth).then(()=>location.reload()); });
     }
 
     // -------------------------------------------------------------------------
@@ -817,9 +811,9 @@
         const req = store.get(id); req.onsuccess = () => { if (!req.result) return; const bytes = req.result.data; const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" })); if (action === 'download') { const a = document.createElement('a'); a.href = url; a.download = `Shegurs_${req.result.platform.toUpperCase()}_Recovered_${id}.pdf`; a.click(); URL.revokeObjectURL(url); } else if (action === 'preview') { window.open(url, '_blank'); setTimeout(() => URL.revokeObjectURL(url), 10000); } };
     };
 
-    // -------------------------------------------------------------------------
+    // ==========================================
     // FLIPKART P&L LOGIC
-    // -------------------------------------------------------------------------
+    // ==========================================
     let fk_rawSkuData = [];
     document.getElementById('fk_excelInput').addEventListener('change', fk_handleExcel);
     document.getElementById('fk_applyBulkBtn').addEventListener('click', fk_applyBulkCost);
@@ -895,9 +889,9 @@
       document.getElementById('fk_kpiNet').textContent = `₹${fnP.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; document.getElementById('fk_kpiNet').className = `text-4xl font-black mt-2 ${fnP >= 0 ? 'text-emerald-300' : 'text-rose-400'}`;
     }
 
-    // -------------------------------------------------------------------------
+    // ==========================================
     // MEESHO P&L LOGIC (3-WAY SMART FILTERING)
-    // -------------------------------------------------------------------------
+    // ==========================================
     const ms_state = { pay: [], ord: [], ret: [] }; let ms_reconciledData = [];
     document.getElementById('ms_payInput').addEventListener('change', (e) => ms_loadReport(e, 'pay', 'ms_labelPay'));
     document.getElementById('ms_ordInput').addEventListener('change', (e) => ms_loadReport(e, 'ord', 'ms_labelOrd'));
@@ -933,17 +927,20 @@
     function ms_reconcile() {
       const subOrderMap = new Map(); const skuMap = new Map();
       
+      // Base Map from Orders File
       ms_state.ord.forEach(row => {
           const sid = ms_cleanId(ms_findVal(row, ['suborderno', 'suborder', 'subordernumber', 'orderno', 'orderid']));
           if (sid) subOrderMap.set(sid, { sku: String(ms_findVal(row, ['sku', 'skuid', 'productsku']) || 'MISC_SKU').trim(), qty: parseInt(ms_findVal(row, ['quantity', 'qty', 'units'])) || 1, status: String(ms_findVal(row, ['status', 'orderstatus', 'deliverystatus']) || '').toUpperCase(), settlement: 0, returnType: '' });
       });
 
+      // Add Payouts
       ms_state.pay.forEach(row => {
           const sid = ms_cleanId(ms_findVal(row, ['suborderno', 'suborder', 'subordernumber', 'orderno', 'orderid']));
           const net = parseFloat(String(ms_findVal(row, ['finalsettlementamount', 'netsettlementamount', 'banksettlementamount', 'totalpayout', 'netpayout', 'settlementamount'])).replace(/[^0-9.-]/g, '')) || 0;
           if (sid && subOrderMap.has(sid)) { subOrderMap.get(sid).settlement += net; } else if (sid) { subOrderMap.set(sid, { sku: String(ms_findVal(row, ['sku', 'productsku', 'skuid']) || 'UNMAPPED_SKU').trim(), qty: 1, status: net >= 0 ? 'DELIVERED' : 'RETURNED', settlement: net, returnType: net < 0 ? 'CUSTOMER' : '' }); }
       });
       
+      // Safe Returns Filtering (Only apply if order exists in the time range)
       ms_state.ret.forEach(row => {
           const sid = ms_cleanId(ms_findVal(row, ['suborderno', 'suborder', 'subordernumber', 'orderid', 'orderno']));
           if (sid && subOrderMap.has(sid)) subOrderMap.get(sid).returnType = String(ms_findVal(row, ['returntype', 'typeofreturn', 'trackingtype']) || '').toUpperCase().includes('CUSTOMER') ? 'CUSTOMER' : 'RTO';
@@ -953,7 +950,14 @@
         if (!skuMap.has(val.sku)) skuMap.set(val.sku, { sku: val.sku, disp: 0, del: 0, cr: 0, rto: 0, can: 0, set: 0, cost: app_userSavedSkus[val.sku] || 0 });
         const item = skuMap.get(val.sku); 
         item.set += val.settlement;
-        if (val.status.includes('CANCEL')) { item.can += val.qty; } else { item.disp += val.qty; }
+        
+        // Accurate Tracking
+        if (val.status.includes('CANCEL')) {
+            item.can += val.qty;
+        } else {
+            item.disp += val.qty;
+        }
+        
         if (val.returnType === 'CUSTOMER' || val.status.includes('CUSTOMER') || (val.settlement < 0 && !val.status.includes('RTO'))) item.cr += val.qty;
         else if (val.returnType === 'RTO' || val.status.includes('RTO')) item.rto += val.qty;
         else if (val.status.includes('DELIVERED') || val.settlement > 0) item.del += val.qty;
