@@ -98,7 +98,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 border-t border-slate-800">
             <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-800"><div class="bg-blue-500/20 w-12 h-12 rounded-xl flex items-center justify-center text-blue-400 mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg></div><h3 class="text-white font-black text-lg mb-2">A.I. Label Cutter</h3><p class="text-slate-400 text-xs font-medium leading-relaxed">Drop raw PDFs. Get perfect 4x6 or 3x5 thermal labels with auto-generated packing slips and transparent brand logos.</p></div>
             <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-800"><div class="bg-emerald-500/20 w-12 h-12 rounded-xl flex items-center justify-center text-emerald-400 mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg></div><h3 class="text-white font-black text-lg mb-2">Flipkart Engine</h3><p class="text-slate-400 text-xs font-medium leading-relaxed">Parse SKU-level P&L exports. Input manufacturing costs to automatically deduce your real margins minus courier penalties.</p></div>
-            <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-800"><div class="bg-pink-500/20 w-12 h-12 rounded-xl flex items-center justify-center text-pink-400 mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg></div><h3 class="text-white font-black text-lg mb-2">Meesho Reconciliation</h3><p class="text-slate-400 text-xs font-medium leading-relaxed">Single file engine. Drop the official Meesho payment file to instantly parse Delievered, RTO, and Cancelled units for pure net profit.</p></div>
+            <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-800"><div class="bg-pink-500/20 w-12 h-12 rounded-xl flex items-center justify-center text-pink-400 mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg></div><h3 class="text-white font-black text-lg mb-2">Meesho Reconciliation</h3><p class="text-slate-400 text-xs font-medium leading-relaxed">3-way file matching. Smartly filters 6-month return dumps to identify exact RTOs vs. Customer returns on your active payout.</p></div>
         </div>
     </div>
 
@@ -148,47 +148,12 @@
     <!-- APP 2: FLIPKART P&L WORKSPACE                  -->
     <!-- ============================================== -->
     <div id="fkPnlWorkspace" class="hidden space-y-8 animate-fade-in">
-      <div class="w-full bg-slate-900/60 p-10 rounded-3xl border-2 border-dashed border-blue-500/30 hover:border-blue-500 transition-colors text-center cursor-pointer relative shadow-lg">
-        <input type="file" id="fk_excelInput" accept=".xlsx, .xls" class="absolute inset-0 opacity-0 z-10 cursor-pointer" />
-        <div class="flex flex-col items-center justify-center gap-3 pointer-events-none">
-          <div class="p-4 bg-blue-500/20 text-blue-400 rounded-full"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg></div>
-          <p class="text-xl font-black text-white">Drop Official Flipkart P&L Report Here</p>
-          <p class="text-xs text-slate-400 font-medium uppercase tracking-widest">Requires 'SKU-level P&L' Sheet</p>
-        </div>
-      </div>
-      
+      <div class="w-full bg-slate-900/60 p-10 rounded-3xl border-2 border-dashed border-blue-500/30 hover:border-blue-500 transition-colors text-center cursor-pointer relative shadow-lg"><input type="file" id="fk_excelInput" accept=".xlsx, .xls" class="absolute inset-0 opacity-0 z-10 cursor-pointer" /><div class="flex flex-col items-center justify-center gap-3 pointer-events-none"><div class="p-4 bg-blue-500/20 text-blue-400 rounded-full"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg></div><p class="text-xl font-black text-white">Drop Official Flipkart P&L Report Here</p><p class="text-xs text-slate-400 font-medium uppercase tracking-widest">Requires 'SKU-level P&L' Sheet</p></div></div>
       <div id="fk_calcSection" class="hidden space-y-6">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Net Units</span><p id="fk_kpiUnits" class="text-3xl font-black text-white mt-1">0</p></div>
-          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Settlement</span><p id="fk_kpiSettlement" class="text-3xl font-black text-blue-400 mt-1">₹0.00</p></div>
-          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Gross Profit (Valid SKUs)</span><p id="fk_kpiGross" class="text-3xl font-black text-emerald-400 mt-1">₹0.00</p></div>
-          <div class="glass-panel border border-emerald-500/30 p-6 rounded-2xl bg-gradient-to-br from-emerald-900/40 to-slate-900 shadow-[0_0_20px_rgba(16,185,129,0.15)]"><span class="text-[10px] font-black uppercase text-emerald-400 tracking-widest">Final Net Profit</span><p id="fk_kpiNet" class="text-3xl font-black text-emerald-300 mt-1">₹0.00</p></div>
-        </div>
-
-        <div class="flex flex-col sm:flex-row items-center gap-3 bg-slate-900 p-4 rounded-2xl border border-slate-700 shadow-md">
-            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2">Bulk Fill Missing Product Costs (₹):</label>
-            <input type="number" id="fk_bulkCostInput" class="bg-slate-950 border border-slate-700 px-4 py-2 rounded-xl text-white font-bold outline-none focus:border-blue-500 w-full sm:w-32" />
-            <button id="fk_applyBulkBtn" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-colors btn-hover w-full sm:w-auto">Apply To Empty</button>
-        </div>
-
-        <div class="glass-panel rounded-3xl border border-slate-700 shadow-xl overflow-hidden">
-          <div class="max-h-[500px] overflow-y-auto">
-            <table class="w-full text-left text-sm whitespace-nowrap">
-              <thead class="bg-slate-950 text-slate-400 text-[10px] font-black uppercase tracking-widest sticky top-0 border-b border-slate-700 z-10">
-                <tr><th class="py-4 px-6">#</th><th class="py-4 px-6">SKU ID</th><th class="py-4 px-6 text-right">Net Units</th><th class="py-4 px-6 text-right">Total Settlement</th><th class="py-4 px-6 text-center">Your Mfg Cost (₹)</th><th class="py-4 px-6 text-right">Profit / Unit</th><th class="py-4 px-6 text-right">Total Profit</th></tr>
-              </thead>
-              <tbody id="fk_skuTableBody" class="divide-y divide-slate-800 font-medium"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="glass-panel p-6 rounded-2xl border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div><h3 class="text-sm font-black text-white uppercase tracking-wider">Unclaimed Return & Damage Losses</h3><p class="text-xs text-slate-400 mt-1">Deduct missing items or packaging waste.</p></div>
-          <div class="flex items-center gap-4 w-full sm:w-auto">
-            <div class="relative w-full sm:w-56"><span class="absolute left-4 top-3.5 text-slate-500 font-black text-sm">₹</span><input type="number" id="fk_lossInput" value="0" class="w-full bg-slate-950 border border-slate-700 pl-8 pr-4 py-3 rounded-xl font-black text-rose-400 outline-none focus:border-rose-500 shadow-inner" /></div>
-            <button id="fk_recalcBtn" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black px-8 py-3 rounded-xl text-xs uppercase tracking-widest btn-hover">Update</button>
-          </div>
-        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"><div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Net Units</span><p id="fk_kpiUnits" class="text-3xl font-black text-white mt-1">0</p></div><div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Settlement</span><p id="fk_kpiSettlement" class="text-3xl font-black text-blue-400 mt-1">₹0.00</p></div><div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Gross Profit (Valid SKUs)</span><p id="fk_kpiGross" class="text-3xl font-black text-emerald-400 mt-1">₹0.00</p></div><div class="glass-panel border border-emerald-500/30 p-6 rounded-2xl bg-gradient-to-br from-emerald-900/40 to-slate-900 shadow-[0_0_20px_rgba(16,185,129,0.15)]"><span class="text-[10px] font-black uppercase text-emerald-400 tracking-widest">Final Net Profit</span><p id="fk_kpiNet" class="text-3xl font-black text-emerald-300 mt-1">₹0.00</p></div></div>
+        <div class="flex flex-col sm:flex-row items-center gap-3 bg-slate-900 p-4 rounded-2xl border border-slate-700 shadow-md"><label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2">Bulk Fill Missing Product Costs (₹):</label><input type="number" id="fk_bulkCostInput" class="bg-slate-950 border border-slate-700 px-4 py-2 rounded-xl text-white font-bold outline-none focus:border-blue-500 w-full sm:w-32" /><button id="fk_applyBulkBtn" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-colors btn-hover w-full sm:w-auto">Apply To Empty</button></div>
+        <div class="glass-panel rounded-3xl border border-slate-700 shadow-xl overflow-hidden"><div class="max-h-[500px] overflow-y-auto"><table class="w-full text-left text-sm whitespace-nowrap"><thead class="bg-slate-950 text-slate-400 text-[10px] font-black uppercase tracking-widest sticky top-0 border-b border-slate-700 z-10"><tr><th class="py-4 px-6">#</th><th class="py-4 px-6">SKU ID</th><th class="py-4 px-6 text-right">Net Units</th><th class="py-4 px-6 text-right">Total Settlement</th><th class="py-4 px-6 text-center">Your Mfg Cost (₹)</th><th class="py-4 px-6 text-right">Profit / Unit</th><th class="py-4 px-6 text-right">Total Profit</th></tr></thead><tbody id="fk_skuTableBody" class="divide-y divide-slate-800 font-medium"></tbody></table></div></div>
+        <div class="glass-panel p-6 rounded-2xl border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-6"><div><h3 class="text-sm font-black text-white uppercase tracking-wider">Unclaimed Return & Damage Losses</h3><p class="text-xs text-slate-400 mt-1">Deduct missing items or packaging waste.</p></div><div class="flex items-center gap-4 w-full sm:w-auto"><div class="relative w-full sm:w-56"><span class="absolute left-4 top-3.5 text-slate-500 font-black text-sm">₹</span><input type="number" id="fk_lossInput" value="0" class="w-full bg-slate-950 border border-slate-700 pl-8 pr-4 py-3 rounded-xl font-black text-rose-400 outline-none focus:border-rose-500 shadow-inner" /></div><button id="fk_recalcBtn" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black px-8 py-3 rounded-xl text-xs uppercase tracking-widest btn-hover">Update</button></div></div>
       </div>
     </div>
 
@@ -197,48 +162,18 @@
     <!-- ============================================== -->
     <div id="msPnlWorkspace" class="hidden space-y-8 animate-fade-in">
       
-      <div class="w-full bg-slate-900/60 p-10 rounded-3xl border-2 border-dashed border-pink-500/30 hover:border-pink-500 transition-colors text-center cursor-pointer relative shadow-lg">
-        <input type="file" id="ms_excelInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 opacity-0 z-10 cursor-pointer" />
-        <div class="flex flex-col items-center justify-center gap-3 pointer-events-none">
-          <div class="p-4 bg-pink-500/20 text-pink-400 rounded-full"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg></div>
-          <p class="text-xl font-black text-white">Drop Official Meesho Payments File Here</p>
-          <p id="ms_fileName" class="text-xs text-slate-400 font-medium uppercase tracking-widest">Auto-extracts Delivered, RTOs, & Settlements directly</p>
+      <div class="glass-panel p-6 rounded-3xl border border-slate-700 mb-6 bg-slate-900/80"><h3 class="text-sm font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2"><div class="bg-pink-500 w-2 h-2 rounded-full"></div> 3-Way Reconciliation File Drop</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="relative bg-slate-950 p-6 rounded-2xl border border-slate-800 hover:border-pink-500/50 transition-colors text-center cursor-pointer shadow-inner"><input type="file" id="ms_ordInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 opacity-0 z-10 cursor-pointer" /><p class="text-sm font-black text-white">1. Orders File</p><p id="ms_labelOrd" class="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Status & SKU Map</p></div>
+            <div class="relative bg-slate-950 p-6 rounded-2xl border border-slate-800 hover:border-pink-500/50 transition-colors text-center cursor-pointer shadow-inner"><input type="file" id="ms_payInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 opacity-0 z-10 cursor-pointer" /><p class="text-sm font-black text-white">2. Payments File</p><p id="ms_labelPay" class="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Settlement Details</p></div>
+            <div class="relative bg-slate-950 p-6 rounded-2xl border border-slate-800 hover:border-pink-500/50 transition-colors text-center cursor-pointer shadow-inner"><input type="file" id="ms_retInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 opacity-0 z-10 cursor-pointer" /><p class="text-sm font-black text-white">3. Returns File (Optional)</p><p id="ms_labelRet" class="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Smart 6-Month Filter</p></div>
         </div>
       </div>
-
       <div id="ms_calcSection" class="hidden space-y-6">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Net Settlement</span><p id="ms_kpiSettlement" class="text-2xl font-black text-blue-400 mt-1">₹0.00</p></div>
-          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Dispatched Orders</span><p id="ms_kpiDispatched" class="text-2xl font-black text-white mt-1">0</p></div>
-          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Delivered Orders</span><p id="ms_kpiDelivered" class="text-2xl font-black text-emerald-400 mt-1">0</p></div>
-          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">RTO / Cancellations</span><p id="ms_kpiReturns" class="text-2xl font-black text-rose-400 mt-1">0</p></div>
-          <div class="glass-panel border border-emerald-500/30 p-6 rounded-2xl bg-gradient-to-br from-emerald-900/40 to-slate-900 shadow-[0_0_20px_rgba(16,185,129,0.15)]"><span class="text-[10px] font-black uppercase text-emerald-400 tracking-widest">Realized Net Profit</span><p id="ms_kpiNetProfit" class="text-2xl font-black text-emerald-300 mt-1">₹0.00</p></div>
-        </div>
-
-        <div class="flex flex-col sm:flex-row items-center gap-3 bg-slate-900 p-4 rounded-2xl border border-slate-700 shadow-md">
-            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2">Bulk Fill Missing Product Costs (₹):</label>
-            <input type="number" id="ms_bulkCostInput" class="bg-slate-950 border border-slate-700 px-4 py-2 rounded-xl text-white font-bold outline-none focus:border-pink-500 w-full sm:w-32" />
-            <button id="ms_applyBulkBtn" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-colors btn-hover w-full sm:w-auto">Apply To Empty</button>
-        </div>
-
-        <div class="glass-panel rounded-3xl border border-slate-700 shadow-xl overflow-hidden">
-          <div class="max-h-[500px] overflow-y-auto">
-            <table class="w-full text-left text-sm whitespace-nowrap">
-              <thead class="bg-slate-950 text-slate-400 text-[10px] font-black uppercase tracking-widest sticky top-0 border-b border-slate-700 z-10">
-                <tr><th class="py-4 px-6">#</th><th class="py-4 px-6">SKU ID</th><th class="py-4 px-6 text-right">Dispatched</th><th class="py-4 px-6 text-right">Delivered</th><th class="py-4 px-6 text-right">RTO/Ret/Can</th><th class="py-4 px-6 text-right">Net Payout</th><th class="py-4 px-6 text-center">Your Mfg Cost (₹)</th><th class="py-4 px-6 text-right">Total Profit</th></tr>
-              </thead>
-              <tbody id="ms_skuTableBody" class="divide-y divide-slate-800 font-medium"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="glass-panel p-6 rounded-2xl border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div><h3 class="text-sm font-black text-white uppercase tracking-wider">Additional Warehouse Losses</h3><p class="text-xs text-slate-400 mt-1">Deduct missing inventory not covered by SPF.</p></div>
-          <div class="flex items-center gap-4 w-full sm:w-auto">
-            <div class="relative w-full sm:w-56"><span class="absolute left-4 top-3.5 text-slate-500 font-black text-sm">₹</span><input type="number" id="ms_lossInput" value="0" class="w-full bg-slate-950 border border-slate-700 pl-8 pr-4 py-3 rounded-xl font-black text-rose-400 outline-none focus:border-rose-500 shadow-inner" /></div>
-            <button id="ms_recalcBtn" class="bg-gradient-to-r from-pink-500 to-rose-600 text-white font-black px-8 py-3 rounded-xl text-xs uppercase tracking-widest btn-hover">Update</button>
-          </div>
-        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"><div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Net Settlement</span><p id="ms_kpiSettlement" class="text-2xl font-black text-blue-400 mt-1">₹0.00</p></div><div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Dispatched Orders</span><p id="ms_kpiDispatched" class="text-2xl font-black text-white mt-1">0</p></div><div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Delivered Orders</span><p id="ms_kpiDelivered" class="text-2xl font-black text-emerald-400 mt-1">0</p></div><div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">RTO / Cancellations</span><p id="ms_kpiReturns" class="text-2xl font-black text-rose-400 mt-1">0</p></div><div class="glass-panel border border-emerald-500/30 p-6 rounded-2xl bg-gradient-to-br from-emerald-900/40 to-slate-900 shadow-[0_0_20px_rgba(16,185,129,0.15)]"><span class="text-[10px] font-black uppercase text-emerald-400 tracking-widest">Realized Net Profit</span><p id="ms_kpiNetProfit" class="text-2xl font-black text-emerald-300 mt-1">₹0.00</p></div></div>
+        <div class="flex flex-col sm:flex-row items-center gap-3 bg-slate-900 p-4 rounded-2xl border border-slate-700 shadow-md"><label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2">Bulk Fill Missing Product Costs (₹):</label><input type="number" id="ms_bulkCostInput" class="bg-slate-950 border border-slate-700 px-4 py-2 rounded-xl text-white font-bold outline-none focus:border-pink-500 w-full sm:w-32" /><button id="ms_applyBulkBtn" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-colors btn-hover w-full sm:w-auto">Apply To Empty</button></div>
+        <div class="glass-panel rounded-3xl border border-slate-700 shadow-xl overflow-hidden"><div class="max-h-[500px] overflow-y-auto"><table class="w-full text-left text-sm whitespace-nowrap"><thead class="bg-slate-950 text-slate-400 text-[10px] font-black uppercase tracking-widest sticky top-0 border-b border-slate-700 z-10"><tr><th class="py-4 px-6">#</th><th class="py-4 px-6">SKU ID</th><th class="py-4 px-6 text-right">Dispatched</th><th class="py-4 px-6 text-right">Delivered</th><th class="py-4 px-6 text-right">RTO / Cancels</th><th class="py-4 px-6 text-right">Net Payout</th><th class="py-4 px-6 text-center">Your Mfg Cost (₹)</th><th class="py-4 px-6 text-right">Total Profit</th></tr></thead><tbody id="ms_skuTableBody" class="divide-y divide-slate-800 font-medium"></tbody></table></div></div>
+        <div class="glass-panel p-6 rounded-2xl border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-6"><div><h3 class="text-sm font-black text-white uppercase tracking-wider">Additional Warehouse Losses</h3><p class="text-xs text-slate-400 mt-1">Deduct missing inventory not covered by SPF.</p></div><div class="flex items-center gap-4 w-full sm:w-auto"><div class="relative w-full sm:w-56"><span class="absolute left-4 top-3.5 text-slate-500 font-black text-sm">₹</span><input type="number" id="ms_lossInput" value="0" class="w-full bg-slate-950 border border-slate-700 pl-8 pr-4 py-3 rounded-xl font-black text-rose-400 outline-none focus:border-rose-500 shadow-inner" /></div><button id="ms_recalcBtn" class="bg-gradient-to-r from-pink-500 to-rose-600 text-white font-black px-8 py-3 rounded-xl text-xs uppercase tracking-widest btn-hover">Update</button></div></div>
       </div>
     </div>
 
@@ -246,28 +181,18 @@
 
   <!-- Processing Loader -->
   <div id="loader" class="hidden fixed bottom-10 left-1/2 transform -translate-x-1/2 z-[100] bg-slate-800/90 backdrop-blur-xl p-5 px-8 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-slate-600 flex items-center gap-5">
-    <div class="inline-block animate-spin rounded-full h-6 w-6 border-[3px] border-slate-600 border-t-indigo-500"></div>
-    <p id="loaderText" class="text-sm font-black text-white tracking-wider uppercase">Processing Data...</p>
+    <div class="inline-block animate-spin rounded-full h-6 w-6 border-[3px] border-slate-600 border-t-indigo-500"></div><p id="loaderText" class="text-sm font-black text-white tracking-wider uppercase">Processing Data...</p>
   </div>
 
   <!-- ============================================== -->
   <!-- SINGLE UNIFIED SCRIPT BLOCK                    -->
   <!-- ============================================== -->
   <script type="module">
+    // We import the config you put in firebase-config.js!
+    import { firebaseConfig } from './firebase-config.js';
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
-    // ✅ PASTE YOUR FIREBASE CONFIGURATION HERE ✅
-    const firebaseConfig = {
-  apiKey: "AIzaSyDSksHc8RucBx0qW_A6OBP6Ccn1g3hGKKE",
-  authDomain: "labelcutter-f7eb6.firebaseapp.com",
-  projectId: "labelcutter-f7eb6",
-  storageBucket: "labelcutter-f7eb6.firebasestorage.app",
-  messagingSenderId: "66842510048",
-  appId: "1:66842510048:web:02697d801892172e9d0685",
-  measurementId: "G-M42PECLE2Y"
-};
 
     let app, auth, db;
     try {
@@ -359,9 +284,20 @@
             }
         });
 
-        document.getElementById('googleSignInBtn').addEventListener('click', () => { if(auth) signInWithPopup(auth, provider).catch(e => alert("Login Error: " + e.message)); });
+        document.getElementById('googleSignInBtn').addEventListener('click', () => { 
+            if(auth) {
+                signInWithPopup(auth, provider).catch(e => {
+                    console.error("Login Details:", e);
+                    alert("⚠️ LOGIN FAILED: Please make sure you added 'madhvishegur.vercel.app' to your Authorized Domains in the Firebase Console.\n\nError: " + e.message);
+                });
+            } else {
+                alert("Firebase failed to load. Check your firebase-config.js file.");
+            }
+        });
         document.getElementById('logoutBtn').addEventListener('click', () => { if(auth) signOut(auth).then(()=>location.reload()); });
         document.getElementById('expiredLogoutBtn').addEventListener('click', () => { if(auth) signOut(auth).then(()=>location.reload()); });
+    } else {
+        document.getElementById('googleSignInBtn').addEventListener('click', () => alert("Firebase is missing! Did you set up your firebase-config.js file?"));
     }
 
     document.getElementById('adminToggleBtn').addEventListener('click', async () => {
