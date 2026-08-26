@@ -34,7 +34,7 @@
         const banner = document.getElementById('syntaxErrorBanner');
         if(banner) {
             banner.classList.remove('hidden');
-            banner.innerHTML = "⚠️ <b>CRITICAL SYSTEM ERROR:</b> " + e.message + "<br/><span class='text-xs font-medium'>Did you make a typo when pasting your Firebase Keys? Fix it and redeploy.</span>";
+            banner.innerHTML = "⚠️ <b>CRITICAL SYSTEM ERROR:</b> " + e.message + "<br/><span class='text-xs font-medium'>Check the console. You likely made a typo when pasting your Firebase Keys.</span>";
         }
     });
   </script>
@@ -100,7 +100,7 @@
     <!-- ============================================== -->
     <!-- SaaS LANDING PAGE & AUTH PANEL                 -->
     <!-- ============================================== -->
-    <div id="landingPage" class="glass-panel rounded-[2rem] shadow-2xl p-8 md:p-16 mb-10 border border-slate-700/50 relative overflow-hidden">
+    <div id="authPanel" class="glass-panel rounded-[2rem] shadow-2xl p-8 md:p-16 mb-10 border border-slate-700/50 relative overflow-hidden">
         <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] -z-10"></div>
         <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] -z-10"></div>
         
@@ -340,11 +340,11 @@
       <!-- Meesho Calculator Section -->
       <div id="ms_calcSection" class="hidden space-y-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Net Settlement</span><p id="ms_kpiSettlement" class="text-3xl font-black text-blue-400 mt-2">₹0.00</p></div>
-          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Dispatched Orders</span><p id="ms_kpiDispatched" class="text-3xl font-black text-white mt-2">0</p></div>
-          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Delivered Orders</span><p id="ms_kpiDelivered" class="text-3xl font-black text-emerald-400 mt-2">0</p></div>
-          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">RTO / Cancellations</span><p id="ms_kpiReturns" class="text-3xl font-black text-rose-400 mt-2">0</p></div>
-          <div class="glass-panel border border-emerald-500/40 p-6 rounded-3xl bg-gradient-to-br from-emerald-900/50 to-slate-900 shadow-[0_0_30px_rgba(16,185,129,0.2)]"><span class="text-[10px] font-black uppercase text-emerald-400 tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Realized Net Profit</span><p id="ms_kpiNetProfit" class="text-3xl font-black text-emerald-300 mt-2">₹0.00</p></div>
+          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Net Settlement</span><p id="ms_kpiSettlement" class="text-4xl font-black text-blue-400 mt-2">₹0.00</p></div>
+          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Dispatched Orders</span><p id="ms_kpiDispatched" class="text-4xl font-black text-white mt-2">0</p></div>
+          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Delivered Orders</span><p id="ms_kpiDelivered" class="text-4xl font-black text-emerald-400 mt-2">0</p></div>
+          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">RTO / Cancellations</span><p id="ms_kpiReturns" class="text-4xl font-black text-rose-400 mt-2">0</p></div>
+          <div class="glass-panel border border-emerald-500/40 p-6 rounded-3xl bg-gradient-to-br from-emerald-900/50 to-slate-900 shadow-[0_0_30px_rgba(16,185,129,0.2)]"><span class="text-[10px] font-black uppercase text-emerald-400 tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Realized Net Profit</span><p id="ms_kpiNetProfit" class="text-4xl font-black text-emerald-300 mt-2">₹0.00</p></div>
         </div>
 
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/90 p-5 rounded-2xl border border-slate-700 shadow-md">
@@ -359,7 +359,6 @@
                 </div>
             </div>
             
-            <!-- NEW EXPORT BUTTON -->
             <button id="ms_exportBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-6 py-3 rounded-xl text-xs uppercase tracking-widest shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all btn-hover flex items-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg> Download Excel P&L
             </button>
@@ -398,7 +397,7 @@
   </div>
 
   <!-- ============================================== -->
-  <!-- THE MASTER JAVASCRIPT ENGINE                   -->
+  <!-- SINGLE UNIFIED SCRIPT BLOCK                    -->
   <!-- ============================================== -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
@@ -408,7 +407,7 @@
     // =========================================================================
     // ⚠️ PASTE YOUR FIREBASE CONFIGURATION BETWEEN THE QUOTES BELOW ⚠️
     // =========================================================================
-    const firebaseConfig = {
+   const firebaseConfig = {
   apiKey: "AIzaSyDSksHc8RucBx0qW_A6OBP6Ccn1g3hGKKE",
   authDomain: "labelcutter-f7eb6.firebaseapp.com",
   projectId: "labelcutter-f7eb6",
@@ -457,6 +456,7 @@
         if (!app_isAppUnlocked) return;
         app_currentApp = e.target.value;
         document.getElementById('landingPage').classList.add('hidden');
+        document.getElementById('authPanel').classList.add('hidden');
         document.getElementById('labelWorkspace').classList.add('hidden');
         document.getElementById('fkPnlWorkspace').classList.add('hidden');
         document.getElementById('msPnlWorkspace').classList.add('hidden');
@@ -498,17 +498,17 @@
                 
                 const isAdmin = app_currentUserData.role === 'admin'; const now = Date.now(); const isExpired = !isAdmin && (now > app_currentUserData.expiresAt || !app_currentUserData.isActive);
                 if (isAdmin) {
-                    document.getElementById('userPlan').textContent = "ADMINISTRATOR"; document.getElementById('userPlan').className = "text-[9px] font-black uppercase text-indigo-400";
+                    document.getElementById('userPlan').textContent = "ADMINISTRATOR"; document.getElementById('userPlan').className = "text-[9px] font-black uppercase text-indigo-400 mt-0.5";
                     document.getElementById('adminToggleBtn').classList.remove('hidden'); document.getElementById('appSelectorContainer').classList.remove('hidden'); document.getElementById('adminPanel').classList.remove('hidden'); document.getElementById('authPanel').classList.add('hidden'); document.getElementById('landingPage').classList.add('hidden');
                     broadcastToExtension(true); loadAdminUsers();
                 } else {
                     document.getElementById('adminToggleBtn').classList.add('hidden');
                     const daysLeft = Math.ceil((app_currentUserData.expiresAt - now) / (1000 * 60 * 60 * 24));
-                    if (daysLeft > 0) { document.getElementById('userPlan').textContent = `${app_currentUserData.planType} • ${daysLeft} Days Left`; document.getElementById('userPlan').className = "text-[9px] font-black uppercase text-emerald-400"; } 
-                    else { document.getElementById('userPlan').textContent = "PLAN EXPIRED"; document.getElementById('userPlan').className = "text-[9px] font-black uppercase text-rose-500"; }
+                    if (daysLeft > 0) { document.getElementById('userPlan').textContent = `${app_currentUserData.planType} • ${daysLeft} Days Left`; document.getElementById('userPlan').className = "text-[9px] font-black uppercase text-emerald-400 mt-0.5"; } 
+                    else { document.getElementById('userPlan').textContent = "PLAN EXPIRED"; document.getElementById('userPlan').className = "text-[9px] font-black uppercase text-rose-500 mt-0.5"; }
                     
                     if (isExpired) {
-                        document.getElementById('authPanel').classList.remove('hidden'); document.getElementById('authWarning').classList.add('hidden'); document.getElementById('expiredWarning').classList.remove('hidden'); document.getElementById('appSelectorContainer').classList.add('hidden'); document.getElementById('landingPage').classList.remove('hidden');
+                        document.getElementById('authPanel').classList.remove('hidden'); document.getElementById('authWarning').classList.add('hidden'); document.getElementById('expiredWarning').classList.remove('hidden'); document.getElementById('appSelectorContainer').classList.add('hidden'); document.getElementById('landingPage').classList.add('hidden');
                         broadcastToExtension(false);
                     } else {
                         app_isAppUnlocked = true; document.getElementById('authPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.remove('hidden'); document.getElementById('landingPage').classList.add('hidden');
@@ -547,7 +547,7 @@
     // -------------------------------------------------------------------------
     document.getElementById('adminToggleBtn').addEventListener('click', async () => {
         if (document.getElementById('adminPanel').classList.contains('hidden')) {
-            document.getElementById('landingPage').classList.add('hidden'); document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); document.getElementById('msPnlWorkspace').classList.add('hidden');
+            document.getElementById('landingPage').classList.add('hidden'); document.getElementById('authPanel').classList.add('hidden'); document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); document.getElementById('msPnlWorkspace').classList.add('hidden');
             document.getElementById('adminPanel').classList.remove('hidden'); document.getElementById('adminToggleBtn').textContent = "Back to App"; await loadAdminUsers();
         } else {
             document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('adminToggleBtn').textContent = "Admin Panel";
@@ -927,7 +927,6 @@
     document.getElementById('ms_exportBtn').addEventListener('click', () => {
         if(ms_reconciledData.length === 0) return alert("No Meesho data to export. Please process your files first.");
         
-        // 1. Map data for Excel export
         const exportData = ms_reconciledData.map(item => ({
             "SKU ID": item.sku,
             "Total Dispatched": item.disp,
@@ -938,21 +937,13 @@
             "Total Final Profit (₹)": item.cost > 0 ? (item.set - (item.del * item.cost)) : "COST MISSING"
         }));
 
-        // 2. Add Business Summary Row
         const totalSet = ms_reconciledData.reduce((s, i) => s + i.set, 0);
         const totalProfit = ms_reconciledData.reduce((s, i) => i.cost > 0 ? s + (i.set - (i.del * i.cost)) : s, 0);
         const loss = parseFloat(document.getElementById('ms_lossInput').value) || 0;
         
-        exportData.push({}); // Empty row
-        exportData.push({
-            "SKU ID": "BUSINESS SUMMARY",
-            "Total Net Payout (₹)": totalSet,
-            "Total Final Profit (₹)": totalProfit - loss
-        });
+        exportData.push({}); exportData.push({ "SKU ID": "BUSINESS SUMMARY", "Total Net Payout (₹)": totalSet, "Total Final Profit (₹)": totalProfit - loss });
 
-        // 3. Create Excel and trigger download
-        const wb = XLSX.utils.book_new();
-        const ws = XLSX.utils.json_to_sheet(exportData);
+        const wb = XLSX.utils.book_new(); const ws = XLSX.utils.json_to_sheet(exportData);
         XLSX.utils.book_append_sheet(wb, ws, "Meesho PnL Report");
         XLSX.writeFile(wb, `Shegurs_Meesho_PnL_${new Date().toISOString().slice(0,10)}.xlsx`);
     });
@@ -984,20 +975,17 @@
     function ms_reconcile() {
       const subOrderMap = new Map(); const skuMap = new Map();
       
-      // Base Map from Orders File
       ms_state.ord.forEach(row => {
           const sid = ms_cleanId(ms_findVal(row, ['suborderno', 'suborder', 'subordernumber', 'orderno', 'orderid']));
           if (sid) subOrderMap.set(sid, { sku: String(ms_findVal(row, ['sku', 'skuid', 'productsku']) || 'MISC_SKU').trim(), qty: parseInt(ms_findVal(row, ['quantity', 'qty', 'units'])) || 1, status: String(ms_findVal(row, ['status', 'orderstatus', 'deliverystatus']) || '').toUpperCase(), settlement: 0, returnType: '' });
       });
 
-      // Add Payouts
       ms_state.pay.forEach(row => {
           const sid = ms_cleanId(ms_findVal(row, ['suborderno', 'suborder', 'subordernumber', 'orderno', 'orderid']));
           const net = parseFloat(String(ms_findVal(row, ['finalsettlementamount', 'netsettlementamount', 'banksettlementamount', 'totalpayout', 'netpayout', 'settlementamount'])).replace(/[^0-9.-]/g, '')) || 0;
           if (sid && subOrderMap.has(sid)) { subOrderMap.get(sid).settlement += net; } else if (sid) { subOrderMap.set(sid, { sku: String(ms_findVal(row, ['sku', 'productsku', 'skuid']) || 'UNMAPPED_SKU').trim(), qty: 1, status: net >= 0 ? 'DELIVERED' : 'RETURNED', settlement: net, returnType: net < 0 ? 'CUSTOMER' : '' }); }
       });
       
-      // Safe Returns Filtering (Only apply if order exists in the time range)
       ms_state.ret.forEach(row => {
           const sid = ms_cleanId(ms_findVal(row, ['suborderno', 'suborder', 'subordernumber', 'orderid', 'orderno']));
           if (sid && subOrderMap.has(sid)) subOrderMap.get(sid).returnType = String(ms_findVal(row, ['returntype', 'typeofreturn', 'trackingtype']) || '').toUpperCase().includes('CUSTOMER') ? 'CUSTOMER' : 'RTO';
