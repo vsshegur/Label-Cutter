@@ -1,177 +1,108 @@
-import { auth, db, provider } from './firebase-config.js';
+import { auth, db, provider, firebaseConfig } from './firebase-config.js';
 import { signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import { doc, getDoc, setDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const ADMIN_EMAIL = "vsshegur@gmail.com";
-const EXTENSION_ID = "YOUR_EXTENSION_ID_HERE";
+const CHROME_EXTENSION_ID = "YOUR_EXTENSION_ID_HERE";
 
-// Global state available to other modules
-window.appState = {
-    userSkus: {},
-    isUnlocked: false,
-    currentUser: null
-};
+window.appState = { userSkus: {}, isUnlocked: false, currentUser: null };
 
-// UI Elements
-const DOM = {
-    authContainer: document.getElementById('authContainer'),
-    mainAppContainer: document.getElementById('mainAppContainer'),
-    authWarning: document.getElementById('authWarning'),
-    authFeatures: document.getElementById('authFeatures'),
-    expiredWarning: document.getElementById('expiredWarning'),
-    userInfo: document.getElementById('userInfo'),
-    userName: document.getElementById('userName'),
-    userAvatar: document.getElementById('userAvatar'),
-    userPlan: document.getElementById('userPlan'),
-    adminToggleBtn: document.getElementById('adminToggleBtn'),
-    appSelector: document.getElementById('appSelector'),
-    workspaces: {
-        labelCutter: document.getElementById('workspace_label'),
-        fkPnlCalculator: document.getElementById('workspace_flipkart'),
-        msPnlCalculator: document.getElementById('workspace_meesho'),
-        admin: document.getElementById('workspace_admin')
-    }
-};
-
-// Navigation
-DOM.appSelector.addEventListener('change', (e) => {
-    Object.values(DOM.workspaces).forEach(w => w.classList.add('hidden'));
-    if (DOM.workspaces[e.target.value]) {
-        DOM.workspaces[e.target.value].classList.remove('hidden');
-    }
+document.getElementById('appSelector').addEventListener('change', (e) => {
+    if (!window.appState.isUnlocked) return;
+    document.getElementById('authPanel').classList.add('hidden');
+    document.getElementById('labelWorkspace').classList.add('hidden');
+    document.getElementById('fkPnlWorkspace').classList.add('hidden');
+    document.getElementById('msPnlWorkspace').classList.add('hidden');
+    
+    if (e.target.value === 'labelCutter') { document.getElementById('labelWorkspace').classList.remove('hidden'); window.dispatchEvent(new Event('appUnlocked')); } 
+    else if (e.target.value === 'fkPnlCalculator') { document.getElementById('fkPnlWorkspace').classList.remove('hidden'); } 
+    else if (e.target.value === 'msPnlCalculator') { document.getElementById('msPnlWorkspace').classList.remove('hidden'); }
 });
 
 document.getElementById('themeToggle').addEventListener('click', () => {
     document.documentElement.classList.toggle('dark');
+    document.getElementById('lc_logoPreview').className = `h-full object-contain p-1 ${document.documentElement.classList.contains('dark') ? '' : 'invert'}`;
 });
 
-// Auth Logic
-if (auth) {
+if(auth) {
     onAuthStateChanged(auth, async (user) => {
         if (user) {
-            DOM.authWarning.classList.add('hidden');
-            DOM.authFeatures.classList.add('hidden');
+            document.getElementById('authWarning').classList.add('hidden');
+            document.getElementById('authFeatures').classList.add('hidden');
             
             const userRef = doc(db, 'users', user.uid);
             const userSnap = await getDoc(userRef);
-            let uData;
+            let uData = userSnap.exists() ? userSnap.data() : { email: user.email, name: user.displayName || 'User', photo: user.photoURL || '', role: user.email === ADMIN_EMAIL ? 'admin' : 'user', planType: 'Free Trial', createdAt: Date.now(), expiresAt: Date.now() + (2 * 24 * 60 * 60 * 1000), isActive: true };
+            if (!userSnap.exists()) await setDoc(userRef, uData);
+            else if (user.email === ADMIN_EMAIL && uData.role !== 'admin') { uData.role = 'admin'; await updateDoc(userRef, { role: 'admin' }); }
             
-            if (!userSnap.exists()) {
-                uData = { email: user.email, name: user.displayName || 'User', photo: user.photoURL || '', role: user.email === ADMIN_EMAIL ? 'admin' : 'user', planType: 'Free Trial', createdAt: Date.now(), expiresAt: Date.now() + (2 * 24 * 60 * 60 * 1000), isActive: true };
-                await setDoc(userRef, uData);
-            } else {
-                uData = userSnap.data();
-                if (user.email === ADMIN_EMAIL && uData.role !== 'admin') { uData.role = 'admin'; await updateDoc(userRef, { role: 'admin' }); }
-            }
-            
-            try { 
-                const memSnap = await getDoc(doc(db, 'users', user.uid, 'skus', 'memory')); 
-                if(memSnap.exists()) window.appState.userSkus = memSnap.data() || {}; 
-            } catch(e) {}
+            try { const memSnap = await getDoc(doc(db, 'users', user.uid, 'skus', 'memory')); if(memSnap.exists()) window.appState.userSkus = memSnap.data() || {}; } catch(e){}
             
             window.appState.currentUser = user;
-            DOM.userAvatar.src = user.photoURL || 'https://via.placeholder.com/32';
-            DOM.userName.textContent = user.displayName || 'User';
-            DOM.userInfo.classList.remove('hidden');
+            document.getElementById('userAvatar').src = user.photoURL || 'https://via.placeholder.com/32';
+            document.getElementById('userName').textContent = user.displayName || 'User';
+            document.getElementById('userInfo').classList.remove('hidden');
             
-            const isAdmin = uData.role === 'admin';
-            const isExpired = !isAdmin && (Date.now() > uData.expiresAt || !uData.isActive);
-            
-            if (isAdmin) {
-                DOM.userPlan.textContent = "ADMINISTRATOR";
-                DOM.adminToggleBtn.classList.remove('hidden');
-                unlockApp();
-                loadAdminUsers();
-            } else if (!isExpired) {
-                const daysLeft = Math.ceil((uData.expiresAt - Date.now()) / (1000 * 60 * 60 * 24));
-                DOM.userPlan.textContent = `${uData.planType} • ${daysLeft} Days Left`;
-                unlockApp();
+            const isAdmin = uData.role === 'admin'; const now = Date.now(); const isExpired = !isAdmin && (now > uData.expiresAt || !uData.isActive);
+            if (isAdmin || !isExpired) {
+                document.getElementById('userPlan').textContent = isAdmin ? "ADMINISTRATOR" : `${uData.planType}`;
+                if(isAdmin) document.getElementById('adminToggleBtn').classList.remove('hidden');
+                
+                window.appState.isUnlocked = true; document.getElementById('authPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.remove('hidden');
+                document.getElementById('appSelector').value = "labelCutter"; document.getElementById('labelWorkspace').classList.remove('hidden'); window.dispatchEvent(new Event('appUnlocked'));
             } else {
-                DOM.userPlan.textContent = "PLAN EXPIRED";
-                DOM.userPlan.classList.replace('text-emerald-400', 'text-rose-500');
-                DOM.expiredWarning.classList.remove('hidden');
+                document.getElementById('userPlan').textContent = "PLAN EXPIRED"; document.getElementById('expiredWarning').classList.remove('hidden');
             }
         } else {
-            lockApp();
+            window.appState.currentUser = null; window.appState.userSkus = {}; window.appState.isUnlocked = false;
+            document.getElementById('authPanel').classList.remove('hidden'); document.getElementById('authWarning').classList.remove('hidden'); document.getElementById('authFeatures').classList.remove('hidden'); 
+            document.getElementById('expiredWarning').classList.add('hidden'); document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); document.getElementById('msPnlWorkspace').classList.add('hidden');
+            document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.add('hidden'); document.getElementById('userInfo').classList.add('hidden');
+            document.getElementById('googleSignInBtn').innerHTML = `Secure Login`;
         }
     });
-} else {
-    document.getElementById('googleSignInBtn').addEventListener('click', () => {
-        alert("Firebase Configuration Missing! Please add your API keys to firebase-config.js");
-    });
-}
 
-function unlockApp() {
-    window.appState.isUnlocked = true;
-    DOM.authContainer.classList.add('hidden');
-    DOM.mainAppContainer.classList.remove('hidden');
-    DOM.workspaces.labelCutter.classList.remove('hidden');
-    DOM.appSelector.value = "labelCutter";
-    window.dispatchEvent(new Event('appUnlocked'));
-}
-
-function lockApp() {
-    window.appState.isUnlocked = false;
-    window.appState.userSkus = {};
-    window.appState.currentUser = null;
-    DOM.authContainer.classList.remove('hidden');
-    DOM.authWarning.classList.remove('hidden');
-    DOM.authFeatures.classList.remove('hidden');
-    DOM.expiredWarning.classList.add('hidden');
-    DOM.mainAppContainer.classList.add('hidden');
-}
-
-// Buttons
-const btnLogin = document.getElementById('googleSignInBtn');
-if(btnLogin && auth) {
-    btnLogin.addEventListener('click', () => {
-        btnLogin.innerHTML = "Connecting...";
+    document.getElementById('googleSignInBtn').addEventListener('click', () => { 
+        document.getElementById('googleSignInBtn').innerHTML = `Connecting...`;
         signInWithPopup(auth, provider).catch(e => {
-            alert("Login Failed: " + e.message);
-            btnLogin.innerHTML = "Secure Login";
+            alert("⚠️ LOGIN FAILED: \n\n" + e.message + "\n\nMake sure 'madhvishegur.vercel.app' is added to Authorized Domains in your Firebase Authentication Settings.");
+            document.getElementById('googleSignInBtn').innerHTML = `Secure Login`;
         });
     });
+    document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(()=>location.reload()); });
+    document.getElementById('expiredLogoutBtn').addEventListener('click', () => { signOut(auth).then(()=>location.reload()); });
+} else {
+    document.getElementById('googleSignInBtn').addEventListener('click', () => {
+        alert("⚠️ CRITICAL ERROR: Firebase API keys are missing. Open firebase-config.js and paste your keys.");
+    });
 }
 
-document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth).then(()=>location.reload()));
-document.getElementById('expiredLogoutBtn').addEventListener('click', () => signOut(auth).then(()=>location.reload()));
-
-// Admin Logic
-DOM.adminToggleBtn.addEventListener('click', async () => {
-    Object.values(DOM.workspaces).forEach(w => w.classList.add('hidden'));
-    if (DOM.adminToggleBtn.textContent === "Admin") {
-        DOM.workspaces.admin.classList.remove('hidden');
-        DOM.adminToggleBtn.textContent = "Back";
-        await loadAdminUsers();
+document.getElementById('adminToggleBtn').addEventListener('click', async () => {
+    if (document.getElementById('adminPanel').classList.contains('hidden')) {
+        document.getElementById('authPanel').classList.add('hidden'); document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); document.getElementById('msPnlWorkspace').classList.add('hidden');
+        document.getElementById('adminPanel').classList.remove('hidden'); document.getElementById('adminToggleBtn').textContent = "Back to App"; await loadAdminUsers();
     } else {
-        DOM.workspaces[DOM.appSelector.value].classList.remove('hidden');
-        DOM.adminToggleBtn.textContent = "Admin";
+        document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('adminToggleBtn').textContent = "Admin Panel";
+        if(document.getElementById('appSelector').value === 'labelCutter') document.getElementById('labelWorkspace').classList.remove('hidden'); 
+        else if (document.getElementById('appSelector').value === 'fkPnlCalculator') document.getElementById('fkPnlWorkspace').classList.remove('hidden');
+        else document.getElementById('msPnlWorkspace').classList.remove('hidden');
     }
 });
 
 async function loadAdminUsers() {
-    const tbody = document.getElementById('adminUserTableBody'); 
-    tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-slate-500">Fetching users...</td></tr>';
+    const tbody = document.getElementById('adminUserTableBody'); tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-xs font-bold text-slate-500">Fetching users...</td></tr>';
     try {
-        const snapshot = await getDocs(collection(db, 'users')); 
-        tbody.innerHTML = '';
+        const snapshot = await getDocs(collection(db, 'users')); tbody.innerHTML = '';
         snapshot.forEach(docSnap => {
-            const u = docSnap.data(); const uid = docSnap.id;
-            const daysLeft = Math.ceil((u.expiresAt - Date.now()) / (1000 * 60 * 60 * 24));
-            const tr = document.createElement('tr'); 
-            tr.innerHTML = `<td class="py-4 px-4">${u.name}</td><td class="py-4 px-4">${u.role}</td><td class="py-4 px-4">${u.planType}</td><td class="py-4 px-4">${daysLeft} Days</td><td class="py-4 px-4"><button onclick="updateUser('${uid}')" class="bg-indigo-600 px-3 py-1 rounded text-white text-xs">Add 30 Days</button></td>`; 
-            tbody.appendChild(tr);
+            const u = docSnap.data(); const uid = docSnap.id; const now = Date.now(); const daysLeft = Math.ceil((u.expiresAt - now) / (1000 * 60 * 60 * 24)); const isExp = daysLeft <= 0;
+            const tr = document.createElement('tr'); tr.className = "border-b border-slate-800/50 text-sm hover:bg-slate-800/30 transition-colors";
+            tr.innerHTML = `<td class="py-4 px-4 flex items-center gap-3"><img src="${u.photo || 'https://via.placeholder.com/24'}" class="w-8 h-8 rounded-full shadow-sm"><div><p class="font-bold text-white">${u.name}</p><p class="text-[10px] text-slate-500">${u.email}</p></div></td><td class="py-4 px-4"><span class="px-2 py-1 rounded text-[9px] font-black uppercase tracking-widest ${u.role === 'admin' ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 text-slate-400'}">${u.role}</span></td><td class="py-4 px-4"><span class="px-2 py-1 rounded text-[9px] font-black uppercase tracking-widest ${u.planType === 'Free Trial' ? 'bg-orange-500/20 text-orange-400' : 'bg-emerald-500/20 text-emerald-400'}">${u.planType}</span></td><td class="py-4 px-4 font-black text-xs ${isExp && u.role !== 'admin' ? 'text-rose-500' : 'text-slate-300'}">${u.role === 'admin' ? 'LIFETIME' : (isExp ? 'EXPIRED' : `${daysLeft} DAYS`)}</td><td class="py-4 px-4 flex justify-end items-center gap-2">${u.role !== 'admin' ? `<button onclick="window.updateDaysAdmin('${uid}')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-[9px] px-3 py-2 rounded uppercase tracking-widest font-black transition-colors">Add 30 Days</button>` : '<span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Sys Admin</span>'}</td>`; tbody.appendChild(tr);
         });
     } catch(e) {}
 }
 
-window.updateUser = async function(uid) {
-    if(!confirm("Add 30 days to this user?")) return;
+window.updateDaysAdmin = async function(uid) {
+    if(!confirm(`Add 30 Days?`)) return;
     const userRef = doc(db, 'users', uid); const snap = await getDoc(userRef);
-    if(snap.exists()) {
-        const u = snap.data(); 
-        const baseTime = u.expiresAt > Date.now() ? u.expiresAt : Date.now();
-        await updateDoc(userRef, { expiresAt: baseTime + (30 * 24 * 60 * 60 * 1000), planType: 'Paid Plan' }); 
-        loadAdminUsers();
-    }
+    if(snap.exists()) { const u = snap.data(); let baseTime = u.expiresAt > Date.now() ? u.expiresAt : Date.now(); let newExp = baseTime + (30 * 24 * 60 * 60 * 1000); await updateDoc(userRef, { expiresAt: newExp, planType: 'Paid Plan' }); loadAdminUsers(); }
 }
