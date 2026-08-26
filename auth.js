@@ -3,8 +3,6 @@ import { signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstati
 import { doc, getDoc, setDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const ADMIN_EMAIL = "vsshegur@gmail.com";
-const EXTENSION_ID = "YOUR_EXTENSION_ID_HERE";
-
 window.appState = { userSkus: {}, isUnlocked: false, currentUser: null, currentApp: 'labelCutter' };
 
 document.getElementById('appSelector').addEventListener('change', (e) => {
@@ -72,8 +70,6 @@ if(auth) {
     });
     document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(()=>location.reload()); });
     document.getElementById('expiredLogoutBtn').addEventListener('click', () => { signOut(auth).then(()=>location.reload()); });
-} else {
-    document.getElementById('googleSignInBtn').addEventListener('click', () => alert("⚠️ SYSTEM ERROR: Firebase API keys are missing. Open firebase-config.js and paste your keys."));
 }
 
 document.getElementById('adminToggleBtn').addEventListener('click', async () => {
