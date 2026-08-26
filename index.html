@@ -4,146 +4,837 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shegur's Ecommerce Suite</title>
+  
+  <!-- Sleek Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%234f46e5%22/><text x=%2250%22 y=%2270%22 font-family=%22Arial, sans-serif%22 font-size=%2265%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22>S</text></svg>">
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } };</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.1/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
     body { font-family: 'Inter', sans-serif; transition: background-color 0.2s, color 0.2s; }
-    .glass-panel { backdrop-filter: blur(16px); }
+    .glass-panel { backdrop-filter: blur(16px); background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255,255,255,0.05); }
     .btn-hover { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
-    .btn-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.2); }
+    .btn-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); }
+    .btn-hover:active { transform: translateY(0px); }
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
     input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
   </style>
 </head>
-<body class="min-h-screen pb-32 overflow-x-hidden bg-slate-50 text-slate-900 dark:bg-[#0f172a] dark:text-[#f8fafc] selection:bg-indigo-500 selection:text-white relative">
+<body class="min-h-screen pb-32 overflow-x-hidden bg-slate-950 text-slate-200 selection:bg-indigo-500 selection:text-white relative">
 
-  <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none hidden dark:block">
-    <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 rounded-full blur-[120px] transition-colors duration-700"></div>
+  <!-- Ambient Glow Background -->
+  <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+    <div class="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-600/10 rounded-full blur-[150px]"></div>
+    <div class="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-pink-600/10 rounded-full blur-[150px]"></div>
   </div>
 
-  <header class="glass-panel sticky top-0 z-50 border-b border-slate-200 dark:border-white/10 bg-white/80 dark:bg-slate-900/80 shadow-md dark:shadow-2xl mb-6 transition-colors">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center gap-6">
-      <div class="flex items-center gap-4">
-        <div class="bg-gradient-to-br from-blue-500 to-indigo-600 p-3 rounded-xl shadow-lg text-white">
+  <!-- Premium Header -->
+  <header class="glass-panel sticky top-0 z-50 shadow-2xl mb-8">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-4 w-full md:w-auto justify-center md:justify-start">
+        <div class="bg-gradient-to-br from-indigo-500 to-blue-600 p-3 rounded-xl shadow-[0_0_20px_rgba(79,70,229,0.3)] text-white">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
         </div>
         <div>
-          <h1 class="text-2xl font-black tracking-tight">Shegur's <span class="text-slate-500 dark:text-slate-400 font-semibold text-lg">Ecommerce Suite</span></h1>
-          <p class="text-slate-500 dark:text-slate-400 text-[10px] mt-0.5 font-bold tracking-widest uppercase flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Multi-Tool Workspace</p>
+          <h1 class="text-2xl font-black tracking-tight text-white">Shegur's <span class="text-slate-400 font-semibold text-lg">Suite</span></h1>
+          <p class="text-indigo-400 text-[10px] mt-0.5 font-bold tracking-widest uppercase flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Authorized Terminal</p>
         </div>
       </div>
-      <div class="flex items-center gap-4">
-        <div id="appSelectorContainer" class="hidden relative mr-4">
-            <select id="appSelector" class="appearance-none bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-xs font-black uppercase tracking-widest rounded-xl py-2.5 pl-4 pr-10 outline-none shadow-sm cursor-pointer focus:ring-2 focus:border-indigo-500">
-                <option value="labelCutter">📦 E-Com Label Cutter</option>
-                <option value="fkPnlCalculator">📊 Flipkart P&L Calculator</option>
-                <option value="msPnlCalculator">🛍️ Meesho P&L Calculator</option>
+      
+      <div class="flex items-center gap-4 w-full md:w-auto justify-center">
+        <!-- App Navigation Selector -->
+        <div id="appSelectorContainer" class="hidden relative">
+            <select id="appSelector" class="appearance-none bg-slate-900 border border-slate-700 text-white text-xs font-black uppercase tracking-widest rounded-xl py-3 pl-4 pr-10 outline-none shadow-sm cursor-pointer focus:ring-2 focus:border-indigo-500 transition-all">
+                <option value="labelCutter">✂️ E-Com Label Cutter</option>
+                <option value="fkPnlCalculator">🔵 Flipkart Profit Engine</option>
+                <option value="msPnlCalculator">👚 Meesho Profit Engine</option>
             </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                <svg class="fill-current h-4 w-4" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            </div>
         </div>
-        <div id="userInfo" class="hidden flex items-center gap-3 bg-slate-100 dark:bg-slate-800 p-1.5 pr-4 rounded-xl shadow-inner">
+
+        <div id="userInfo" class="hidden flex items-center gap-3 bg-slate-900 border border-slate-700 p-1.5 pr-4 rounded-xl shadow-inner">
            <img id="userAvatar" class="w-8 h-8 rounded-lg shadow-sm" src="" alt="Profile">
            <div class="flex flex-col text-left hidden sm:flex">
-               <span id="userName" class="text-[11px] font-bold leading-tight">Loading...</span>
-               <span id="userPlan" class="text-[9px] font-black uppercase text-emerald-500 leading-tight">Checking Plan...</span>
+               <span id="userName" class="text-[11px] font-bold text-white leading-tight">Loading...</span>
+               <span id="userPlan" class="text-[9px] font-black uppercase text-emerald-400 leading-tight">Checking Plan...</span>
            </div>
-           <div class="h-6 w-[1px] bg-slate-300 dark:bg-slate-600 mx-2"></div>
-           <button id="adminToggleBtn" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-black text-[9px] uppercase px-3 py-1.5 rounded-lg shadow-sm">Admin</button>
-           <button id="logoutBtn" class="text-slate-500 hover:text-rose-500 font-black text-[9px] uppercase px-2 py-1.5">Logout</button>
+           <div class="h-6 w-[1px] bg-slate-700 mx-2"></div>
+           <button id="adminToggleBtn" class="hidden bg-indigo-500 hover:bg-indigo-600 text-white font-black text-[9px] uppercase tracking-widest px-3 py-1.5 rounded-lg transition-colors">Admin</button>
+           <button id="logoutBtn" class="text-slate-400 hover:text-rose-400 font-black text-[9px] uppercase tracking-widest px-2 py-1.5 transition-colors">Logout</button>
         </div>
-        <button id="themeToggle" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 btn-hover">
-          <svg id="iconSun" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-          <svg id="iconMoon" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-        </button>
       </div>
     </div>
   </header>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-    <!-- Auth / Landing Panel -->
-    <div id="authPanel" class="glass-panel bg-white dark:bg-slate-800/80 rounded-2xl shadow-xl p-8 md:p-12 mb-10 border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center min-h-[500px]">
-        <div id="authWarning" class="flex flex-col items-center justify-center gap-6 w-full max-w-5xl mx-auto text-center">
-            <div class="bg-indigo-100 dark:bg-indigo-500/20 p-5 rounded-3xl mb-2"><svg class="w-12 h-12 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg></div>
-            <h2 class="text-3xl md:text-5xl font-black mb-4">Automate Shipping Labels &<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">P&L Profit Analysis</span></h2>
-            <p class="text-sm md:text-base text-slate-600 dark:text-slate-400 font-medium leading-relaxed mb-6 max-w-3xl mx-auto">The all-in-one suite for modern Flipkart & Meesho sellers. Smart-crop PDF labels into thermal sizes, auto-generate SKU packing lists, and parse official settlement spreadsheets with cloud-saved SKU cost memory.</p>
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12">
-                <button id="googleSignInBtn" class="flex items-center gap-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black py-4 px-8 rounded-xl shadow-lg btn-hover text-sm tracking-wide">Sign In / Start Trial</button>
+
+    <!-- ============================================== -->
+    <!-- LANDING / AUTH PANEL                           -->
+    <!-- ============================================== -->
+    <div id="authPanel" class="glass-panel rounded-3xl shadow-2xl p-8 md:p-16 mb-10 flex flex-col items-center justify-center min-h-[500px]">
+        <div id="authWarning" class="flex flex-col items-center text-center">
+            <div class="bg-indigo-500/20 p-5 rounded-3xl mb-6 border border-indigo-500/30 shadow-inner">
+                <svg class="w-14 h-14 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+            </div>
+            <h2 class="text-4xl md:text-6xl font-black text-white tracking-tight mb-6 leading-tight">Master Your Ecommerce<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Operations & Profits</span></h2>
+            <p class="text-base text-slate-400 font-medium leading-relaxed mb-10 max-w-2xl mx-auto">
+                Smart-crop PDF shipping labels, auto-generate packing lists, and parse official settlement spreadsheets from Flipkart and Meesho to calculate your exact true Net Profit.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <button id="googleSignInBtn" class="flex items-center gap-3 bg-white text-slate-900 hover:bg-slate-200 font-black py-4 px-8 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.2)] btn-hover text-sm tracking-wide">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                    Secure Login
+                </button>
             </div>
         </div>
-        <div id="expiredWarning" class="hidden flex flex-col items-center justify-center gap-4 w-full">
-            <p class="text-xs font-black text-rose-500 uppercase px-4 py-2 rounded-lg bg-rose-500/10">Your Plan Has Expired</p>
-            <a href="https://wa.me/919970836509" target="_blank" class="bg-emerald-500 hover:bg-emerald-600 text-white font-black py-3 px-4 rounded-xl text-[11px] uppercase tracking-widest">Upgrade on WhatsApp</a>
-            <button id="expiredLogoutBtn" class="mt-2 text-slate-500 hover:text-slate-700 font-bold text-xs underline cursor-pointer">Sign out</button>
+
+        <div id="expiredWarning" class="hidden flex flex-col items-center text-center gap-4 w-full">
+            <div class="bg-rose-500/20 p-4 rounded-full mb-2"><svg class="w-10 h-10 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
+            <h2 class="text-3xl font-black text-white">Subscription Expired</h2>
+            <p class="text-slate-400 max-w-md">Your trial or active plan period has concluded. To regain access to your automated operations, please renew.</p>
+            <a href="https://wa.me/919970836509" target="_blank" class="mt-4 bg-emerald-500 hover:bg-emerald-600 text-white font-black py-4 px-8 rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.3)] btn-hover text-sm tracking-widest uppercase">Renew via WhatsApp</a>
         </div>
     </div>
 
     <!-- Admin Panel -->
-    <div id="adminPanel" class="hidden glass-panel bg-white dark:bg-slate-800/80 rounded-2xl shadow-xl p-6 mb-10"><tbody id="adminUserTableBody"></tbody></div>
+    <div id="adminPanel" class="hidden glass-panel rounded-3xl p-8 mb-10 border border-indigo-500/30 shadow-[0_0_30px_rgba(79,70,229,0.15)]">
+       <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
+          <h2 class="text-xl font-black text-white uppercase tracking-wider text-indigo-400">System Administrator Control</h2>
+       </div>
+       <div class="overflow-x-auto">
+          <table class="w-full text-left">
+             <thead><tr class="text-xs uppercase tracking-widest text-slate-500 border-b border-slate-800"><th class="pb-3 px-4">User</th><th class="pb-3 px-4">Role</th><th class="pb-3 px-4">Plan</th><th class="pb-3 px-4">Time Left</th><th class="pb-3 px-4 text-right">Actions</th></tr></thead>
+             <tbody id="adminUserTableBody" class="divide-y divide-slate-800/50"></tbody>
+          </table>
+       </div>
+    </div>
 
-    <!-- 1: LABEL CUTTER -->
-    <div id="labelWorkspace" class="hidden">
-        <div class="flex justify-center mb-6"><div class="flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-xl"><button id="lc_tabFk" type="button" class="px-6 py-2 rounded-lg font-black text-xs uppercase transition-all">Flipkart Labels</button><button id="lc_tabMs" type="button" class="px-6 py-2 rounded-lg font-black text-xs uppercase transition-all">Meesho Labels</button></div></div>
-        <div class="glass-panel bg-white dark:bg-slate-800/80 rounded-3xl shadow-xl p-8 mb-10">
-          <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
-            <div class="lg:col-span-2 flex flex-col gap-4">
-              <div id="lc_dropzone" class="border-[3px] border-dashed rounded-2xl p-8 text-center flex flex-col justify-center items-center relative min-h-[220px] w-full cursor-pointer"><input type="file" id="lc_pdfFileInput" accept="application/pdf" multiple class="absolute inset-0 w-full h-full opacity-0 z-50" /><p class="text-base font-black relative z-10">Drop <span id="lc_platformName">Flipkart</span> PDFs</p><div class="mt-4 bg-blue-600 text-white text-xs font-black uppercase tracking-widest px-8 py-2.5 rounded-xl shadow-md">Browse Files</div></div>
-              <div id="lc_fileManager" class="hidden rounded-2xl p-4 border border-slate-200 dark:border-slate-700 max-h-40 overflow-y-auto space-y-2"><div class="text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 px-1 pb-2 border-b border-slate-200 dark:border-slate-700">Files (<span id="lc_fileCount" class="text-slate-800 dark:text-white">0</span>)</div><div id="lc_fileList" class="space-y-2 relative z-50"></div></div>
+    <!-- ============================================== -->
+    <!-- APP 1: LABEL CUTTER WORKSPACE                  -->
+    <!-- ============================================== -->
+    <div id="labelWorkspace" class="hidden animate-fade-in">
+        <div class="flex justify-center mb-8">
+            <div class="flex bg-slate-900 p-1.5 rounded-xl border border-slate-700 shadow-inner">
+              <button id="lc_tabFk" type="button" class="bg-blue-600 text-white px-8 py-2.5 rounded-lg font-black text-xs uppercase tracking-widest transition-all shadow-md">Flipkart Labels</button>
+              <button id="lc_tabMs" type="button" class="text-slate-400 hover:text-white px-8 py-2.5 rounded-lg font-black text-xs uppercase tracking-widest transition-all">Meesho Labels</button>
             </div>
-            <div class="lg:col-span-3 flex flex-col justify-between bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl">
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-                <div class="space-y-2"><label class="block text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Output Format</label><select id="lc_printFormat" class="w-full rounded-xl p-3.5 outline-none shadow-sm font-bold text-sm bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white"></select></div>
-                <div class="space-y-2"><label class="block text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest flex justify-between"><span>Brand Logo</span><span class="text-emerald-600 dark:text-emerald-400">Auto-Transparent</span></label><div class="flex items-center gap-3 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2 shadow-sm"><div class="h-10 w-24 rounded flex items-center justify-center bg-slate-100 dark:bg-slate-800 overflow-hidden"><img id="lc_logoPreview" src="" alt="Logo" class="h-full object-contain p-1 invert dark:invert-0" /></div><div class="w-full relative overflow-hidden rounded shadow-sm"><input type="file" id="lc_logoInput" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" /><div class="block text-center font-black uppercase text-[10px] py-2.5 bg-slate-200 dark:bg-slate-700">Change Logo</div></div></div></div>
+        </div>
+
+        <div class="glass-panel rounded-3xl shadow-2xl p-8 mb-10 border border-slate-700">
+          <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+            <!-- Dropzone -->
+            <div class="lg:col-span-2 flex flex-col gap-4">
+              <div id="lc_dropzone" class="border-[3px] border-dashed rounded-2xl p-8 transition-all text-center flex flex-col justify-center items-center relative border-blue-500/50 bg-blue-500/5 hover:bg-blue-500/10 cursor-pointer min-h-[250px]">
+                <input type="file" id="lc_pdfFileInput" accept="application/pdf" multiple class="absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" />
+                <div class="bg-blue-500/20 p-4 rounded-full text-blue-400 mb-4"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg></div>
+                <p class="text-lg font-black text-white">Drop <span id="lc_platformName" class="text-blue-400">Flipkart</span> PDFs</p>
+                <div class="mt-4 bg-slate-800 border border-slate-600 text-white text-[10px] font-black uppercase tracking-widest px-6 py-2 rounded-lg">Browse Files</div>
               </div>
-              <div class="mt-auto flex flex-col gap-3">
-                <div class="flex items-center gap-3 relative z-10"><input type="checkbox" id="lc_includeSummary" checked class="w-5 h-5 rounded cursor-pointer border-slate-300 dark:border-slate-600" /><label for="lc_includeSummary" class="text-xs font-bold cursor-pointer text-slate-700 dark:text-slate-300">Append Summaries</label></div>
-                <div class="flex gap-4 mt-1"><button id="lc_resetBtn" class="w-1/4 bg-slate-200 dark:bg-slate-800 font-black py-4 rounded-xl text-xs uppercase btn-hover border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-white shadow-sm">Reset</button><button id="lc_processBtn" disabled class="w-3/4 bg-blue-600 text-white font-black py-4 px-6 rounded-xl text-sm uppercase btn-hover disabled:opacity-50"><span id="lc_processBtnText">Process Labels</span></button></div>
+              <div id="lc_fileManager" class="hidden bg-slate-900/80 rounded-2xl p-4 border border-slate-700 max-h-40 overflow-y-auto">
+                <div class="text-[10px] font-black uppercase tracking-widest text-slate-400 pb-2 border-b border-slate-800 mb-2">Files (<span id="lc_fileCount" class="text-white">0</span>)</div>
+                <div id="lc_fileList" class="space-y-2"></div>
+              </div>
+            </div>
+
+            <!-- Settings -->
+            <div class="lg:col-span-3 flex flex-col justify-between bg-slate-900/50 p-8 rounded-2xl border border-slate-700">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+                <div class="space-y-2">
+                  <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Output Format</label>
+                  <select id="lc_printFormat" class="w-full bg-slate-950 border border-slate-700 text-white text-sm font-bold rounded-xl p-3.5 outline-none focus:border-indigo-500"></select>
+                </div>
+                <div class="space-y-2">
+                  <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest flex justify-between"><span>Brand Logo</span><span class="text-emerald-400">Auto-Transparent</span></label>
+                  <div class="flex items-center gap-3 bg-slate-950 border border-slate-700 rounded-xl p-2">
+                    <div class="h-10 w-24 rounded flex items-center justify-center bg-slate-800 border border-slate-700 overflow-hidden"><img id="lc_logoPreview" src="" alt="Logo" class="h-full object-contain p-1" /></div>
+                    <div class="w-full relative overflow-hidden rounded"><input type="file" id="lc_logoInput" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" /><div class="block text-center font-black uppercase text-[10px] py-2.5 bg-slate-800 text-white rounded">Change</div></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-auto flex flex-col gap-4">
+                <div class="flex items-center gap-3 bg-slate-950 p-4 rounded-xl border border-slate-800"><input type="checkbox" id="lc_includeSummary" checked class="w-5 h-5 rounded cursor-pointer accent-indigo-500 bg-slate-800 border-slate-600" /><label for="lc_includeSummary" class="text-xs font-bold cursor-pointer text-slate-300">Append Courier, Seller & SKU Summaries</label></div>
+                <div class="flex gap-4">
+                  <button id="lc_resetBtn" class="w-1/4 bg-slate-800 text-white hover:bg-rose-600 font-black py-4 rounded-xl text-xs uppercase btn-hover border border-slate-700">Reset</button>
+                  <button id="lc_processBtn" disabled class="w-3/4 bg-indigo-600 hover:bg-indigo-500 text-white font-black py-4 px-6 rounded-xl text-sm uppercase shadow-[0_0_20px_rgba(79,70,229,0.3)] btn-hover disabled:opacity-50 disabled:shadow-none"><span id="lc_processBtnText">Process Labels</span></button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div id="lc_results" class="hidden mb-10 p-6 shadow-lg bg-white dark:bg-slate-800/80 rounded-2xl flex justify-between items-center"><div class="flex items-center gap-8"><div><span class="block text-[10px] text-slate-500 font-black uppercase mb-1">Total Orders</span><span id="lc_metricTotal" class="text-4xl font-black text-slate-800 dark:text-white">0</span></div><div class="h-12 w-[2px] bg-slate-200 dark:bg-slate-700 rounded-full"></div><div><span class="block text-[10px] text-slate-500 font-black uppercase mb-1">Total Items</span><span id="lc_metricPieces" class="text-4xl font-black text-blue-600 dark:text-blue-400">0</span></div></div><div class="flex gap-4"><button id="lc_previewBtn" class="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white font-black py-3 px-6 rounded-xl text-xs uppercase shadow-sm border border-slate-300 dark:border-slate-600">Preview</button><button id="lc_downloadBtn" class="bg-emerald-500 text-white font-black py-3 px-8 rounded-xl text-xs uppercase shadow-md">Save PDF</button></div></div>
-        <div id="recoveryPanel" class="hidden p-6 mb-10 bg-white dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-lg"><div class="flex justify-between items-center mb-4 border-b border-slate-200 dark:border-slate-700 pb-3"><h2 class="text-sm font-black uppercase text-slate-800 dark:text-white">Saved Batches</h2></div><ul id="savedBatchesList" class="space-y-3 max-h-48 overflow-y-auto pr-2"></ul></div>
+
+        <div id="lc_results" class="hidden mb-10 p-8 glass-panel bg-slate-900/80 rounded-3xl border border-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.1)] flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-8">
+              <div><span class="block text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Total Orders</span><span id="lc_metricTotal" class="text-5xl font-black text-white">0</span></div>
+              <div class="h-16 w-[2px] bg-slate-700 rounded-full"></div>
+              <div><span class="block text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Total Items</span><span id="lc_metricPieces" class="text-5xl font-black text-indigo-400">0</span></div>
+            </div>
+            <div class="flex gap-4 w-full md:w-auto">
+              <button id="lc_previewBtn" class="flex-1 bg-slate-800 text-white font-black py-4 px-8 rounded-xl text-xs uppercase tracking-widest border border-slate-600 btn-hover">Preview</button>
+              <button id="lc_downloadBtn" class="flex-2 bg-emerald-500 text-white font-black py-4 px-10 rounded-xl text-xs uppercase tracking-widest shadow-[0_0_20px_rgba(16,185,129,0.4)] btn-hover">Save Print PDF</button>
+            </div>
+        </div>
+        
+        <div id="recoveryPanel" class="hidden glass-panel bg-slate-900/80 rounded-3xl p-6 mb-10 border border-slate-700 shadow-xl">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-800 pb-4"><h2 class="text-sm font-black uppercase tracking-widest text-white">Cloud Recovery (Last 6 Hours)</h2><span class="bg-indigo-500/20 text-indigo-400 text-[9px] font-black px-2 py-1 rounded uppercase tracking-widest">Auto-Deletes</span></div>
+            <ul id="savedBatchesList" class="space-y-3 max-h-48 overflow-y-auto pr-2"></ul>
+        </div>
     </div>
 
-    <!-- 2: FLIPKART P&L -->
-    <div id="fkPnlWorkspace" class="hidden space-y-6">
-      <div class="w-full bg-slate-900/60 p-6 rounded-2xl border-2 border-dashed border-slate-700 text-center cursor-pointer relative"><input type="file" id="fk_excelInput" accept=".xlsx, .xls" class="absolute inset-0 opacity-0 z-10 cursor-pointer" /><p class="text-sm font-bold text-slate-200">Drop Flipkart P&L Excel</p></div>
+    <!-- ============================================== -->
+    <!-- APP 2: FLIPKART P&L WORKSPACE                  -->
+    <!-- ============================================== -->
+    <div id="fkPnlWorkspace" class="hidden space-y-8 animate-fade-in">
+      <div class="w-full bg-slate-900/60 p-10 rounded-3xl border-2 border-dashed border-blue-500/30 hover:border-blue-500 transition-colors text-center cursor-pointer relative shadow-lg">
+        <input type="file" id="fk_excelInput" accept=".xlsx, .xls" class="absolute inset-0 opacity-0 z-10 cursor-pointer" />
+        <div class="flex flex-col items-center justify-center gap-3 pointer-events-none">
+          <div class="p-4 bg-blue-500/20 text-blue-400 rounded-full"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg></div>
+          <p class="text-xl font-black text-white">Drop Official Flipkart P&L Report Here</p>
+          <p class="text-xs text-slate-400 font-medium uppercase tracking-widest">Requires 'SKU-level P&L' Sheet</p>
+        </div>
+      </div>
+      
       <div id="fk_calcSection" class="hidden space-y-6">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"><div class="bg-slate-900/80 border border-slate-800 p-5 rounded-xl"><span class="text-[10px] font-black uppercase text-slate-400">Total Net Units</span><p id="fk_kpiUnits" class="text-2xl font-black text-white mt-1">0</p></div><div class="bg-slate-900/80 border border-slate-800 p-5 rounded-xl"><span class="text-[10px] font-black uppercase text-slate-400">Total Settlement</span><p id="fk_kpiSettlement" class="text-2xl font-black text-blue-400 mt-1">₹0.00</p></div><div class="bg-slate-900/80 border border-slate-800 p-5 rounded-xl"><span class="text-[10px] font-black uppercase text-slate-400">Total Gross Profit</span><p id="fk_kpiGross" class="text-2xl font-black text-emerald-400 mt-1">₹0.00</p></div><div class="bg-slate-900/80 border border-slate-800 p-5 rounded-xl bg-gradient-to-br from-emerald-950/30 to-slate-900"><span class="text-[10px] font-black uppercase text-emerald-400">Final Net Profit</span><p id="fk_kpiNet" class="text-2xl font-black text-emerald-300 mt-1">₹0.00</p></div></div>
-        <div class="flex items-center gap-3 bg-slate-900/90 p-4 rounded-xl border border-slate-800"><label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Bulk Fill Missing Costs (₹):</label><input type="number" id="fk_bulkCostInput" class="bg-slate-950 border border-slate-700 px-3 py-2 rounded-lg text-white" /><button id="fk_applyBulkBtn" class="bg-slate-800 border border-slate-700 text-white px-4 py-2 rounded-lg text-xs font-black uppercase">Apply to Empty</button></div>
-        <div class="max-h-[500px] overflow-y-auto bg-slate-900/80 border border-slate-800 rounded-2xl shadow-xl"><table class="w-full text-left text-sm"><thead class="bg-slate-950 text-slate-400 text-[10px] font-black uppercase tracking-widest sticky top-0 border-b border-slate-800 z-10"><tr><th class="py-3 px-4">#</th><th class="py-3 px-4">SKU ID</th><th class="py-3 px-4 text-right">Net Units</th><th class="py-3 px-4 text-right">Settlement</th><th class="py-3 px-4 text-center">Cost / Unit (₹)</th><th class="py-3 px-4 text-right">Profit / Unit</th><th class="py-3 px-4 text-right">Total Profit</th></tr></thead><tbody id="fk_skuTableBody" class="divide-y divide-slate-800/60 font-medium"></tbody></table></div>
-        <div class="flex justify-between items-center bg-slate-900/90 p-6 rounded-2xl border border-slate-800"><h3 class="text-sm font-black text-white uppercase tracking-wider">Return Losses</h3><div class="flex gap-4"><input type="number" id="fk_lossInput" value="0" class="bg-slate-950 border border-slate-700 px-4 py-2.5 rounded-xl text-rose-400 font-black outline-none focus:border-rose-500" /><button id="fk_recalcBtn" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black px-6 py-2.5 rounded-xl text-xs uppercase">Calculate</button></div></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Net Units</span><p id="fk_kpiUnits" class="text-3xl font-black text-white mt-1">0</p></div>
+          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Settlement</span><p id="fk_kpiSettlement" class="text-3xl font-black text-blue-400 mt-1">₹0.00</p></div>
+          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Gross Profit (Valid SKUs)</span><p id="fk_kpiGross" class="text-3xl font-black text-emerald-400 mt-1">₹0.00</p></div>
+          <div class="glass-panel border border-emerald-500/30 p-6 rounded-2xl bg-gradient-to-br from-emerald-900/40 to-slate-900 shadow-[0_0_20px_rgba(16,185,129,0.15)]"><span class="text-[10px] font-black uppercase text-emerald-400 tracking-widest">Final Net Profit</span><p id="fk_kpiNet" class="text-3xl font-black text-emerald-300 mt-1">₹0.00</p></div>
+        </div>
+
+        <div class="flex items-center gap-3 bg-slate-900 p-4 rounded-2xl border border-slate-700 shadow-md">
+            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2">Bulk Fill Missing Product Costs (₹):</label>
+            <input type="number" id="fk_bulkCostInput" class="bg-slate-950 border border-slate-700 px-4 py-2 rounded-xl text-white font-bold outline-none focus:border-blue-500 w-32" />
+            <button id="fk_applyBulkBtn" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-colors btn-hover">Apply To Empty</button>
+        </div>
+
+        <div class="glass-panel rounded-3xl border border-slate-700 shadow-xl overflow-hidden">
+          <div class="max-h-[500px] overflow-y-auto">
+            <table class="w-full text-left text-sm whitespace-nowrap">
+              <thead class="bg-slate-950 text-slate-400 text-[10px] font-black uppercase tracking-widest sticky top-0 border-b border-slate-700 z-10">
+                <tr><th class="py-4 px-6">#</th><th class="py-4 px-6">SKU ID</th><th class="py-4 px-6 text-right">Net Units</th><th class="py-4 px-6 text-right">Total Settlement</th><th class="py-4 px-6 text-center">Your Mfg Cost (₹)</th><th class="py-4 px-6 text-right">Profit / Unit</th><th class="py-4 px-6 text-right">Total Profit</th></tr>
+              </thead>
+              <tbody id="fk_skuTableBody" class="divide-y divide-slate-800 font-medium"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="glass-panel p-6 rounded-2xl border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div><h3 class="text-sm font-black text-white uppercase tracking-wider">Unclaimed Return & Damage Losses</h3><p class="text-xs text-slate-400 mt-1">Deduct missing items or packaging waste.</p></div>
+          <div class="flex items-center gap-4 w-full sm:w-auto">
+            <div class="relative w-full sm:w-56"><span class="absolute left-4 top-3.5 text-slate-500 font-black text-sm">₹</span><input type="number" id="fk_lossInput" value="0" class="w-full bg-slate-950 border border-slate-700 pl-8 pr-4 py-3 rounded-xl font-black text-rose-400 outline-none focus:border-rose-500 shadow-inner" /></div>
+            <button id="fk_recalcBtn" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black px-8 py-3 rounded-xl text-xs uppercase tracking-widest btn-hover">Update</button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- 3: MEESHO P&L -->
-    <div id="msPnlWorkspace" class="hidden space-y-6">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="relative bg-slate-900/60 p-6 rounded-2xl border-2 border-dashed border-slate-700 text-center"><input type="file" id="ms_payInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 opacity-0 z-10 cursor-pointer" /><p class="text-sm font-black text-slate-200">1. Payments Report</p></div>
-        <div class="relative bg-slate-900/60 p-6 rounded-2xl border-2 border-dashed border-slate-700 text-center"><input type="file" id="ms_ordInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 opacity-0 z-10 cursor-pointer" /><p class="text-sm font-black text-slate-200">2. Orders Report</p></div>
-        <div class="relative bg-slate-900/60 p-6 rounded-2xl border-2 border-dashed border-slate-700 text-center"><input type="file" id="ms_retInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 opacity-0 z-10 cursor-pointer" /><p class="text-sm font-black text-slate-200">3. Returns Report</p></div>
+    <!-- ============================================== -->
+    <!-- APP 3: MEESHO P&L WORKSPACE                    -->
+    <!-- ============================================== -->
+    <div id="msPnlWorkspace" class="hidden space-y-8 animate-fade-in">
+      <div class="w-full bg-slate-900/60 p-10 rounded-3xl border-2 border-dashed border-pink-500/30 hover:border-pink-500 transition-colors text-center cursor-pointer relative shadow-lg">
+        <input type="file" id="ms_excelInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 opacity-0 z-10 cursor-pointer" />
+        <div class="flex flex-col items-center justify-center gap-3 pointer-events-none">
+          <div class="p-4 bg-pink-500/20 text-pink-400 rounded-full"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg></div>
+          <p class="text-xl font-black text-white">Drop Official Meesho Payment File Here</p>
+          <p class="text-xs text-slate-400 font-medium uppercase tracking-widest">Auto-extracts Delivered, RTOs, Returns & Settlements</p>
+        </div>
       </div>
+
       <div id="ms_calcSection" class="hidden space-y-6">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"><div class="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400">Total Net Settlement</span><p id="ms_kpiSettlement" class="text-3xl font-black text-blue-400 mt-1">₹0.00</p></div><div class="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400">Delivered Orders</span><p id="ms_kpiDelivered" class="text-3xl font-black text-emerald-400 mt-1">0</p></div><div class="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400">Return Units</span><p id="ms_kpiReturns" class="text-3xl font-black text-rose-400 mt-1">0</p></div><div class="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl bg-gradient-to-br from-emerald-950/40 to-slate-900"><span class="text-[10px] font-black uppercase text-emerald-400">Realized Net Profit</span><p id="ms_kpiNetProfit" class="text-3xl font-black text-emerald-300 mt-1">₹0.00</p></div></div>
-        <div class="flex items-center gap-3 bg-slate-900/90 p-4 rounded-xl border border-slate-800"><label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Bulk Fill Missing Costs (₹):</label><input type="number" id="ms_bulkCostInput" class="bg-slate-950 border border-slate-700 px-3 py-2 rounded-lg text-white" /><button id="ms_applyBulkBtn" class="bg-slate-800 border border-slate-700 text-white px-4 py-2 rounded-lg text-xs font-black uppercase">Apply to Empty</button></div>
-        <div class="max-h-[500px] overflow-y-auto bg-slate-900/80 border border-slate-800 rounded-2xl shadow-xl"><table class="w-full text-left text-sm"><thead class="bg-slate-950 text-slate-400 text-[10px] font-black uppercase tracking-widest sticky top-0 border-b border-slate-800 z-10"><tr><th class="py-3 px-4">#</th><th class="py-3 px-4">SKU ID</th><th class="py-3 px-4 text-right">Delivered</th><th class="py-3 px-4 text-right">Returns</th><th class="py-3 px-4 text-right">Settlement</th><th class="py-3 px-4 text-center">Cost / Unit (₹)</th><th class="py-3 px-4 text-right">Total Profit</th></tr></thead><tbody id="ms_skuTableBody" class="divide-y divide-slate-800/60 font-medium"></tbody></table></div>
-        <div class="flex justify-between items-center bg-slate-900/90 p-6 rounded-2xl border border-slate-800"><h3 class="text-sm font-black text-white uppercase tracking-wider">Additional Losses</h3><div class="flex gap-4"><input type="number" id="ms_lossInput" value="0" class="bg-slate-950 border border-slate-700 px-4 py-2.5 rounded-xl text-rose-400 font-black outline-none focus:border-rose-500" /><button id="ms_recalcBtn" class="bg-gradient-to-r from-pink-500 to-rose-600 text-white font-black px-6 py-2.5 rounded-xl text-xs uppercase">Recompute</button></div></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Net Settlement</span><p id="ms_kpiSettlement" class="text-3xl font-black text-blue-400 mt-1">₹0.00</p></div>
+          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Delivered Orders</span><p id="ms_kpiDelivered" class="text-3xl font-black text-emerald-400 mt-1">0</p></div>
+          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Return / RTO Units</span><p id="ms_kpiReturns" class="text-3xl font-black text-rose-400 mt-1">0</p></div>
+          <div class="glass-panel border border-emerald-500/30 p-6 rounded-2xl bg-gradient-to-br from-emerald-900/40 to-slate-900 shadow-[0_0_20px_rgba(16,185,129,0.15)]"><span class="text-[10px] font-black uppercase text-emerald-400 tracking-widest">Realized Net Profit</span><p id="ms_kpiNetProfit" class="text-3xl font-black text-emerald-300 mt-1">₹0.00</p></div>
+        </div>
+
+        <div class="flex items-center gap-3 bg-slate-900 p-4 rounded-2xl border border-slate-700 shadow-md">
+            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2">Bulk Fill Missing Product Costs (₹):</label>
+            <input type="number" id="ms_bulkCostInput" class="bg-slate-950 border border-slate-700 px-4 py-2 rounded-xl text-white font-bold outline-none focus:border-pink-500 w-32" />
+            <button id="ms_applyBulkBtn" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-colors btn-hover">Apply To Empty</button>
+        </div>
+
+        <div class="glass-panel rounded-3xl border border-slate-700 shadow-xl overflow-hidden">
+          <div class="max-h-[500px] overflow-y-auto">
+            <table class="w-full text-left text-sm whitespace-nowrap">
+              <thead class="bg-slate-950 text-slate-400 text-[10px] font-black uppercase tracking-widest sticky top-0 border-b border-slate-700 z-10">
+                <tr><th class="py-4 px-6">#</th><th class="py-4 px-6">SKU ID</th><th class="py-4 px-6 text-right">Delivered</th><th class="py-4 px-6 text-right">Returns</th><th class="py-4 px-6 text-right">Net Payout</th><th class="py-4 px-6 text-center">Your Mfg Cost (₹)</th><th class="py-4 px-6 text-right">Total Profit</th></tr>
+              </thead>
+              <tbody id="ms_skuTableBody" class="divide-y divide-slate-800 font-medium"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="glass-panel p-6 rounded-2xl border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div><h3 class="text-sm font-black text-white uppercase tracking-wider">Additional Warehouse Losses</h3><p class="text-xs text-slate-400 mt-1">Deduct missing inventory not covered by SPF.</p></div>
+          <div class="flex items-center gap-4 w-full sm:w-auto">
+            <div class="relative w-full sm:w-56"><span class="absolute left-4 top-3.5 text-slate-500 font-black text-sm">₹</span><input type="number" id="ms_lossInput" value="0" class="w-full bg-slate-950 border border-slate-700 pl-8 pr-4 py-3 rounded-xl font-black text-rose-400 outline-none focus:border-rose-500 shadow-inner" /></div>
+            <button id="ms_recalcBtn" class="bg-gradient-to-r from-pink-500 to-rose-600 text-white font-black px-8 py-3 rounded-xl text-xs uppercase tracking-widest btn-hover">Update</button>
+          </div>
+        </div>
       </div>
     </div>
+
   </main>
 
-  <div id="loader" class="hidden fixed bottom-6 left-1/2 transform -translate-x-1/2 z-[100] bg-slate-800 p-5 rounded-2xl shadow-xl flex items-center gap-4 border border-slate-700"><div class="inline-block animate-spin rounded-full h-8 w-8 border-[3px] border-slate-600 border-t-blue-500"></div><p id="loaderText" class="text-sm font-black text-white tracking-tight">Processing...</p></div>
+  <!-- Processing Loader -->
+  <div id="loader" class="hidden fixed bottom-10 left-1/2 transform -translate-x-1/2 z-[100] bg-slate-800/90 backdrop-blur-xl p-5 px-8 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-slate-600 flex items-center gap-5">
+    <div class="inline-block animate-spin rounded-full h-6 w-6 border-[3px] border-slate-600 border-t-indigo-500"></div>
+    <p id="loaderText" class="text-sm font-black text-white tracking-wider uppercase">Processing Data...</p>
+  </div>
 
-  <script type="module" src="./auth.js"></script>
-  <script type="module" src="./labelCutter.js"></script>
-  <script type="module" src="./flipkartPnl.js"></script>
-  <script type="module" src="./meeshoPnl.js"></script>
+  <!-- ============================================== -->
+  <!-- SINGLE UNIFIED SCRIPT (NO MORE CORS CRASHES)   -->
+  <!-- ============================================== -->
+  <script type="module">
+    // 1. FIREBASE IMPORTS
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+    import { firebaseConfig } from './firebase-config.js';
+
+    // 2. GLOBAL STATE
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const provider = new GoogleAuthProvider();
+    const ADMIN_EMAIL = "vsshegur@gmail.com";
+    const CHROME_EXTENSION_ID = "YOUR_EXTENSION_ID_HERE";
+
+    let app_currentUserData = null;
+    let app_isAppUnlocked = false;
+    let app_currentApp = 'labelCutter'; 
+    let currentPlatform = 'flipkart'; 
+    let app_userSavedSkus = {}; 
+    const DEFAULT_BRAND_LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAABLCAMAAAD9JUoRAAAAP1BMVEXoEhK2AgLhFxfhFxfgFhZ/AAAAAADdFhbjFxfcFhbcFhbYFxfdFhbcFhbbFhbcFhYAAAAAAAAAAAAAAAAAAACY8OZZAAAAEHRSTlMPA85QoAIA/f6xUhTPbi+Pff8FGgAACahJREFUeNrtnIl24yoMhuWkNTu8/9teViNAeMltmp5MPOdMZ2LHhg8hxC+5sF4+FiucWv/FA65+QUnBOJcfWMeHdZpzxj6w1kVZGQ9LzzKIRsXYBxZIpz2FeDAmTOIlKxVlNIuk3goWgAoHqAuwQN4SKC2ccyJgcfZ7XYXI563LRvVmsEzulDwPy4pIgmsJlQ0T0uoMy3GE6p1giTSXxHIalkzziwtkjDbdpsC6sbeEtehkJHDaZ5nstduvKBeWvTINlRXsDaehjZ062x3Px+YZxm13ztMqsPD0fidYMvbGnV4NQWdWgy2C4BgWovU2sEKXzk7CAEtmBARf21jWhvWNYLlLETYsosAy1L1Ef+u3ghWGn7vTuxhQxW9TAGwLy7wCFizPu7fv/PlJGKLRzQ8ZivyLYVkjbu6Jt7+mCSBYgorZXgpLhW0D2a4f8+/8ylAgWIzYH0n5QlgQ9xXPhOW4vqLMga3BkzseiN+ElRffJ8Ly8fuljiBYpNd6IawQE/OnTkPlzLXhq8HTMa1fhRWcrxZCELDUbAGzduZsfkQHh2YXcxBzELDgbpw/pN35Yr7G3K3atXEZL3NGAiTDMuGnktB1XDBBPS0I3sxSN3Ya+yaQuck7FuSvSY3xzTHSqtgiD0thPYELewFWaHfRC4Wkcakir4aLbmY69C5oaFFM8z+1sd7iqWvVXYcbjdSjNsnHuZGeX78BrjR5Mj2SCso2TSr+Q8fhgWaDHNZEA2dhSZ111XTPL2pU4zXM9903OvggRiWGIHU0m7WK4plghE/IEiRnQJ8YHIn90unzDEshYY6Epb5ip5KaFzXUANv/sQkWiIbWjnE1sJTgNyeldNsWQA9fVCI+V5b/hKtu/VWLSUkQ125vmZYTG+1h1RMtLPx5giWxgyZDpfIEDCF+K8NasY+Pd3H2GJa98WyDVm+0usenM9sIZvGoY6qKSqtwgJXaoRrrqzaBYeHcAILVCuGJjOGNxwEqSM1R1NIHMQVW7e4BLgTLoikPm221z0+DgFYzR4iM5dnNpLC8tdU+BVBhtScqLBDt5wFWQIFm4TjNS0eG/aJFsEZa3s2oHVjMNOFc/dy2AXj3mR2ZVjVNEWJQ+VSxNgVQYfXJgQ2WHmCZcKkOKaxZjsLx2c5PIFjZnzS49B3msDrnoKmnmGxHy3id7IH22wez3VAl7+M0oy3rLhhpWX5FaR1UcAIm+OzkZQmXBXoKS2JYcZnocQ3LG5JKW0PdhgS1wOYsCKaa0VTTmoW5cpgsIJFnahy8FZMxBIe+4SfP5izDRCJcVnUng2xjG1jtSrGFEVNYk74h2y4ttdQN7KYnURN4m7ANfstIB98s560jQtIua/bM3sSJnTDUrstB+GphRUGkN642ojeT1qK+mW6YWmuXnSqLbqh6VW7s/vTx5NXtIHb5GEtFWYDMpA9bRAcrhHDDXMSpRNRaMTNg113bWrTsnMJmEr3hI5uo06U+pQ9K3QSWqrOlsyRBRFmAJjrvYnNYe1jrInWHq+mFmS27VZsWg3uiLDD3tvZlB1adPXU16GHNGvaN3Fk7z6X4XqcOPi1wYzwAwxarp4Uc4VR1GGGVT9oBrXrQAawV9fIELDkbRTGdC2ovjszhk7OwC2t0Xd025CQsS1q/bT3oDiz907DOKFeq63nc0S97sPp1kVcDvgBLnoEFp6Yh/ASsc2UycoyfmKjei5QYlGllmwdgGTLYlN0NHOGZdhz847A4s2czGIwN4XnBNdFj5I3anj8Ai/kNBjp4OUy/tNtZMCDXH4F1UiqVbKAVcMk9WG1YLK/DqjG9oI68OUBL+ywoRfPzN2CtTbVQF3BOlT5FhMWPwBIHTuIgmsSf/wosHz61gkVxJ7BXrVw3EZvfeQTWQXZ8AtVRos/vwAo5A8H44Ordbmm3HcLyh3yWPUqkEr2pwpJafx9WK7IiZwQn8hP/C9ZR1qzIHU03y16p2Wz9JiyClx84uMOOaT3us/ZLKNpsxaCrJ7/vvapaXwcry7DItiTshLbQK74PRPAnIpwlpX3qlFPpAyFnXvS3YLW4vP/cq3AQnSR1ARaKKg9KKDwaJ2O5zM2oZf3OmUEiD/lsWIrKPNSI069Ve9MkV2boB4JSFJzvm5anGorQc2pT6/i3I5OX11WHa7As6V+RFgE7tyn63SPbneq0yJxTEyQUmPnVITstBXCzJVb8DCxm9ly3h7WzH4eezBVYgHW378EVqBqfnC+RMpNtMcyUUjI5MDdyJva8kZ+GO401fZrvCqwmFdTVm9hax+ADh/OwZiWdhrOfsCxg9FVuS7PMPXDZuMlj14DyIpSk22ahwfvMMjOhZMZr/UoppgnVNOp4TDrx2Ex2IWdUB5igKLAMzIWxbFjI48ykbnrf22QLQp2FJwHKxjQ8oO6HhG54k81TEjoXsOTSHN2tT7TTcnxWvYgwylOwyMtyIp1ZSOr81OabSTIVaas3x71wnUobRZq465KNraRTGVK3228D03EHFgdVm0kIDOerGtPVY33OZs/+DhEW42MhEFHFgUSmbnI7ch6AG7oey2WQxysNGTAd5pckeoiVkySZm2WFpwsaYVvZsLzf9RG8jOFzGwOCSUPetHRq7haFudgSwZHaEGrOt54wwrQW0gnF5Evwf36xkHTGC6vE/Pg3BgBZFGPyp0Gi8aZg+5A5BtGxOgQpbz7yx4dLNY+wLp0Ire+o5DP0pctyt+Vf5hBWu/Smcu9NVszlZNg9ppTMt7WmlfH8ZJX7b/dCrSECNN5hfG8pZxDmjTI6vfJrQlDo3WyaFmgszE1Xv1u8b7gDiOGEP1MNMtX914LDzoKbNXMGq9VpTLlhek05jqdlbcNMWGapQx44+NqDjIIlO1JZ6IJcpnJrH+iaAl8Pa5CGIywrxhPihmN2JYUulZlOLmN8cmxbnT5vxFbpWRopv5rnG29Zdzked9gXZXzQ4vu1LTbpGVR2B2y8VIjDuuLLhwIbDrUQ2z1tO9loG6+dlUyl+8H6jANCcyE1uX3Gc553+pB+Yiy15jkQypaKax/F+jeOF8PK9RkhII1HKDlfsqGLD6wu3hNnkhkaPrDCKiYOth8fWEhuEyfyZJ9pmC1Ln0gvcfeBFX0WO/Gu0J95ff3Vq+Gu1ThOKu7/KizJud1DeboO7V+A5ffFc1VZcvKNoH8WVkxYTGwrvyal7fqBhTQn6r1OiMWa/C+xej2s+Iqn7t9hVumVSPpdzn8Y1qq+opYWkqsq/AY+G7LTaVv99YfM6m/ACnJkeuEtZTSq+PXXfnXsX9l13d0muQaVxkn7B3/J7n94d0MQBQOGIgAAAABJRU5ErkJggg==";
+
+    function broadcastToExtension(isUnlocked) {
+        if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.sendMessage) {
+            try { chrome.runtime.sendMessage(CHROME_EXTENSION_ID, { action: "verifySubscription", isAuthorized: isUnlocked }, function() {}); } catch(e) {}
+        }
+    }
+
+    // 3. UI NAVIGATION
+    document.getElementById('appSelector').addEventListener('change', (e) => {
+        if (!app_isAppUnlocked) return;
+        app_currentApp = e.target.value;
+        document.getElementById('labelWorkspace').classList.add('hidden');
+        document.getElementById('fkPnlWorkspace').classList.add('hidden');
+        document.getElementById('msPnlWorkspace').classList.add('hidden');
+        
+        if (app_currentApp === 'labelCutter') { document.getElementById('labelWorkspace').classList.remove('hidden'); lc_setPlatform('flipkart'); } 
+        else if (app_currentApp === 'fkPnlCalculator') { document.getElementById('fkPnlWorkspace').classList.remove('hidden'); } 
+        else if (app_currentApp === 'msPnlCalculator') { document.getElementById('msPnlWorkspace').classList.remove('hidden'); }
+    });
+
+    document.getElementById('themeToggle').addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+        document.getElementById('lc_logoPreview').className = `h-full object-contain p-1 ${document.documentElement.classList.contains('dark') ? '' : 'invert'}`;
+    });
+
+    // 4. AUTHENTICATION & CLOUD SYNC
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            document.getElementById('authWarning').classList.add('hidden');
+            const userRef = doc(db, 'users', user.uid);
+            const userSnap = await getDoc(userRef);
+            if (!userSnap.exists()) {
+                app_currentUserData = { email: user.email, name: user.displayName || 'User', photo: user.photoURL || '', role: user.email === ADMIN_EMAIL ? 'admin' : 'user', planType: 'Free Trial', createdAt: Date.now(), expiresAt: Date.now() + (2 * 24 * 60 * 60 * 1000), isActive: true };
+                await setDoc(userRef, app_currentUserData);
+            } else {
+                app_currentUserData = userSnap.data();
+                if (user.email === ADMIN_EMAIL && app_currentUserData.role !== 'admin') { app_currentUserData.role = 'admin'; await updateDoc(userRef, { role: 'admin' }); }
+            }
+            try { const memSnap = await getDoc(doc(db, 'users', user.uid, 'skus', 'memory')); if(memSnap.exists()) app_userSavedSkus = memSnap.data() || {}; } catch(e){}
+            
+            document.getElementById('userAvatar').src = user.photoURL || 'https://via.placeholder.com/32';
+            document.getElementById('userName').textContent = user.displayName || 'User';
+            document.getElementById('userInfo').classList.remove('hidden');
+            
+            const isAdmin = app_currentUserData.role === 'admin'; const now = Date.now(); const isExpired = !isAdmin && (now > app_currentUserData.expiresAt || !app_currentUserData.isActive);
+            if (isAdmin) {
+                document.getElementById('userPlan').textContent = "ADMINISTRATOR"; document.getElementById('userPlan').className = "text-[9px] font-black uppercase text-indigo-400";
+                document.getElementById('adminToggleBtn').classList.remove('hidden'); document.getElementById('authPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.remove('hidden'); document.getElementById('adminPanel').classList.remove('hidden');
+                broadcastToExtension(true); loadAdminUsers();
+            } else {
+                document.getElementById('adminToggleBtn').classList.add('hidden');
+                const daysLeft = Math.ceil((app_currentUserData.expiresAt - now) / (1000 * 60 * 60 * 24));
+                if (daysLeft > 0) { document.getElementById('userPlan').textContent = `${app_currentUserData.planType} • ${daysLeft} Days Left`; document.getElementById('userPlan').className = "text-[9px] font-black uppercase text-emerald-400"; } 
+                else { document.getElementById('userPlan').textContent = "PLAN EXPIRED"; document.getElementById('userPlan').className = "text-[9px] font-black uppercase text-rose-500"; }
+                
+                if (isExpired) {
+                    document.getElementById('authPanel').classList.remove('hidden'); document.getElementById('authWarning').classList.add('hidden'); document.getElementById('expiredWarning').classList.remove('hidden'); document.getElementById('appSelectorContainer').classList.add('hidden');
+                    broadcastToExtension(false);
+                } else {
+                    app_isAppUnlocked = true; document.getElementById('authPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.remove('hidden');
+                    document.getElementById('appSelector').value = "labelCutter"; document.getElementById('labelWorkspace').classList.remove('hidden'); lc_setPlatform('flipkart'); lc_loadRecoveredPdfs(); broadcastToExtension(true);
+                }
+            }
+        } else {
+            app_currentUserData = null; app_userSavedSkus = {}; app_isAppUnlocked = false;
+            document.getElementById('authPanel').classList.remove('hidden'); document.getElementById('authWarning').classList.remove('hidden'); document.getElementById('expiredWarning').classList.add('hidden'); 
+            document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); document.getElementById('msPnlWorkspace').classList.add('hidden');
+            document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.add('hidden'); document.getElementById('userInfo').classList.add('hidden');
+            broadcastToExtension(false);
+        }
+    });
+
+    document.getElementById('googleSignInBtn').addEventListener('click', () => signInWithPopup(auth, provider).catch(e => alert(e.message)));
+    document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth).then(()=>location.reload()));
+    document.getElementById('expiredLogoutBtn').addEventListener('click', () => signOut(auth).then(()=>location.reload()));
+
+    // 5. ADMIN CONTROLS
+    document.getElementById('adminToggleBtn').addEventListener('click', async () => {
+        if (document.getElementById('adminPanel').classList.contains('hidden')) {
+            document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); document.getElementById('msPnlWorkspace').classList.add('hidden');
+            document.getElementById('adminPanel').classList.remove('hidden'); document.getElementById('adminToggleBtn').textContent = "Back to App"; await loadAdminUsers();
+        } else {
+            document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('adminToggleBtn').textContent = "Admin Panel";
+            if(app_currentApp === 'labelCutter') document.getElementById('labelWorkspace').classList.remove('hidden'); 
+            else if (app_currentApp === 'fkPnlCalculator') document.getElementById('fkPnlWorkspace').classList.remove('hidden');
+            else document.getElementById('msPnlWorkspace').classList.remove('hidden');
+        }
+    });
+
+    async function loadAdminUsers() {
+        const tbody = document.getElementById('adminUserTableBody'); tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-xs font-bold text-slate-500">Fetching users...</td></tr>';
+        try {
+            const snapshot = await getDocs(collection(db, 'users')); tbody.innerHTML = '';
+            snapshot.forEach(docSnap => {
+                const u = docSnap.data(); const uid = docSnap.id; const now = Date.now(); const daysLeft = Math.ceil((u.expiresAt - now) / (1000 * 60 * 60 * 24)); const isExp = daysLeft <= 0;
+                const tr = document.createElement('tr'); tr.className = "border-b border-slate-800/50 text-sm hover:bg-slate-800/30 transition-colors";
+                tr.innerHTML = `<td class="py-4 px-4 flex items-center gap-3"><img src="${u.photo || 'https://via.placeholder.com/24'}" class="w-8 h-8 rounded-full shadow-sm"><div><p class="font-bold text-white">${u.name}</p><p class="text-[10px] text-slate-500">${u.email}</p></div></td><td class="py-4 px-4"><span class="px-2 py-1 rounded text-[9px] font-black uppercase tracking-widest ${u.role === 'admin' ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 text-slate-400'}">${u.role}</span></td><td class="py-4 px-4"><span class="px-2 py-1 rounded text-[9px] font-black uppercase tracking-widest ${u.planType === 'Free Trial' ? 'bg-orange-500/20 text-orange-400' : 'bg-emerald-500/20 text-emerald-400'}">${u.planType}</span></td><td class="py-4 px-4 font-black text-xs ${isExp && u.role !== 'admin' ? 'text-rose-500' : 'text-slate-300'}">${u.role === 'admin' ? 'LIFETIME' : (isExp ? 'EXPIRED' : `${daysLeft} DAYS`)}</td><td class="py-4 px-4 flex justify-end items-center gap-2">${u.role !== 'admin' ? `<input type="number" id="days_${uid}" placeholder="Days" class="w-16 bg-slate-900 border border-slate-700 text-white text-xs px-2 py-1.5 rounded text-center outline-none focus:border-indigo-500" /><button onclick="window.updateDaysAdmin('${uid}')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-[9px] px-3 py-2 rounded uppercase tracking-widest font-black transition-colors">Update</button>` : '<span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Sys Admin</span>'}</td>`; tbody.appendChild(tr);
+            });
+        } catch(e) {}
+    }
+
+    window.updateDaysAdmin = async function(uid) {
+        const inputEl = document.getElementById(`days_${uid}`); if (!inputEl) return; const daysToChange = parseInt(inputEl.value, 10); if (isNaN(daysToChange)) return;
+        if(!confirm(`Update plan by ${daysToChange} days?`)) return;
+        const userRef = doc(db, 'users', uid); const snap = await getDoc(userRef);
+        if(snap.exists()) { const u = snap.data(); let baseTime = u.expiresAt > Date.now() ? u.expiresAt : Date.now(); let newExp = baseTime + (daysToChange * 24 * 60 * 60 * 1000); await updateDoc(userRef, { expiresAt: newExp, planType: 'Paid Plan' }); loadAdminUsers(); }
+    }
+
+    // -------------------------------------------------------------------------
+    // 6. LABEL CUTTER ENGINE
+    // -------------------------------------------------------------------------
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    let lc_rawFiles = []; let lc_parsedData = []; let lc_customLogoBase64 = null;
+
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); document.getElementById('lc_logoPreview').className = "h-full object-contain p-1"; } else { document.documentElement.classList.remove('dark'); document.getElementById('lc_logoPreview').className = "h-full object-contain p-1 invert"; }
+    try { const cachedLogo = localStorage.getItem('savedBrandLogo'); lc_customLogoBase64 = (cachedLogo && cachedLogo.startsWith('data:image')) ? cachedLogo : DEFAULT_BRAND_LOGO; document.getElementById('lc_logoPreview').src = lc_customLogoBase64; } catch(e) { lc_customLogoBase64 = DEFAULT_BRAND_LOGO; document.getElementById('lc_logoPreview').src = lc_customLogoBase64; }
+
+    document.getElementById('lc_logoInput').addEventListener('change', (e) => {
+      const f = e.target.files[0]; if (!f) return; const r = new FileReader();
+      r.onload = (ev) => {
+        const img = new Image(); img.onload = () => {
+          const cvs = document.createElement('canvas'); cvs.width = img.width; cvs.height = img.height; const ctx = cvs.getContext('2d'); ctx.drawImage(img, 0, 0);
+          const imgData = ctx.getImageData(0,0,cvs.width,cvs.height); const d = imgData.data; for (let i=0; i<d.length; i+=4) { const gray = (d[i]*0.299 + d[i+1]*0.587 + d[i+2]*0.114); if(gray > 180) d[i+3]=0; else {d[i]=0; d[i+1]=0; d[i+2]=0; d[i+3]=255;} }
+          ctx.putImageData(imgData, 0, 0); lc_customLogoBase64 = cvs.toDataURL('image/png'); document.getElementById('lc_logoPreview').src = lc_customLogoBase64; try { localStorage.setItem('savedBrandLogo', lc_customLogoBase64); } catch(e){}
+        }; img.src = ev.target.result;
+      }; r.readAsDataURL(f);
+    });
+
+    document.getElementById('lc_tabFk').addEventListener('click', () => lc_setPlatform('flipkart'));
+    document.getElementById('lc_tabMs').addEventListener('click', () => lc_setPlatform('meesho'));
+
+    function lc_setPlatform(platform) {
+      currentPlatform = platform; document.getElementById('lc_results').classList.add('hidden'); lc_parsedData = [];
+      if (platform === 'flipkart') {
+        document.getElementById('lc_tabFk').className = "bg-blue-600 text-white px-8 py-2.5 rounded-lg font-black text-xs uppercase tracking-widest shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all cursor-pointer";
+        document.getElementById('lc_tabMs').className = "text-slate-400 bg-transparent hover:text-white px-8 py-2.5 rounded-lg font-black text-xs uppercase tracking-widest transition-all cursor-pointer";
+        document.getElementById('lc_platformName').textContent = "Flipkart"; document.getElementById('lc_platformName').className = "text-blue-400 relative z-10";
+        document.getElementById('lc_dropzone').className = "border-[3px] border-dashed rounded-2xl p-8 transition-all text-center flex flex-col justify-center items-center relative border-blue-500/50 bg-blue-500/5 hover:bg-blue-500/10 cursor-pointer min-h-[250px]";
+        document.getElementById('lc_printFormat').innerHTML = `<option value="fk-4x6-no-inv" selected>4" x 6" Without Invoice</option><option value="fk-4x6-with-inv">4" x 6" With Invoice</option><option value="fk-3x5-no-inv">3" x 5" Without Invoice</option><option value="fk-3x5-with-inv">3" x 5" With Invoice</option>`;
+      } else {
+        document.getElementById('lc_tabMs').className = "bg-pink-600 text-white px-8 py-2.5 rounded-lg font-black text-xs uppercase tracking-widest shadow-[0_0_15px_rgba(219,39,119,0.4)] transition-all cursor-pointer";
+        document.getElementById('lc_tabFk').className = "text-slate-400 bg-transparent hover:text-white px-8 py-2.5 rounded-lg font-black text-xs uppercase tracking-widest transition-all cursor-pointer";
+        document.getElementById('lc_platformName').textContent = "Meesho"; document.getElementById('lc_platformName').className = "text-pink-400 relative z-10";
+        document.getElementById('lc_dropzone').className = "border-[3px] border-dashed rounded-2xl p-8 transition-all text-center flex flex-col justify-center items-center relative border-pink-500/50 bg-pink-500/5 hover:bg-pink-500/10 cursor-pointer min-h-[250px]";
+        document.getElementById('lc_printFormat').innerHTML = `<option value="ms-3x5-no-inv" selected>3" x 5" Without Invoice</option><option value="ms-3x5-with-inv">3" x 5" With Invoice</option><option value="ms-4x4-with-inv">4" x 4" With Invoice</option><option value="ms-4x6-with-inv">4" x 6" With Store Link</option>`;
+      }
+    }
+
+    document.getElementById('lc_pdfFileInput').addEventListener('change', e => {
+      const files = Array.from(e.target.files); if(files.length === 0) return;
+      files.forEach(f => lc_rawFiles.push({ id: Math.random().toString(36).substr(2), name: f.name, file: f })); lc_updateUI(); document.getElementById('lc_pdfFileInput').value = ''; 
+    });
+
+    window.lc_removeFile = function(id) { lc_rawFiles = lc_rawFiles.filter(f => f.id !== id); lc_updateUI(); };
+
+    function lc_updateUI() {
+      const list = document.getElementById('lc_fileList'); list.innerHTML = ''; document.getElementById('lc_fileCount').textContent = lc_rawFiles.length;
+      if (lc_rawFiles.length > 0) {
+          document.getElementById('lc_fileManager').classList.remove('hidden'); document.getElementById('lc_processBtn').disabled = false; document.getElementById('lc_processBtnText').textContent = `Process ${lc_rawFiles.length} File(s)`;
+          lc_rawFiles.forEach(item => {
+              const div = document.createElement('div'); div.className = "flex items-center justify-between bg-slate-950 px-3 py-2 rounded-lg text-xs border border-slate-700 shadow-sm";
+              div.innerHTML = `<span class="truncate font-bold text-white max-w-[200px]">${item.name}</span><button type="button" onclick="lc_removeFile('${item.id}')" class="text-rose-400 px-2 py-0.5 rounded bg-rose-500/10 border border-rose-500/20">✕</button>`; list.appendChild(div);
+          });
+      } else { document.getElementById('lc_fileManager').classList.add('hidden'); document.getElementById('lc_processBtn').disabled = true; document.getElementById('lc_processBtnText').textContent = "Process Labels"; }
+    }
+
+    document.getElementById('lc_resetBtn').addEventListener('click', () => { lc_rawFiles = []; document.getElementById('lc_pdfFileInput').value = ''; lc_updateUI(); });
+
+    function lc_groupLines(items) {
+      const pts = items.filter(it => it.str && it.str.trim().length > 0).map(it => ({ x: it.transform[4], y: it.transform[5], str: it.str, width: it.width || (it.str.length * 5), height: it.height || Math.abs(it.transform[3]) || 9, items: [it] }));
+      pts.sort((a,b) => b.y - a.y || a.x - b.x); const lines = []; const TOL = 2.5;
+      for (const p of pts){ let line = lines.find(l => Math.abs(l.y - p.y) < TOL); if (!line){ line = { y: p.y, items: [] }; lines.push(line); } line.items.push(p); }
+      lines.forEach(l => l.items.sort((a,b) => a.x - b.x)); lines.forEach(l => l.text = l.items.map(i => i.str).join(' ').replace(/\s+/g,' ').trim()); lines.sort((a,b) => b.y - a.y); return lines;
+    }
+    function lc_getBounds(lines, yStart, yEnd) {
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+      for (const l of lines){
+        if (l.y < yStart || l.y > yEnd) continue;
+        for (const it of l.items){ if (!it.str.trim()) continue; if (it.x < minX) minX = it.x; if (it.x + it.width > maxX) maxX = it.x + it.width; if (it.y < minY) minY = it.y; if (it.y + it.height > maxY) maxY = it.y + it.height; }
+      } return { minX, maxX, minY, maxY };
+    }
+
+    async function lc_extract(page, platform) {
+      const textContent = await page.getTextContent(); const lines = lc_groupLines(textContent.items); const fullText = lines.map(l => l.text).join(' ');
+      const v = page.view; const pdfW = v[2] - v[0]; const pdfH = v[3] - v[1];
+      let splitY = 0; let fkGstin = null; let msGap = null; let isStandaloneLabel = false; let soldBy = 'Unknown Seller';
+
+      const midMarker = lines.find(l => { const y = l.y; if (y < pdfH * 0.20 || y > pdfH * 0.65) return false; return l.text.toUpperCase().startsWith('TAX INVOICE') || l.text.toUpperCase().includes('ORIGINAL FOR RECIPIENT'); });
+      if (midMarker) { splitY = midMarker.y + 15; } else { isStandaloneLabel = true; splitY = 0; }
+
+      const sbMatch = fullText.match(/Sold [Bb]y\s*[:]?\s*([^,]+?)(?:\,|\s+34\/3\/16|\s+SHEGUR|\s+GSTIN)/i);
+      if (sbMatch && sbMatch[1]) { let extracted = sbMatch[1].trim(); if(extracted.length > 3) soldBy = extracted.substring(0, 40); 
+      } else { if (fullText.toUpperCase().includes('VIJAYALAXMI TEXTILES')) soldBy = 'VIJAYALAXMI TEXTILES'; if (fullText.toUpperCase().includes('VIPUL TEXTILES')) soldBy = 'VIPUL TEXTILES'; }
+
+      if (platform === 'flipkart') { const gstinLine = lines.find(l => l.text.includes('GSTIN:')); if (gstinLine) { const it = gstinLine.items.find(i => i.str.includes('GSTIN:')); if (it) fkGstin = { x: it.x, y: it.y }; } }
+
+      const padX = 6; const padY = 12; let lBox, iBox, fullBox;
+      if (isStandaloneLabel) {
+          const lBounds = lc_getBounds(lines, 0, pdfH);
+          const lLeft = isFinite(lBounds.minX) ? Math.max(0, lBounds.minX - padX) : 0; const lRight = isFinite(lBounds.maxX) ? Math.min(pdfW, lBounds.maxX + padX) : pdfW;
+          const lBot = isFinite(lBounds.minY) ? Math.max(0, lBounds.minY - padY) : 0; const lTop = isFinite(lBounds.maxY) ? Math.min(pdfH, lBounds.maxY + padY) : pdfH;
+          lBox = { left: lLeft, right: lRight, bottom: lBot, top: lTop, width: lRight - lLeft, height: lTop - lBot }; iBox = { left: 0, right: pdfW, bottom: 0, top: pdfH, width: pdfW, height: pdfH };
+      } else {
+          const lBounds = lc_getBounds(lines, splitY, pdfH);
+          const lLeft = isFinite(lBounds.minX) ? Math.max(0, lBounds.minX - padX) : 10; const lTop = isFinite(lBounds.maxY) ? Math.min(pdfH, lBounds.maxY + padY) : pdfH; let lRight = pdfW - lLeft; if (platform === 'flipkart') lRight = isFinite(lBounds.maxX) ? Math.min(pdfW, lBounds.maxX + padX) : (pdfW - lLeft);
+          lBox = { left: lLeft, right: lRight, bottom: splitY, top: lTop, width: lRight - lLeft, height: lTop - splitY };
+          const iBounds = lc_getBounds(lines, 0, splitY - 5); const iLeft = isFinite(iBounds.minX) ? Math.max(0, iBounds.minX - padX) : 0; const iRight = isFinite(iBounds.maxX) ? Math.min(pdfW, iBounds.maxX + padX) : pdfW; const iBot = isFinite(iBounds.minY) ? Math.max(0, iBounds.minY - padY) : 0;
+          iBox = { left: iLeft, right: iRight, bottom: iBot, top: splitY - 5, width: iRight - iLeft, height: (splitY - 5) - iBot };
+      }
+      
+      const aB = lc_getBounds(lines, 0, pdfH);
+      fullBox = { left: isFinite(aB.minX) ? Math.max(0, aB.minX - padX) : 10, right: isFinite(aB.maxX) ? Math.min(pdfW, aB.maxX + padX) : pdfW - 10, bottom: isFinite(aB.minY) ? Math.max(0, aB.minY - padY) : 10, top: isFinite(aB.maxY) ? Math.min(pdfH, aB.maxY + padY) : pdfH - 10 };
+
+      if (platform === 'meesho') {
+          let headerLine = lines.find(l => /IF UNDELIVERED|RETURN TO/i.test(l.text)); let productLine = lines.find(l => /PRODUCT DETAILS|SKU SIZE QTY/i.test(l.text)); let headY = headerLine ? headerLine.y : pdfH * 0.85; let prodY = productLine ? productLine.y : pdfH * 0.35; let addressLines = lines.filter(l => l.y < headY - 2 && l.y > prodY + 2 && l.items.some(i => i.x < pdfW * 0.48)); let gapTopY = headY - 15; let minX = headerLine ? headerLine.items[0].x : 15; let maxX = minX + 120;
+          if (addressLines.length > 0) { gapTopY = Math.min(...addressLines.map(l => l.y)); let allItems = addressLines.flatMap(l => l.items.filter(i => i.x < pdfW * 0.48)); if(allItems.length > 0) { minX = Math.min(...allItems.map(i => i.x)); maxX = Math.max(...allItems.map(i => i.x + i.width)); } }
+          msGap = { x: minX, y: prodY + 10, w: Math.min(Math.max(maxX, minX + 120), (pdfW*0.48)-5) - minX, h: Math.max((gapTopY - 5) - (prodY + 10), 15) };
+      }
+
+      let qty = 1; let sku = 'Unknown SKU'; let courier = 'Unknown Courier';
+      const cleanFull = fullText.replace(/\s+/g, ' '); const cMatch = cleanFull.match(/E-Kart|Shadowfax|Delhivery|Xpress Bees|Xpressbees|Valmo|Ecom Express|DTDC/i); if(cMatch) courier = cMatch[0];
+
+      if (platform === 'flipkart') {
+          const tqMatch = cleanFull.match(/TOTAL\s*QTY\s*[:\-]?\s*(\d+)/i); let totalQtyVal = tqMatch ? parseInt(tqMatch[1], 10) : null; let fkSkus = []; let words = cleanFull.split(/\s+/);
+          for (let i = 0; i < words.length; i++) {
+              if (/IMEI\/SrNo/i.test(words[i])) {
+                  let candidate = "";
+                  for (let j = i - 1; j >= Math.max(0, i - 25); j--) {
+                      let w = words[j].replace(/\|/g, '').trim(); if (!w) continue; if (/^[\-\+]?[0-9,]+(\.[0-9]+)?%?$/.test(w)) continue; if (/^x$/i.test(w)) continue;
+                      if (/^(Free|L|M|S|XL|XXL|Towel|Towels|Pack|of|Piece|Pieces|Cotton|Microfiber|GSM|CESS:|IGST:|CGST:|SGST:|Amount|Tax|Invoice|HSN:|Rate|Total|Discount|Value|Rs\.?|INR|Color|Colour|Multi|Design|Plain|Printed|Soft|Gross|Handling|Fee)$/i.test(w)) continue;
+                      if (w.length >= 3) { candidate = w; if (j > 0) { let prevW = words[j-1].replace(/\|/g, '').trim(); if (/^(Shopsy|FKRT|FLIPKART)$/i.test(prevW)) candidate = prevW + '_' + candidate; } break; }
+                  }
+                  if (candidate && !fkSkus.includes(candidate)) fkSkus.push(candidate.replace(/^Shopsy\s+/i, 'Shopsy_'));
+              }
+          }
+          if (fkSkus.length > 0) { let uniqueSkus = [...new Set(fkSkus)]; sku = uniqueSkus.join(' + '); qty = totalQtyVal !== null ? totalQtyVal : fkSkus.length;
+          } else { const safeText = cleanFull.replace(/GSTIN\s*[:\-]?\s*[A-Z0-9]+/ig, ''); const sMatch = safeText.match(/(?:FSN|SKU(?: ID)?)\s*[:\-]?\s*([A-Za-z0-9_\-\.\/\^\+]+)/i); if (sMatch && !/^(ID|Description|QTY|Name|Price|Tax|Invoice|Amount)$/i.test(sMatch[1])) { sku = sMatch[1].trim(); } if (totalQtyVal !== null) qty = totalQtyVal; }
+      } else {
+          let detailsMatch = cleanFull.match(/Product Details(.*?)TAX INVOICE/i) || cleanFull.match(/Product Details(.*?)Original For Recipient/i);
+          if (detailsMatch) {
+              let block = detailsMatch[1].replace(/SKU|Size|Qty|Color|Order No\.?|Free Size|Multicolor/ig, '').replace(/\|/g, ' ').trim(); let words = block.split(/\s+/).filter(w => w.length > 0);
+              if (words.length > 0) { sku = words[0]; for(let w = 1; w < words.length; w++) { if(!isNaN(words[w]) && parseInt(words[w]) < 100 && parseInt(words[w]) > 0) { qty = parseInt(words[w]); break; } } }
+          } else { const fbm = cleanFull.match(/([A-Za-z0-9_\-\.\/]{4,50})\s+(?:Free\s*Size|[A-Za-z0-9\-]+)\s+(\d{1,3})/i); if (fbm) { sku = fbm[1]; qty = parseInt(fbm[2], 10); } }
+      }
+      return { pdfW, pdfH, splitY, lBox, iBox, fullBox, fkGstin, msGap, sku, qty, courier, soldBy };
+    }
+
+    function lc_readFile(file) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(new Uint8Array(reader.result)); reader.onerror = () => reject(reader.error); reader.readAsArrayBuffer(file); }); }
+
+    document.getElementById('lc_processBtn').addEventListener('click', async () => {
+      if (lc_rawFiles.length === 0) return;
+      try {
+          lc_parsedData = []; document.getElementById('lc_results').classList.add('hidden'); document.getElementById('loader').classList.remove('hidden'); document.getElementById('lc_processBtn').disabled = true;
+          let tPages = 0; let pCount = 0; const docs = [];
+          for (const item of lc_rawFiles) { const buf = await lc_readFile(item.file); const pdf = await pdfjsLib.getDocument({ data: buf }).promise; docs.push(pdf); tPages += pdf.numPages; }
+          for (let fIdx = 0; fIdx < lc_rawFiles.length; fIdx++) {
+            const pdf = docs[fIdx];
+            for (let pIdx = 1; pIdx <= pdf.numPages; pIdx++) {
+              pCount++; await new Promise(r => setTimeout(r, 0)); 
+              const page = await pdf.getPage(pIdx); const data = await lc_extract(page, currentPlatform);
+              lc_parsedData.push({ fileIndex: fIdx, pageIndex: pIdx - 1, w: data.pdfW, h: data.pdfH, splitY: data.splitY, lBox: data.lBox, iBox: data.iBox, fullBox: data.fullBox, fkPos: data.fkGstin, msPos: data.msGap, sku: data.sku, qty: data.qty, courier: data.courier, soldBy: data.soldBy });
+            }
+          }
+          document.getElementById('loader').classList.add('hidden');
+          document.getElementById('lc_metricTotal').textContent = lc_parsedData.length; document.getElementById('lc_metricPieces').textContent = lc_parsedData.reduce((s,i)=>s+i.qty,0);
+          document.getElementById('lc_results').classList.remove('hidden'); document.getElementById('lc_processBtn').disabled = false;
+      } catch (err) { console.error(err); alert("Error processing files"); document.getElementById('loader').classList.add('hidden'); document.getElementById('lc_processBtn').disabled = false; }
+    });
+
+    async function lc_generatePdf() {
+      const { PDFDocument, rgb, StandardFonts } = PDFLib; const outDoc = await PDFDocument.create(); const font = await outDoc.embedFont(StandardFonts.HelveticaBold); const fontReg = await outDoc.embedFont(StandardFonts.Helvetica);
+      const isMs = currentPlatform === 'meesho'; const formatSelection = document.getElementById('lc_printFormat').value; const incInv = formatSelection.includes('with-inv'); const is4x4Combined = formatSelection === 'ms-4x4-with-inv'; const is4x6Combined = formatSelection === 'ms-4x6-with-inv'; const incSum = document.getElementById('lc_includeSummary').checked; const margin = 1 * 2.83465;
+      const srcDocs = await Promise.all(lc_rawFiles.map(async f => await PDFDocument.load(await lc_readFile(f.file))));
+      
+      let logo = null;
+      try { if (lc_customLogoBase64 && lc_customLogoBase64.startsWith('data:image')) { logo = await outDoc.embedPng(lc_customLogoBase64); } else if (lc_customLogoBase64) { const imgBytes = await fetch(lc_customLogoBase64).then((res) => res.arrayBuffer()); logo = await outDoc.embedPng(imgBytes); } } catch(e) {}
+
+      const isMulti = item => (item.qty > 1 || (item.sku && item.sku.includes('+'))); const sortFn = (a, b) => { const cComp = (a.courier||'').localeCompare(b.courier||''); if (cComp !== 0) return cComp; return (a.sku||'').localeCompare(b.sku||''); };
+      const sortedData = [...lc_parsedData.filter(i => !isMulti(i)).sort(sortFn), ...lc_parsedData.filter(i => isMulti(i)).sort(sortFn)];
+
+      for (const item of sortedData) {
+          const doc = srcDocs[item.fileIndex]; const srcPage = doc.getPage(item.pageIndex);
+          if (is4x4Combined) {
+              const p = outDoc.addPage([288, 288]); p.drawRectangle({ x: 0, y: 0, width: 288, height: 288, color: rgb(1,1,1) });
+              const embBox = { left: item.fullBox.left, bottom: item.fullBox.bottom, right: item.fullBox.right, top: item.fullBox.top }; const embedded = await outDoc.embedPage(srcPage, embBox);
+              const eW = embBox.right - embBox.left; const eH = embBox.top - embBox.bottom; const pW = 288 - (margin * 2); const pH = 288 - (margin * 2); const scale = Math.min(pW / eW, pH / eH); p.drawPage(embedded, { x: margin + (pW - (eW*scale)) / 2, y: margin + (pH - (eH*scale)) / 2, xScale: scale, yScale: scale });
+          } else if (is4x6Combined) {
+              const p = outDoc.addPage([288, 432]); p.drawRectangle({ x: 0, y: 0, width: 288, height: 432, color: rgb(1,1,1) });
+              const printableW = 288 - (margin * 2); const printableH = 432 - (margin * 2); const bannerH = 95; const contentH = printableH - bannerH - margin;
+              const embBox = { left: item.fullBox.left, bottom: item.fullBox.bottom, right: item.fullBox.right, top: item.fullBox.top }; const embedded = await outDoc.embedPage(srcPage, embBox);
+              const eW = embBox.right - embBox.left; const eH = embBox.top - embBox.bottom; const scale = Math.min(printableW / eW, contentH / eH); p.drawPage(embedded, { x: margin + (printableW - (eW*scale)) / 2, y: margin + bannerH + margin + (contentH - (eH*scale)) / 2, xScale: scale, yScale: scale });
+              p.drawRectangle({ x: margin, y: margin, width: printableW, height: bannerH, color: rgb(0.97, 0.97, 0.97), borderColor: rgb(0.8, 0.8, 0.8), borderWidth: 1 });
+              let storeUrl = /VIPUL/i.test(item.soldBy) ? "https://www.meesho.com/vipultextiless" : "https://www.meesho.com/shegursvijayalaxmitextiles";
+              try { const qrDataUrl = await QRCode.toDataURL(storeUrl, { width: 150, margin: 1 }); const qrImage = await outDoc.embedPng(Uint8Array.from(atob(qrDataUrl.split(',')[1]), c => c.charCodeAt(0))); p.drawImage(qrImage, { x: margin + 12, y: margin + (bannerH - 75) / 2, width: 75, height: 75 }); const textX = margin + 12 + 75 + 15; p.drawText("Visit Store", { x: textX, y: margin + bannerH - 28, size: 11, font, color: rgb(0.1, 0.1, 0.1) }); p.drawText("Scan QR to open brand store.", { x: textX, y: margin + bannerH - 44, size: 8.5, font: fontReg, color: rgb(0.3, 0.3, 0.3) }); p.drawText(storeUrl, { x: textX, y: margin + bannerH - 60, size: 7, font: fontReg, color: rgb(0.4, 0.4, 0.4) }); } catch (e) {}
+          } else {
+              const is4x6Standard = formatSelection.includes('4x6'); const embBox = { left: item.lBox.left, bottom: item.lBox.bottom, right: item.lBox.right, top: item.lBox.top }; const embedded = await outDoc.embedPage(srcPage, embBox);
+              const embW = embBox.right - embBox.left; const embH = embBox.top - embBox.bottom; const baseW = is4x6Standard ? 288 : 216; const baseH = is4x6Standard ? 432 : 360; const labelFw = (embW > embH) ? baseH : baseW; const labelFh = (embW > embH) ? baseW : baseH; 
+              const p1 = outDoc.addPage([labelFw, labelFh]); p1.drawRectangle({ x: 0, y: 0, width: labelFw, height: labelFh, color: rgb(1,1,1) }); const sw = labelFw - (margin * 2); const sh = labelFh - (margin * 2); const scale = Math.min(sw / embW, sh / embH); const xOff = margin + (sw - (embW*scale)) / 2; const yOff = margin + (sh - (embH*scale)) / 2; p1.drawPage(embedded, { x: xOff, y: yOff, xScale: scale, yScale: scale });
+              if (currentPlatform === 'flipkart' && logo && item.fkPos) { p1.drawImage(logo, { x: xOff + ((item.fkPos.x - embBox.left + 125)*scale), y: yOff + ((item.fkPos.y - embBox.bottom - 2)*scale), width: 60*scale, height: 18*scale }); }
+              if (currentPlatform === 'meesho' && logo && item.msPos) { let lh = Math.min(26 * scale, item.msPos.h * scale * 0.90); if (lh < 15) lh = 20 * scale; let lw = lh * 3.33; const lx = xOff + ((item.msPos.x - embBox.left) * scale) + ((item.msPos.w * scale)/2) - (lw/2); const ly = yOff + ((item.msPos.y - embBox.bottom) * scale) + ((item.msPos.h * scale)/2) - (lh/2); p1.drawRectangle({ x: lx-2, y: ly-2, width: lw+4, height: lh+4, color: rgb(1,1,1) }); p1.drawImage(logo, { x: lx, y: ly, width: lw, height: lh }); }
+              if (incInv && item.iBox) {
+                  const embeddedInv = await outDoc.embedPage(srcPage, item.iBox); const invW = item.iBox.right - item.iBox.left; const invH = item.iBox.top - item.iBox.bottom; let invFw, invFh; if (isMs) { invFw = labelFw; invFh = labelFh; } else { if (is4x6Standard) { invFw = (invW > invH) ? 432 : 288; invFh = (invW > invH) ? 288 : 432; } else { invFw = 360; invFh = 216; } }
+                  const p2 = outDoc.addPage([invFw, invFh]); p2.drawRectangle({ x: 0, y: 0, width: invFw, height: invFh, color: rgb(1,1,1) }); const iScale = Math.min((invFw - margin*2) / invW, (invFh - margin*2) / invH); p2.drawPage(embeddedInv, { x: margin + ((invFw - margin*2) - (invW*iScale)) / 2, y: margin + ((invFh - margin*2) - (invH*iScale)) / 2, xScale: iScale, yScale: iScale });
+              }
+          }
+      }
+
+      if (incSum) {
+        let sp = outDoc.addPage([216, 360]); let y = 345; const skus = {}; const couriers = {}; const sellers = {};
+        lc_parsedData.forEach(item => {
+            if (!couriers[item.courier]) { couriers[item.courier] = 0; } couriers[item.courier] += 1;
+            if (!sellers[item.soldBy]) { sellers[item.soldBy] = { items: 0, orders: 0 }; } sellers[item.soldBy].items += item.qty; sellers[item.soldBy].orders += 1;
+            const key = item.sku + "|||" + item.qty; if (!skus[key]) { skus[key] = { sku: item.sku, qtyPerOrder: item.qty, orders: 0 }; } skus[key].orders += 1;
+        });
+        sp.drawRectangle({ x: 5, y: y-5, width: 206, height: 15, color: rgb(0,0,0) }); sp.drawText("DELIVERY PARTNERS", { x: 10, y: y, size: 9, font, color: rgb(1,1,1) }); sp.drawText("PARCELS", { x: 160, y: y, size: 9, font, color: rgb(1,1,1) }); y-=14;
+        Object.entries(couriers).forEach(([c, n]) => { if (y<15) { sp=outDoc.addPage([216,360]); y=345; } sp.drawText(c, { x: 10, y, size: 8, font }); sp.drawText(String(n), { x: 180, y, size: 10, font }); sp.drawLine({ start: {x:5,y:y-3}, end: {x:211,y:y-3}, thickness: 0.5, color: rgb(0.8,0.8,0.8) }); y-=14; }); y-=10;
+        if (y<30) { sp=outDoc.addPage([216,360]); y=345; } sp.drawRectangle({ x: 5, y: y-5, width: 206, height: 15, color: rgb(0,0,0) }); sp.drawText("SOLD BY", { x: 10, y: y, size: 9, font, color: rgb(1,1,1) }); sp.drawText("ITEMS", { x: 140, y: y, size: 9, font, color: rgb(1,1,1) }); sp.drawText("ORDS", { x: 180, y: y, size: 9, font, color: rgb(1,1,1) }); y-=14;
+        Object.entries(sellers).forEach(([s, data]) => { if (y<25) { sp=outDoc.addPage([216,360]); y=345; } let line1 = s.substring(0, 25); let line2 = s.substring(25, 50); sp.drawText(line1, { x: 10, y, size: 8, font }); if (line2) sp.drawText(line2, { x: 10, y: y-10, size: 8, font }); sp.drawText(String(data.items), { x: 145, y, size: 10, font }); sp.drawText(String(data.orders), { x: 185, y, size: 10, font }); let yStep = line2 ? 22 : 14; sp.drawLine({ start: {x:5,y:y-yStep+3}, end: {x:211,y:y-yStep+3}, thickness: 0.5, color: rgb(0.8,0.8,0.8) }); y-=yStep; }); y-=10;
+        if (y<30) { sp=outDoc.addPage([216,360]); y=345; } sp.drawRectangle({ x: 5, y: y-5, width: 206, height: 15, color: rgb(0,0,0) }); sp.drawText("SKU", { x: 10, y: y, size: 9, font, color: rgb(1,1,1) }); sp.drawText("QTY/ORD", { x: 135, y: y, size: 9, font, color: rgb(1,1,1) }); sp.drawText("ORDERS", { x: 180, y: y, size: 9, font, color: rgb(1,1,1) }); y-=14;
+        Object.values(skus).sort((a, b) => a.sku.localeCompare(b.sku) || a.qtyPerOrder - b.qtyPerOrder).forEach(item => { let line1 = item.sku.substring(0, 28); let line2 = item.sku.substring(28, 56); if (y < (line2 ? 25 : 15)) { sp = outDoc.addPage([216, 360]); y = 345; } sp.drawText(line1, { x: 10, y, size: 8, font }); if (line2) sp.drawText(line2, { x: 10, y: y - 10, size: 8, font }); sp.drawText(String(item.qtyPerOrder), { x: 145, y, size: 10, font }); sp.drawText(String(item.orders), { x: 191, y, size: 10, font }); let yStep = line2 ? 22 : 14; sp.drawLine({ start: {x:5, y: y - yStep + 3}, end: {x:211, y: y - yStep + 3}, thickness: 0.5, color: rgb(0.8,0.8,0.8) }); y -= yStep; });
+      }
+
+      const pdfBytes = await outDoc.save(); 
+      if(auth.currentUser) {
+          const tx = lc_dbLocal.transaction('pdfs', 'readwrite');
+          tx.objectStore('pdfs').put({ id: Date.now(), userId: auth.currentUser.uid, platform: currentPlatform, totalOrders: lc_parsedData.length, totalPieces: lc_parsedData.reduce((s,i)=>s+i.qty,0), data: pdfBytes, timestamp: Date.now() });
+          tx.oncomplete = () => lc_loadRecoveredPdfs();
+      }
+      return pdfBytes;
+    }
+
+    document.getElementById('lc_downloadBtn').addEventListener('click', async () => {
+      try { const bytes = await lc_generatePdf(); const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" })); const a = document.createElement('a'); a.href = url; const fmt = document.getElementById('lc_printFormat').value; const sizeName = fmt.includes('4x6') ? '4x6' : (fmt.includes('4x4') ? '4x4' : '3x5'); a.download = `Shegurs_${currentPlatform.toUpperCase()}_${sizeName}_${new Date().toISOString().slice(0,10)}.pdf`; a.click(); URL.revokeObjectURL(url); } catch (e) { alert(e.message); }
+    });
+
+    document.getElementById('lc_previewBtn').addEventListener('click', async () => {
+      try { const bytes = await lc_generatePdf(); const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" })); window.open(url, '_blank'); setTimeout(()=>URL.revokeObjectURL(url), 10000); } catch (e) { alert(e.message); }
+    });
+
+    let lc_dbLocal; const lc_dbRequest = indexedDB.open("ShegursLabelDB", 6);
+    lc_dbRequest.onupgradeneeded = (e) => { lc_dbLocal = e.target.result; if (!lc_dbLocal.objectStoreNames.contains('pdfs')) { lc_dbLocal.createObjectStore('pdfs', { keyPath: 'id' }).createIndex('userId', 'userId', { unique: false }); } };
+    lc_dbRequest.onsuccess = (e) => { lc_dbLocal = e.target.result; };
+
+    // -------------------------------------------------------------------------
+    // 7. FLIPKART P&L LOGIC
+    // -------------------------------------------------------------------------
+    let fk_rawSkuData = [];
+    document.getElementById('fk_excelInput').addEventListener('change', fk_handleExcel);
+    document.getElementById('fk_applyBulkBtn').addEventListener('click', fk_applyBulkCost);
+    document.getElementById('fk_lossInput').addEventListener('input', fk_updateCalculations);
+    document.getElementById('fk_recalcBtn').addEventListener('click', fk_updateCalculations);
+
+    function fk_handleExcel(e) {
+      const file = e.target.files[0]; if (!file) return; const reader = new FileReader();
+      reader.onload = function (event) { const workbook = XLSX.read(new Uint8Array(event.target.result), { type: 'array' }); fk_extractData(workbook); }; reader.readAsArrayBuffer(file);
+    }
+
+    function fk_extractData(wb) {
+      if (!wb.SheetNames.includes('SKU-level P&L')) { alert("Missing 'SKU-level P&L' sheet in Excel."); return; }
+      const rawRows = XLSX.utils.sheet_to_json(wb.Sheets['SKU-level P&L'], { header: 1, defval: '' }); if (rawRows.length < 2) return;
+      const skuMap = new Map();
+      const headers = rawRows[0].map(h => String(h).trim().toLowerCase());
+      const skuIdx = headers.findIndex(h => h.includes('sku id') || h === 'sku');
+      const unitIdx = headers.findIndex(h => h.includes('net units'));
+      const settleIdx = headers.findIndex(h => h.includes('amount settled') || h.includes('bank settlement'));
+      
+      if(skuIdx === -1 || settleIdx === -1) return alert("Could not find SKU or Settlement columns in Flipkart file.");
+
+      for (let i = 1; i < rawRows.length; i++) {
+        const row = rawRows[i]; if (row.length < 5) continue;
+        const skuId = String(row[skuIdx]).trim(); if (!skuId || skuId === 'undefined' || skuId === 'nan') continue;
+        const netUnits = parseFloat(row[unitIdx]) || 0; const bankSettlement = parseFloat(String(row[settleIdx]).replace(/[^0-9.-]/g, '')) || 0;
+        if (!skuMap.has(skuId)) { skuMap.set(skuId, { skuId, netUnits, bankSettlement, costOfProduct: app_userSavedSkus[skuId] || 0 }); } else { const item = skuMap.get(skuId); item.netUnits += netUnits; item.bankSettlement += bankSettlement; }
+      }
+      fk_rawSkuData = Array.from(skuMap.values()); fk_renderTable(); document.getElementById('fk_calcSection').classList.remove('hidden'); fk_updateCalculations();
+    }
+
+    function fk_renderTable() {
+      const tbody = document.getElementById('fk_skuTableBody'); tbody.innerHTML = '';
+      fk_rawSkuData.sort((a, b) => { if (a.costOfProduct === 0 && b.costOfProduct !== 0) return -1; if (a.costOfProduct !== 0 && b.costOfProduct === 0) return 1; return b.bankSettlement - a.bankSettlement; });
+      fk_rawSkuData.forEach((item, index) => {
+        const tr = document.createElement('tr'); const isMissing = item.costOfProduct === 0; tr.className = `border-b border-slate-800/50 ${isMissing ? 'bg-orange-500/10' : ''}`;
+        tr.innerHTML = `<td class="py-4 px-6 text-slate-500">${index + 1}</td><td class="py-4 px-6 font-bold ${isMissing ? 'text-orange-400' : 'text-slate-200'}">${item.skuId}</td><td class="py-4 px-6 text-right">${item.netUnits}</td><td class="py-4 px-6 text-right text-blue-400">₹${item.bankSettlement.toFixed(2)}</td><td class="py-4 px-6 text-center"><input type="number" step="0.01" value="${item.costOfProduct || ''}" placeholder="0.00" class="fk-cost-input w-24 bg-slate-900 border ${isMissing ? 'border-orange-500' : 'border-slate-600'} text-white px-2 py-1.5 rounded-lg text-center outline-none focus:border-indigo-500" data-index="${index}" /></td><td id="fk_pUnit_${index}" class="py-4 px-6 text-right font-bold text-slate-300">₹0.00</td><td id="fk_tProf_${index}" class="py-4 px-6 text-right font-bold text-slate-300">₹0.00</td>`;
+        tbody.appendChild(tr);
+      });
+      document.querySelectorAll('.fk-cost-input').forEach(input => {
+        let tid; input.addEventListener('input', (e) => {
+          const idx = parseInt(e.target.getAttribute('data-index')); const nCost = parseFloat(e.target.value) || 0; fk_rawSkuData[idx].costOfProduct = nCost;
+          const tr = e.target.closest('tr'); const sc = tr.querySelector('td:nth-child(2)');
+          if(nCost === 0 || isNaN(nCost)) { tr.classList.add('bg-orange-500/10'); sc.classList.add('text-orange-400'); sc.classList.remove('text-slate-200'); e.target.classList.add('border-orange-500'); e.target.classList.remove('border-slate-600'); } else { tr.classList.remove('bg-orange-500/10'); sc.classList.remove('text-orange-400'); sc.classList.add('text-slate-200'); e.target.classList.remove('border-orange-500'); e.target.classList.add('border-slate-600'); }
+          fk_updateCalculations(); clearTimeout(tid); tid = setTimeout(() => { app_userSavedSkus[fk_rawSkuData[idx].skuId] = nCost; if(auth.currentUser) setDoc(doc(db, 'users', auth.currentUser.uid, 'skus', 'memory'), { [fk_rawSkuData[idx].skuId]: nCost }, { merge: true }); }, 1000);
+        });
+      });
+    }
+
+    function fk_applyBulkCost() {
+      const val = parseFloat(document.getElementById('fk_bulkCostInput').value); if (isNaN(val)) return; const bulkUpdates = {};
+      fk_rawSkuData.forEach((item, index) => { 
+          if(item.costOfProduct === 0 || isNaN(item.costOfProduct)) {
+              item.costOfProduct = val; bulkUpdates[item.skuId] = val; const inputEl = document.querySelector(`.fk-cost-input[data-index="${index}"]`);
+              if(inputEl) { inputEl.value = val; inputEl.classList.remove('border-orange-500'); inputEl.classList.add('border-slate-600'); const tr = inputEl.closest('tr'); tr.classList.remove('bg-orange-500/10'); tr.querySelector('td:nth-child(2)').classList.remove('text-orange-400'); tr.querySelector('td:nth-child(2)').classList.add('text-slate-200'); }
+          }
+      });
+      fk_updateCalculations(); Object.assign(app_userSavedSkus, bulkUpdates); if(auth.currentUser) setDoc(doc(db, 'users', auth.currentUser.uid, 'skus', 'memory'), bulkUpdates, { merge: true });
+    }
+
+    function fk_updateCalculations() {
+      let tU = 0; let tS = 0; let tG = 0;
+      fk_rawSkuData.forEach((item, index) => {
+        const pU = document.getElementById(`fk_pUnit_${index}`); const tP = document.getElementById(`fk_tProf_${index}`);
+        if (item.costOfProduct === 0 || isNaN(item.costOfProduct)) { if (pU && tP) { pU.innerHTML = `<span class="text-[10px] text-orange-400 font-black uppercase">Missing Cost</span>`; tP.innerHTML = `<span class="text-[10px] text-orange-400 font-black uppercase">Excluded</span>`; } return; }
+        tU += item.netUnits; tS += item.bankSettlement;
+        const prof = (item.netUnits > 0 ? (item.bankSettlement / item.netUnits) : 0) - item.costOfProduct; const tProf = prof * item.netUnits; tG += tProf;
+        if (pU && tP) { pU.textContent = `₹${prof.toFixed(2)}`; pU.className = `py-4 px-6 text-right font-black ${prof >= 0 ? 'text-emerald-400' : 'text-rose-400'}`; tP.textContent = `₹${tProf.toFixed(2)}`; tP.className = `py-4 px-6 text-right font-black ${tProf >= 0 ? 'text-emerald-400' : 'text-rose-400'}`; }
+      });
+      const fnP = tG - (parseFloat(document.getElementById('fk_lossInput').value) || 0);
+      document.getElementById('fk_kpiUnits').textContent = tU.toLocaleString(); document.getElementById('fk_kpiSettlement').textContent = `₹${tS.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      document.getElementById('fk_kpiGross').textContent = `₹${tG.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; document.getElementById('fk_kpiGross').className = `text-3xl font-black mt-1 ${tG >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+      document.getElementById('fk_kpiNet').textContent = `₹${fnP.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; document.getElementById('fk_kpiNet').className = `text-3xl font-black mt-1 ${fnP >= 0 ? 'text-emerald-300' : 'text-rose-400'}`;
+    }
+
+    // -------------------------------------------------------------------------
+    // 8. MEESHO P&L LOGIC (Optimized to Single Dropzone File!)
+    // -------------------------------------------------------------------------
+    let ms_reconciledData = [];
+    document.getElementById('ms_excelInput').addEventListener('change', ms_handleExcel);
+    document.getElementById('ms_applyBulkBtn').addEventListener('click', ms_applyBulkCost);
+    document.getElementById('ms_lossInput').addEventListener('input', ms_computeTotals);
+    document.getElementById('ms_recalcBtn').addEventListener('click', ms_computeTotals);
+
+    function ms_handleExcel(e) {
+      const file = e.target.files[0]; if(!file) return; const reader = new FileReader();
+      reader.onload = function(event) {
+        const wb = XLSX.read(new Uint8Array(event.target.result), { type: 'array' });
+        let sheetName = wb.SheetNames.find(n => n.toLowerCase().includes('order payments'));
+        if(!sheetName) sheetName = wb.SheetNames.find(n => n.toLowerCase() !== 'disclaimer'); // fallback
+        if(!sheetName) return alert("Invalid Meesho File: 'Order Payments' sheet not found.");
+        
+        const raw = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], {header: 1, defval: ''});
+        let hrIdx = -1;
+        for(let i=0; i<Math.min(15, raw.length); i++) {
+            const rowStr = raw[i].join('').toLowerCase();
+            if(rowStr.includes('suborder') && rowStr.includes('sku') && rowStr.includes('status')) { hrIdx = i; break; }
+        }
+        if(hrIdx === -1) return alert("Could not find headers in the Meesho file. Please ensure it is the official Payment file.");
+        
+        const headers = raw[hrIdx].map(h => String(h).trim().toLowerCase());
+        const skuIdx = headers.findIndex(h => h === 'supplier sku' || h === 'sku');
+        const statusIdx = headers.findIndex(h => h === 'live order status' || h.includes('status'));
+        const qtyIdx = headers.findIndex(h => h === 'quantity' || h === 'qty');
+        const settleIdx = headers.findIndex(h => h === 'final settlement amount' || h.includes('settlement'));
+        
+        if(skuIdx === -1 || settleIdx === -1) return alert("Missing required columns (SKU or Settlement) in Meesho file.");
+        
+        const skuMap = new Map();
+        for(let i=hrIdx+1; i<raw.length; i++) {
+            const row = raw[i]; if(row.length < 5) continue;
+            if(String(row[settleIdx]).includes('B + C') || String(row[settleIdx]).includes('B+C')) continue;
+            
+            const sku = String(row[skuIdx]).trim(); if(!sku || sku === 'undefined' || sku === 'nan') continue;
+            const qty = parseInt(row[qtyIdx]) || 1;
+            const status = String(row[statusIdx]).toLowerCase();
+            const settlement = parseFloat(String(row[settleIdx]).replace(/[^0-9.-]/g, '')) || 0;
+            
+            if(!skuMap.has(sku)) skuMap.set(sku, {sku, del:0, cr:0, rto:0, set:0, cost: app_userSavedSkus[sku] || 0});
+            const item = skuMap.get(sku);
+            item.set += settlement;
+            if(status === 'return') item.cr += qty;
+            else if(status === 'rto') item.rto += qty;
+            else if(status === 'delivered') item.del += qty;
+        }
+        ms_reconciledData = Array.from(skuMap.values());
+        document.getElementById('ms_calcSection').classList.remove('hidden');
+        ms_renderTable(); ms_computeTotals();
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    function ms_renderTable() {
+      const tbody = document.getElementById('ms_skuTableBody'); tbody.innerHTML = '';
+      ms_reconciledData.sort((a, b) => { if (a.cost === 0 && b.cost !== 0) return -1; if (a.cost !== 0 && b.cost === 0) return 1; return b.set - a.set; });
+      ms_reconciledData.forEach((item, index) => {
+        const tr = document.createElement('tr'); const isMis = item.cost === 0; tr.className = `border-b border-slate-800/50 ${isMis ? 'bg-orange-500/10' : ''}`;
+        tr.innerHTML = `<td class="py-4 px-6 text-slate-500">${index + 1}</td><td class="py-4 px-6 font-bold ${isMis ? 'text-orange-400' : 'text-slate-200'}">${item.sku}</td><td class="py-4 px-6 text-right text-emerald-400">${item.del}</td><td class="py-4 px-6 text-right text-rose-400">${item.cr + item.rto}</td><td class="py-4 px-6 text-right text-blue-400">₹${item.set.toFixed(2)}</td><td class="py-4 px-6 text-center"><input type="number" step="0.01" value="${item.cost || ''}" class="ms-cost-box w-24 bg-slate-900 border ${isMis ? 'border-orange-500' : 'border-slate-600'} text-white px-2 py-1.5 rounded-xl text-center outline-none focus:border-pink-500" data-index="${index}" /></td><td id="ms_tProf_${index}" class="py-4 px-6 text-right font-bold text-slate-300">₹0.00</td>`;
+        tbody.appendChild(tr);
+      });
+      document.querySelectorAll('.ms-cost-box').forEach(input => {
+        let tid; input.addEventListener('input', (e) => {
+          const idx = parseInt(e.target.getAttribute('data-index')); const nCost = parseFloat(e.target.value) || 0; ms_reconciledData[idx].cost = nCost;
+          const tr = e.target.closest('tr'); const sc = tr.querySelector('td:nth-child(2)');
+          if(nCost === 0 || isNaN(nCost)) { tr.classList.add('bg-orange-500/10'); sc.classList.add('text-orange-400'); sc.classList.remove('text-slate-200'); e.target.classList.add('border-orange-500'); e.target.classList.remove('border-slate-600'); } else { tr.classList.remove('bg-orange-500/10'); sc.classList.remove('text-orange-400'); sc.classList.add('text-slate-200'); e.target.classList.remove('border-orange-500'); e.target.classList.add('border-slate-600'); }
+          ms_computeTotals(); clearTimeout(tid); tid = setTimeout(() => { app_userSavedSkus[ms_reconciledData[idx].sku] = nCost; if(auth.currentUser) setDoc(doc(db, 'users', auth.currentUser.uid, 'skus', 'memory'), { [ms_reconciledData[idx].sku]: nCost }, { merge: true }); }, 1000);
+        });
+      });
+    }
+
+    function ms_applyBulkCost() {
+      const val = parseFloat(document.getElementById('ms_bulkCostInput').value); if (isNaN(val)) return; const bU = {};
+      ms_reconciledData.forEach((item, index) => { if(item.cost === 0 || isNaN(item.cost)) { item.cost = val; bU[item.sku] = val; const inp = document.querySelector(`.ms-cost-box[data-index="${index}"]`); if(inp) { inp.value = val; inp.classList.remove('border-orange-500'); inp.classList.add('border-slate-600'); const tr = inp.closest('tr'); tr.classList.remove('bg-orange-500/10'); tr.querySelector('td:nth-child(2)').classList.remove('text-orange-400'); tr.querySelector('td:nth-child(2)').classList.add('text-slate-200'); } } });
+      ms_computeTotals(); Object.assign(app_userSavedSkus, bU); if(auth.currentUser) setDoc(doc(db, 'users', auth.currentUser.uid, 'skus', 'memory'), bU, { merge: true });
+    }
+
+    function ms_computeTotals() {
+      let tS = 0; let tD = 0; let tR = 0; let tG = 0;
+      ms_reconciledData.forEach((item, index) => {
+        const tP = document.getElementById(`ms_tProf_${index}`);
+        if (item.cost === 0 || isNaN(item.cost)) { if (tP) tP.innerHTML = `<span class="text-[10px] text-orange-400 font-black uppercase">Excluded</span>`; return; }
+        tS += item.set; tD += item.del; tR += (item.cr + item.rto); const skuP = item.set - (item.del * item.cost); tG += skuP;
+        if (tP) { tP.textContent = `₹${skuP.toFixed(2)}`; tP.className = `py-4 px-6 text-right font-black ${skuP >= 0 ? 'text-emerald-400' : 'text-rose-400'}`; }
+      });
+      const fP = tG - (parseFloat(document.getElementById('ms_lossInput').value) || 0);
+      document.getElementById('ms_kpiSettlement').textContent = `₹${tS.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+      document.getElementById('ms_kpiDelivered').textContent = tD.toLocaleString(); document.getElementById('ms_kpiReturns').textContent = tR.toLocaleString();
+      document.getElementById('ms_kpiNetProfit').textContent = `₹${fP.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`; document.getElementById('ms_kpiNetProfit').className = `text-3xl font-black mt-1 ${fP >= 0 ? 'text-emerald-300' : 'text-rose-400'}`;
+    }
+  </script>
 </body>
 </html>
