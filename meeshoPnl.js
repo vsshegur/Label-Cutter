@@ -44,10 +44,17 @@ function ms_loadReport(event, type, labelId) {
 }
 
 function ms_parseSmart(sheet) {
-  const rawRows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' }); if (!rawRows || rawRows.length === 0) return []; let hrIdx = 0;
-  for (let i = 0; i < Math.min(rawRows.length, 15); i++) { const rowStr = rawRows[i].map(c => String(c).toLowerCase()).join(' '); if (rowStr.includes('order') || rowStr.includes('sku') || rowStr.includes('settlement') || rowStr.includes('payout') || rowStr.includes('return type')) { hrIdx = i; break; } }
+  const rawRows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' }); if (!rawRows || rawRows.length === 0) return []; let hrIdx = -1;
+  for (let i = 0; i < Math.min(rawRows.length, 15); i++) { const rowStr = rawRows[i].map(c => String(c).toLowerCase().replace(/\s+/g, '')).join(' '); if (rowStr.includes('suborderno') || rowStr.includes('suppliersku') || rowStr.includes('finalsettlementamount') || rowStr.includes('awbnumber')) { hrIdx = i; break; } }
+  if (hrIdx === -1) return []; 
   const headers = rawRows[hrIdx].map(h => String(h).trim()); const dataRows = [];
-  for (let i = hrIdx + 1; i < rawRows.length; i++) { const rowObj = {}; let hasData = false; rawRows[i].forEach((cell, colIdx) => { if (headers[colIdx]) { rowObj[headers[colIdx]] = cell; if (cell !== '' && cell !== null && cell !== undefined) hasData = true; } }); if (hasData) dataRows.push(rowObj); }
+  for (let i = hrIdx + 1; i < rawRows.length; i++) { 
+      const rowObj = {}; let hasData = false; 
+      rawRows[i].forEach((cell, colIdx) => { 
+          if (headers[colIdx] && headers[colIdx] !== '') { rowObj[headers[colIdx]] = cell; if (cell !== '') hasData = true; } 
+      }); 
+      if (hasData) dataRows.push(rowObj); 
+  }
   return dataRows;
 }
 
@@ -60,20 +67,19 @@ function ms_cleanId(val) { return (!val) ? '' : String(val).trim().replace(/\.0$
 function ms_reconcile() {
   const subOrderMap = new Map(); const skuMap = new Map();
   
-  // Base Map from Orders File
   ms_state.ord.forEach(row => {
       const sid = ms_cleanId(ms_findVal(row, ['suborderno', 'suborder', 'subordernumber', 'orderno', 'orderid']));
       if (sid) subOrderMap.set(sid, { sku: String(ms_findVal(row, ['sku', 'skuid', 'productsku']) || 'MISC_SKU').trim(), qty: parseInt(ms_findVal(row, ['quantity', 'qty', 'units'])) || 1, status: String(ms_findVal(row, ['status', 'orderstatus', 'deliverystatus']) || '').toUpperCase(), settlement: 0, returnType: '' });
   });
 
-  // Add Payouts
   ms_state.pay.forEach(row => {
-      const sid = ms_cleanId(ms_findVal(row, ['suborderno', 'suborder', 'subordernumber', 'orderno', 'orderid']));
+      const rawSid = String(ms_findVal(row, ['suborderno', 'suborder', 'subordernumber', 'orderno', 'orderid']) || '').trim();
+      if (!rawSid || rawSid.includes('+') || rawSid.includes('(')) return; 
+      const sid = rawSid.replace(/\.0$/, '');
       const net = parseFloat(String(ms_findVal(row, ['finalsettlementamount', 'netsettlementamount', 'banksettlementamount', 'totalpayout', 'netpayout', 'settlementamount'])).replace(/[^0-9.-]/g, '')) || 0;
       if (sid && subOrderMap.has(sid)) { subOrderMap.get(sid).settlement += net; } else if (sid) { subOrderMap.set(sid, { sku: String(ms_findVal(row, ['sku', 'productsku', 'skuid']) || 'UNMAPPED_SKU').trim(), qty: 1, status: net >= 0 ? 'DELIVERED' : 'RETURNED', settlement: net, returnType: net < 0 ? 'CUSTOMER' : '' }); }
   });
   
-  // Safe Returns Filtering (Only apply if order exists in the time range)
   ms_state.ret.forEach(row => {
       const sid = ms_cleanId(ms_findVal(row, ['suborderno', 'suborder', 'subordernumber', 'orderid', 'orderno']));
       if (sid && subOrderMap.has(sid)) subOrderMap.get(sid).returnType = String(ms_findVal(row, ['returntype', 'typeofreturn', 'trackingtype']) || '').toUpperCase().includes('CUSTOMER') ? 'CUSTOMER' : 'RTO';
@@ -83,14 +89,7 @@ function ms_reconcile() {
     if (!skuMap.has(val.sku)) skuMap.set(val.sku, { sku: val.sku, disp: 0, del: 0, cr: 0, rto: 0, can: 0, set: 0, cost: window.appState.userSkus[val.sku] || 0 });
     const item = skuMap.get(val.sku); 
     item.set += val.settlement;
-    
-    // Accurate Tracking
-    if (val.status.includes('CANCEL')) {
-        item.can += val.qty;
-    } else {
-        item.disp += val.qty;
-    }
-    
+    if (val.status.includes('CANCEL')) { item.can += val.qty; } else { item.disp += val.qty; }
     if (val.returnType === 'CUSTOMER' || val.status.includes('CUSTOMER') || (val.settlement < 0 && !val.status.includes('RTO'))) item.cr += val.qty;
     else if (val.returnType === 'RTO' || val.status.includes('RTO')) item.rto += val.qty;
     else if (val.status.includes('DELIVERED') || val.settlement > 0) item.del += val.qty;
@@ -133,8 +132,8 @@ function ms_computeTotals() {
     if (tP) { tP.textContent = `₹${skuP.toFixed(2)}`; tP.className = `py-4 px-6 text-right font-black ${skuP >= 0 ? 'text-emerald-400' : 'text-rose-400'}`; }
   });
   const fP = tG - (parseFloat(document.getElementById('ms_lossInput').value) || 0);
-  document.getElementById('ms_kpiSettlement').textContent = `₹${tS.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  document.getElementById('ms_kpiSettlement').textContent = `₹${tS.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
   document.getElementById('ms_kpiDispatched').textContent = tDis.toLocaleString();
   document.getElementById('ms_kpiDelivered').textContent = tD.toLocaleString(); document.getElementById('ms_kpiReturns').textContent = tR.toLocaleString();
-  document.getElementById('ms_kpiNetProfit').textContent = `₹${fP.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; document.getElementById('ms_kpiNetProfit').className = `text-4xl font-black mt-2 ${fP >= 0 ? 'text-emerald-300' : 'text-rose-400'}`;
+  document.getElementById('ms_kpiNetProfit').textContent = `₹${fP.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`; document.getElementById('ms_kpiNetProfit').className = `text-4xl font-black mt-2 ${fP >= 0 ? 'text-emerald-300' : 'text-rose-400'}`;
 }
