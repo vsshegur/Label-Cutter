@@ -4,16 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shegur's Ecommerce Engine</title>
-  
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%234f46e5%22/><text x=%2250%22 y=%2270%22 font-family=%22Arial, sans-serif%22 font-size=%2265%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22>S</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } };</script>
-  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.1/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap');
     body { font-family: 'Inter', sans-serif; transition: background-color 0.2s, color 0.2s; }
@@ -24,31 +20,30 @@
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+    input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
   </style>
+  <script>
+    window.addEventListener('error', function(e) {
+        const banner = document.getElementById('syntaxErrorBanner');
+        if(banner) { banner.classList.remove('hidden'); banner.innerHTML = "⚠️ <b>CRITICAL SYSTEM ERROR:</b> " + e.message; }
+    });
+  </script>
 </head>
 <body class="min-h-screen pb-32 overflow-x-hidden bg-slate-950 text-slate-200 selection:bg-indigo-500 selection:text-white relative">
 
   <div id="syntaxErrorBanner" class="hidden bg-rose-600 text-white text-center py-4 px-6 shadow-2xl z-[999] relative font-bold text-sm tracking-wide"></div>
 
-  <!-- Ambient Glow Background -->
   <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
     <div class="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-indigo-600/10 rounded-full blur-[150px] animate-pulse"></div>
     <div class="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-rose-600/10 rounded-full blur-[150px] animate-pulse" style="animation-delay: 2s;"></div>
   </div>
 
-  <!-- Header -->
   <header class="glass-panel sticky top-0 z-50 shadow-2xl mb-8 border-b border-white/5">
     <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
       <div class="flex items-center gap-4 w-full md:w-auto justify-center md:justify-start">
-        <div class="bg-gradient-to-br from-indigo-500 to-blue-600 p-3 rounded-2xl shadow-[0_0_20px_rgba(99,102,241,0.4)] text-white">
-          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-        </div>
-        <div>
-          <h1 class="text-2xl font-black tracking-tight text-white">Shegur's <span class="text-indigo-400 font-semibold text-lg">Suite</span></h1>
-          <p class="text-slate-400 text-[10px] mt-0.5 font-bold tracking-widest uppercase flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.8)]"></span> Authorized Terminal</p>
-        </div>
+        <div class="bg-gradient-to-br from-indigo-500 to-blue-600 p-3 rounded-2xl shadow-[0_0_20px_rgba(99,102,241,0.4)] text-white"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
+        <div><h1 class="text-2xl font-black tracking-tight text-white">Shegur's <span class="text-indigo-400 font-semibold text-lg">Suite</span></h1><p class="text-slate-400 text-[10px] mt-0.5 font-bold tracking-widest uppercase flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.8)]"></span> Authorized Terminal</p></div>
       </div>
-      
       <div class="flex items-center gap-4 w-full md:w-auto justify-center">
         <div id="appSelectorContainer" class="hidden relative">
             <select id="appSelector" class="appearance-none bg-slate-900 border border-slate-700 text-white text-xs font-black uppercase tracking-widest rounded-xl py-3.5 pl-5 pr-12 outline-none shadow-inner cursor-pointer focus:ring-2 focus:border-indigo-500 transition-all hover:bg-slate-800">
@@ -56,21 +51,12 @@
                 <option value="fkPnlCalculator">🔵 Flipkart Profit Engine</option>
                 <option value="msPnlCalculator">🛍️ Meesho Profit Engine</option>
             </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-indigo-400">
-                <svg class="fill-current h-5 w-5" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-            </div>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-indigo-400"><svg class="fill-current h-5 w-5" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg></div>
         </div>
-
-        <button id="themeToggle" type="button" class="p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-400 hover:text-white transition-colors btn-hover hidden md:block">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-        </button>
-
+        <button id="themeToggle" type="button" class="p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-400 hover:text-white transition-colors btn-hover hidden md:block"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg></button>
         <div id="userInfo" class="hidden flex items-center gap-4 bg-slate-900 border border-slate-700 p-2 pr-5 rounded-2xl shadow-inner">
            <img id="userAvatar" class="w-9 h-9 rounded-xl shadow-md" src="" alt="Profile">
-           <div class="flex flex-col text-left hidden sm:flex">
-               <span id="userName" class="text-[11px] font-bold text-white leading-tight">Loading...</span>
-               <span id="userPlan" class="text-[9px] font-black uppercase text-emerald-400 leading-tight tracking-wider mt-0.5">Checking Plan...</span>
-           </div>
+           <div class="flex flex-col text-left hidden sm:flex"><span id="userName" class="text-[11px] font-bold text-white leading-tight">Loading...</span><span id="userPlan" class="text-[9px] font-black uppercase text-emerald-400 leading-tight tracking-wider mt-0.5">Checking Plan...</span></div>
            <div class="h-6 w-[1px] bg-slate-700 mx-2"></div>
            <button id="adminToggleBtn" class="hidden bg-indigo-600 hover:bg-indigo-500 text-white font-black text-[10px] uppercase tracking-widest px-4 py-2 rounded-xl transition-colors shadow-[0_0_15px_rgba(99,102,241,0.4)]">Admin</button>
            <button id="logoutBtn" class="text-slate-400 hover:text-rose-400 font-black text-[10px] uppercase tracking-widest px-2 py-2 transition-colors">Logout</button>
@@ -80,172 +66,64 @@
   </header>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-
-    <!-- Landing & Auth -->
     <div id="authPanel" class="glass-panel rounded-[2rem] shadow-2xl p-8 md:p-16 mb-10 border border-slate-700/50 relative overflow-hidden">
         <div id="authWarning" class="flex flex-col items-center text-center max-w-4xl mx-auto mb-16 relative z-10">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-[10px] font-black uppercase tracking-widest mb-8 shadow-inner">
-                <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span> E-Commerce Intelligence
-            </div>
-            <h2 class="text-5xl md:text-7xl font-black text-white tracking-tight mb-8 leading-[1.1]">
-                Scale Your Operations <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">Without The Chaos</span>
-            </h2>
-            <p class="text-lg text-slate-400 font-medium leading-relaxed mb-12 max-w-2xl mx-auto">
-                The ultimate workspace for elite Flipkart & Meesho sellers. Crop thermal labels, map massive settlement reports, and reveal your absolute bottom-line net profit.
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
-                <button id="googleSignInBtn" class="flex items-center justify-center gap-4 bg-white text-slate-900 hover:bg-slate-200 font-black py-4 px-10 rounded-2xl shadow-[0_0_40px_rgba(255,255,255,0.2)] btn-hover text-sm tracking-widest uppercase transition-all w-full sm:w-auto">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                    Secure Login
-                </button>
-            </div>
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-[10px] font-black uppercase tracking-widest mb-8 shadow-inner"><span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span> E-Commerce Intelligence</div>
+            <h2 class="text-5xl md:text-7xl font-black text-white tracking-tight mb-8 leading-[1.1]">Scale Your Operations <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">Without The Chaos</span></h2>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4"><button id="googleSignInBtn" class="flex items-center justify-center gap-4 bg-white text-slate-900 hover:bg-slate-200 font-black py-4 px-10 rounded-2xl shadow-[0_0_40px_rgba(255,255,255,0.2)] btn-hover text-sm tracking-widest uppercase transition-all w-full sm:w-auto">Secure Login</button></div>
         </div>
-
-        <div id="authFeatures" class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-slate-800 relative z-10">
-            <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-700/50 shadow-xl"><div class="bg-blue-500/10 w-14 h-14 rounded-2xl flex items-center justify-center text-blue-400 mb-6 border border-blue-500/20"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg></div><h3 class="text-white font-black text-xl mb-3">A.I. Label Cutter</h3><p class="text-slate-400 text-sm font-medium leading-relaxed">Drop raw PDFs. Get perfect 4x6 or 3x5 thermal labels with auto-generated packing slips and transparent brand logos.</p></div>
-            <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-700/50 shadow-xl"><div class="bg-emerald-500/10 w-14 h-14 rounded-2xl flex items-center justify-center text-emerald-400 mb-6 border border-emerald-500/20"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg></div><h3 class="text-white font-black text-xl mb-3">Flipkart Engine</h3><p class="text-slate-400 text-sm font-medium leading-relaxed">Parse SKU-level P&L exports. Input manufacturing costs to automatically deduce your real margins minus courier penalties.</p></div>
-            <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-700/50 shadow-xl"><div class="bg-pink-500/10 w-14 h-14 rounded-2xl flex items-center justify-center text-pink-400 mb-6 border border-pink-500/20"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg></div><h3 class="text-white font-black text-xl mb-3">Meesho Engine</h3><p class="text-slate-400 text-sm font-medium leading-relaxed">Orders File driven. Smartly filters return dumps to perfectly reconcile Dispatched, Cancelled, and RTO units on your active payout.</p></div>
-        </div>
-
+        <div id="authFeatures" class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-slate-800 relative z-10"></div>
         <div id="expiredWarning" class="hidden absolute inset-0 glass-panel z-20 flex flex-col items-center justify-center text-center p-12 bg-slate-950/90 backdrop-blur-xl border border-rose-500/30">
-            <div class="bg-rose-500/20 p-6 rounded-full mb-6 shadow-[0_0_30px_rgba(244,63,94,0.3)]"><svg class="w-14 h-14 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
-            <h2 class="text-4xl font-black text-white mb-4">Subscription Expired</h2>
-            <p class="text-slate-400 max-w-lg mb-8 text-base">Your access to Shegur's Ecommerce Suite has concluded. Renew your plan to unlock automated labels and P&L tools.</p>
-            <a href="https://wa.me/919970836509" target="_blank" class="bg-emerald-500 hover:bg-emerald-400 text-white font-black py-4 px-12 rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.4)] btn-hover text-sm tracking-widest uppercase mb-6 transition-all">Renew via WhatsApp</a>
             <button id="expiredLogoutBtn" class="text-slate-500 hover:text-white font-bold text-xs uppercase tracking-widest transition-colors cursor-pointer border border-slate-700 px-6 py-2 rounded-lg">Sign out</button>
         </div>
     </div>
 
-    <!-- Admin Panel -->
     <div id="adminPanel" class="hidden glass-panel bg-slate-900/90 rounded-3xl p-8 mb-10 border border-indigo-500/40 shadow-[0_0_40px_rgba(79,70,229,0.2)]">
-       <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4"><h2 class="text-xl font-black text-white uppercase tracking-wider flex items-center gap-3"><span class="w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,1)]"></span> Administrator Control</h2></div>
-       <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="text-[10px] font-black uppercase tracking-widest text-slate-500 border-b border-slate-800"><th class="pb-4 px-4">User</th><th class="pb-4 px-4">Role</th><th class="pb-4 px-4">Plan</th><th class="pb-4 px-4">Time Left</th><th class="pb-4 px-4 text-right">Actions</th></tr></thead><tbody id="adminUserTableBody" class="divide-y divide-slate-800/50"></tbody></table></div>
+       <div class="overflow-x-auto"><table class="w-full text-left"><tbody id="adminUserTableBody" class="divide-y divide-slate-800/50"></tbody></table></div>
     </div>
 
     <!-- LABEL CUTTER WORKSPACE -->
     <div id="labelWorkspace" class="hidden animate-fade-in">
-        <div class="flex justify-center mb-8">
-            <div class="flex bg-slate-900 p-1.5 rounded-2xl border border-slate-700 shadow-inner">
-              <button id="lc_tabFk" type="button" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(37,99,235,0.4)]">Flipkart Labels</button>
-              <button id="lc_tabMs" type="button" class="text-slate-400 hover:text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all">Meesho Labels</button>
-            </div>
-        </div>
-
+        <div class="flex justify-center mb-8"><div class="flex bg-slate-900 p-1.5 rounded-2xl border border-slate-700 shadow-inner"><button id="lc_tabFk" type="button" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(37,99,235,0.4)]">Flipkart Labels</button><button id="lc_tabMs" type="button" class="text-slate-400 hover:text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all">Meesho Labels</button></div></div>
         <div class="glass-panel rounded-3xl shadow-2xl p-8 mb-10 border border-slate-700">
           <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
-            <!-- Dropzone -->
             <div class="lg:col-span-2 flex flex-col gap-4">
               <div id="lc_dropzone" class="border-[3px] border-dashed rounded-3xl p-8 transition-all text-center flex flex-col justify-center items-center relative border-blue-500/40 bg-blue-500/5 hover:bg-blue-500/10 cursor-pointer min-h-[280px]">
                 <input type="file" id="lc_pdfFileInput" accept="application/pdf" multiple class="absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" />
                 <div class="bg-blue-500/20 p-5 rounded-full text-blue-400 mb-5 shadow-inner"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg></div>
                 <p class="text-xl font-black text-white">Drop <span id="lc_platformName" class="text-blue-400">Flipkart</span> PDFs</p>
-                <div class="mt-5 bg-slate-800 border border-slate-600 hover:border-slate-400 transition-colors text-white text-[10px] font-black uppercase tracking-widest px-8 py-3 rounded-xl shadow-md">Browse Files</div>
+                <div class="mt-5 bg-slate-800 border border-slate-600 text-white text-[10px] font-black uppercase tracking-widest px-8 py-3 rounded-xl shadow-md">Browse Files</div>
               </div>
-              <div id="lc_fileManager" class="hidden bg-slate-900/90 rounded-2xl p-5 border border-slate-700 max-h-48 overflow-y-auto shadow-inner">
-                <div class="text-[10px] font-black uppercase tracking-widest text-slate-400 pb-3 border-b border-slate-800 mb-3 flex justify-between"><span>Files Loaded</span><span id="lc_fileCount" class="text-white bg-slate-700 px-2 py-0.5 rounded">0</span></div>
-                <div id="lc_fileList" class="space-y-2"></div>
-              </div>
+              <div id="lc_fileManager" class="hidden bg-slate-900/90 rounded-2xl p-5 border border-slate-700 max-h-48 overflow-y-auto shadow-inner"><div class="text-[10px] font-black uppercase tracking-widest text-slate-400 pb-3 border-b border-slate-800 mb-3 flex justify-between"><span>Files Loaded</span><span id="lc_fileCount" class="text-white bg-slate-700 px-2 py-0.5 rounded">0</span></div><div id="lc_fileList" class="space-y-2"></div></div>
             </div>
-
-            <!-- Settings -->
             <div class="lg:col-span-3 flex flex-col justify-between bg-slate-900/60 p-8 rounded-3xl border border-slate-700 shadow-inner">
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-                <div class="space-y-2">
-                  <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Output Format Target</label>
-                  <select id="lc_printFormat" class="w-full bg-slate-950 border border-slate-700 text-white text-sm font-bold rounded-xl p-4 outline-none focus:border-indigo-500 transition-colors"></select>
-                </div>
-                <div class="space-y-2">
-                  <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest flex justify-between"><span>Brand Watermark</span><span class="text-emerald-400 font-bold bg-emerald-500/10 px-2 rounded">Auto-Clear</span></label>
-                  <div class="flex items-center gap-3 bg-slate-950 border border-slate-700 rounded-xl p-2.5">
-                    <div class="h-10 w-24 rounded flex items-center justify-center bg-slate-800 border border-slate-700 overflow-hidden shadow-inner"><img id="lc_logoPreview" src="" alt="Logo" class="h-full object-contain p-1" /></div>
-                    <div class="w-full relative overflow-hidden rounded"><input type="file" id="lc_logoInput" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" /><div class="block text-center font-black uppercase text-[10px] tracking-widest py-3 bg-slate-800 hover:bg-slate-700 transition-colors text-white rounded cursor-pointer">Change Logo</div></div>
-                  </div>
-                </div>
+                <div class="space-y-2"><label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Output Format Target</label><select id="lc_printFormat" class="w-full bg-slate-950 border border-slate-700 text-white text-sm font-bold rounded-xl p-4 outline-none focus:border-indigo-500 transition-colors"></select></div>
+                <div class="space-y-2"><label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest flex justify-between"><span>Brand Watermark</span><span class="text-emerald-400 font-bold bg-emerald-500/10 px-2 rounded">Auto-Clear</span></label><div class="flex items-center gap-3 bg-slate-950 border border-slate-700 rounded-xl p-2.5"><div class="h-10 w-24 rounded flex items-center justify-center bg-slate-800 border border-slate-700 overflow-hidden shadow-inner"><img id="lc_logoPreview" src="" alt="Logo" class="h-full object-contain p-1" /></div><div class="w-full relative overflow-hidden rounded"><input type="file" id="lc_logoInput" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" /><div class="block text-center font-black uppercase text-[10px] tracking-widest py-3 bg-slate-800 hover:bg-slate-700 transition-colors text-white rounded cursor-pointer">Change Logo</div></div></div></div>
               </div>
-
               <div class="mt-auto flex flex-col gap-5">
-                <div class="flex items-center gap-4 bg-slate-950 p-4 rounded-xl border border-slate-800 shadow-inner">
-                    <input type="checkbox" id="lc_includeSummary" checked class="w-5 h-5 rounded cursor-pointer accent-indigo-500 bg-slate-800 border-slate-600" />
-                    <label for="lc_includeSummary" class="text-xs font-bold cursor-pointer text-slate-300">Append Master Packing Slips (Courier, Seller & SKU Tally)</label>
-                </div>
-                <div class="flex gap-4">
-                  <button id="lc_resetBtn" class="w-1/4 bg-slate-800 text-white hover:bg-rose-600 hover:border-rose-500 font-black py-4 rounded-xl text-xs uppercase tracking-widest btn-hover border border-slate-600 transition-all">Reset</button>
-                  <button id="lc_processBtn" disabled class="w-3/4 bg-indigo-600 hover:bg-indigo-500 text-white font-black py-4 px-6 rounded-xl text-sm uppercase tracking-widest shadow-[0_0_20px_rgba(79,70,229,0.4)] btn-hover disabled:opacity-50 disabled:shadow-none transition-all"><span id="lc_processBtnText">Process Labels</span></button>
-                </div>
+                <div class="flex items-center gap-4 bg-slate-950 p-4 rounded-xl border border-slate-800 shadow-inner"><input type="checkbox" id="lc_includeSummary" checked class="w-5 h-5 rounded cursor-pointer accent-indigo-500 bg-slate-800 border-slate-600" /><label for="lc_includeSummary" class="text-xs font-bold cursor-pointer text-slate-300">Append Master Packing Slips</label></div>
+                <div class="flex gap-4"><button id="lc_resetBtn" class="w-1/4 bg-slate-800 text-white hover:bg-rose-600 font-black py-4 rounded-xl text-xs uppercase tracking-widest btn-hover">Reset</button><button id="lc_processBtn" disabled class="w-3/4 bg-indigo-600 hover:bg-indigo-500 text-white font-black py-4 px-6 rounded-xl text-sm uppercase tracking-widest btn-hover disabled:opacity-50 transition-all"><span id="lc_processBtnText">Process Labels</span></button></div>
               </div>
             </div>
           </div>
         </div>
-
-        <div id="lc_results" class="hidden mb-10 p-8 glass-panel bg-slate-900/90 rounded-3xl border border-emerald-500/30 shadow-[0_0_40px_rgba(16,185,129,0.15)] flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex items-center gap-10">
-              <div><span class="block text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Orders Parsed</span><span id="lc_metricTotal" class="text-5xl font-black text-white">0</span></div>
-              <div class="h-16 w-[2px] bg-slate-700 rounded-full"></div>
-              <div><span class="block text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Total Pieces</span><span id="lc_metricPieces" class="text-5xl font-black text-indigo-400 drop-shadow-[0_0_10px_rgba(129,140,248,0.5)]">0</span></div>
-            </div>
-            <div class="flex gap-4 w-full md:w-auto">
-              <button id="lc_previewBtn" class="flex-1 bg-slate-800 text-white font-black py-4 px-8 rounded-xl text-xs uppercase tracking-widest border border-slate-600 btn-hover hover:bg-slate-700 transition-colors">Preview PDF</button>
-              <button id="lc_downloadBtn" class="flex-2 bg-emerald-500 hover:bg-emerald-400 text-white font-black py-4 px-10 rounded-xl text-xs uppercase tracking-widest shadow-[0_0_20px_rgba(16,185,129,0.5)] btn-hover transition-all">Save Thermal Print</button>
-            </div>
-        </div>
-        
-        <div id="recoveryPanel" class="hidden glass-panel bg-slate-900/80 rounded-3xl p-8 mb-10 border border-slate-700 shadow-xl">
-            <div class="flex justify-between items-center mb-5 border-b border-slate-800 pb-4"><h2 class="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2"><svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg> Cloud Recovery</h2><span class="bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 text-[9px] font-black px-3 py-1.5 rounded-lg uppercase tracking-widest shadow-inner">Auto-Deletes in 6H</span></div>
-            <ul id="savedBatchesList" class="space-y-3 max-h-56 overflow-y-auto pr-2"></ul>
-        </div>
+        <div id="lc_results" class="hidden mb-10 p-8 glass-panel bg-slate-900/90 rounded-3xl border border-emerald-500/30 shadow-[0_0_40px_rgba(16,185,129,0.15)] flex flex-col md:flex-row justify-between items-center gap-6"><div class="flex items-center gap-10"><div><span class="block text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Orders Parsed</span><span id="lc_metricTotal" class="text-5xl font-black text-white">0</span></div><div class="h-16 w-[2px] bg-slate-700 rounded-full"></div><div><span class="block text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Total Pieces</span><span id="lc_metricPieces" class="text-5xl font-black text-indigo-400 drop-shadow-[0_0_10px_rgba(129,140,248,0.5)]">0</span></div></div><div class="flex gap-4 w-full md:w-auto"><button id="lc_previewBtn" class="flex-1 bg-slate-800 text-white font-black py-4 px-8 rounded-xl text-xs uppercase tracking-widest border border-slate-600 btn-hover hover:bg-slate-700 transition-colors">Preview PDF</button><button id="lc_downloadBtn" class="flex-2 bg-emerald-500 hover:bg-emerald-400 text-white font-black py-4 px-10 rounded-xl text-xs uppercase tracking-widest shadow-[0_0_20px_rgba(16,185,129,0.5)] btn-hover transition-all">Save Thermal Print</button></div></div>
+        <div id="recoveryPanel" class="hidden glass-panel bg-slate-900/80 rounded-3xl p-8 mb-10 border border-slate-700 shadow-xl"><ul id="savedBatchesList" class="space-y-3 max-h-56 overflow-y-auto pr-2"></ul></div>
     </div>
 
     <!-- FLIPKART P&L WORKSPACE -->
     <div id="fkPnlWorkspace" class="hidden space-y-8 animate-fade-in">
       <div class="w-full bg-slate-900/80 p-12 rounded-3xl border-[3px] border-dashed border-blue-500/40 hover:border-blue-400 transition-colors text-center cursor-pointer relative shadow-[0_0_30px_rgba(59,130,246,0.1)]">
         <input type="file" id="fk_excelInput" accept=".xlsx, .xls" class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer" />
-        <div class="flex flex-col items-center justify-center gap-4 pointer-events-none">
-          <div class="p-5 bg-blue-500/20 text-blue-400 rounded-full shadow-inner"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg></div>
-          <p class="text-2xl font-black text-white tracking-tight">Drop Official Flipkart P&L Excel</p>
-          <p class="text-xs text-blue-400 font-bold uppercase tracking-widest bg-blue-500/10 px-4 py-1.5 rounded-lg">Requires 'SKU-level P&L' Sheet</p>
-        </div>
+        <div class="flex flex-col items-center justify-center gap-4 pointer-events-none"><div class="p-5 bg-blue-500/20 text-blue-400 rounded-full shadow-inner"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg></div><p class="text-2xl font-black text-white tracking-tight">Drop Official Flipkart P&L Excel</p><p class="text-xs text-blue-400 font-bold uppercase tracking-widest bg-blue-500/10 px-4 py-1.5 rounded-lg">Requires 'SKU-level P&L' Sheet</p></div>
       </div>
       
       <div id="fk_calcSection" class="hidden space-y-6">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Net Units</span><p id="fk_kpiUnits" class="text-4xl font-black text-white mt-2">0</p></div>
-          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Settlement</span><p id="fk_kpiSettlement" class="text-4xl font-black text-blue-400 mt-2">₹0.00</p></div>
-          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Gross Profit (Valid SKUs)</span><p id="fk_kpiGross" class="text-4xl font-black text-emerald-400 mt-2">₹0.00</p></div>
-          <div class="glass-panel border border-emerald-500/40 p-6 rounded-3xl bg-gradient-to-br from-emerald-900/50 to-slate-900 shadow-[0_0_30px_rgba(16,185,129,0.2)]"><span class="text-[10px] font-black uppercase text-emerald-400 tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Final Net Profit</span><p id="fk_kpiNet" class="text-4xl font-black text-emerald-300 mt-2">₹0.00</p></div>
-        </div>
-
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/90 p-5 rounded-2xl border border-slate-700 shadow-md">
-            <div class="flex items-center gap-3 w-full sm:w-auto">
-                <div class="bg-indigo-500/20 p-2 rounded-lg text-indigo-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
-                <label class="text-xs font-bold text-white uppercase tracking-widest pl-2">Bulk Fill Missing Costs (₹):</label>
-            </div>
-            <div class="flex items-center gap-3 w-full sm:w-auto">
-                <input type="number" id="fk_bulkCostInput" placeholder="e.g. 150" class="bg-slate-950 border border-slate-600 px-4 py-3 rounded-xl text-white font-black outline-none focus:border-blue-500 w-full sm:w-32 shadow-inner" />
-                <button id="fk_applyBulkBtn" class="bg-slate-800 hover:bg-blue-600 border border-slate-600 text-white px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all btn-hover shadow-lg w-full sm:w-auto">Apply To Empty</button>
-            </div>
-        </div>
-
-        <div class="glass-panel rounded-3xl border border-slate-700 shadow-xl overflow-hidden">
-          <div class="max-h-[550px] overflow-y-auto">
-            <table class="w-full text-left text-sm whitespace-nowrap">
-              <thead class="bg-slate-950 text-slate-400 text-[10px] font-black uppercase tracking-widest sticky top-0 border-b border-slate-700 z-10">
-                <tr><th class="py-4 px-6">#</th><th class="py-4 px-6">SKU ID</th><th class="py-4 px-6 text-right">Net Units</th><th class="py-4 px-6 text-right">Total Settlement</th><th class="py-4 px-6 text-center">Your Mfg Cost (₹)</th><th class="py-4 px-6 text-right">Profit / Unit</th><th class="py-4 px-6 text-right">Total Profit</th></tr>
-              </thead>
-              <tbody id="fk_skuTableBody" class="divide-y divide-slate-800/60 font-medium"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="glass-panel p-8 rounded-3xl border border-rose-500/20 bg-gradient-to-r from-slate-900 to-rose-950/20 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div class="flex items-center gap-4">
-              <div class="bg-rose-500/20 p-3 rounded-2xl text-rose-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg></div>
-              <div><h3 class="text-sm font-black text-white uppercase tracking-wider">Unclaimed Return & Damage Losses</h3><p class="text-xs text-slate-400 mt-1">Deduct missing items or packaging waste to find true net.</p></div>
-          </div>
-          <div class="flex items-center gap-4 w-full sm:w-auto">
-            <div class="relative w-full sm:w-56"><span class="absolute left-4 top-3.5 text-slate-500 font-black text-base">₹</span><input type="number" id="fk_lossInput" value="0" class="w-full bg-slate-950 border border-slate-700 pl-9 pr-4 py-3.5 rounded-xl font-black text-rose-400 outline-none focus:border-rose-500 shadow-inner text-lg" /></div>
-            <button id="fk_recalcBtn" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black px-8 py-3.5 rounded-xl text-xs uppercase tracking-widest shadow-[0_0_20px_rgba(16,185,129,0.3)] btn-hover transition-all">Update P&L</button>
-          </div>
-        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"><div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Net Units</span><p id="fk_kpiUnits" class="text-4xl font-black text-white mt-2">0</p></div><div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Settlement</span><p id="fk_kpiSettlement" class="text-4xl font-black text-blue-400 mt-2">₹0.00</p></div><div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Gross Profit (Valid SKUs)</span><p id="fk_kpiGross" class="text-4xl font-black text-emerald-400 mt-2">₹0.00</p></div><div class="glass-panel border border-emerald-500/40 p-6 rounded-3xl bg-gradient-to-br from-emerald-900/50 to-slate-900 shadow-[0_0_30px_rgba(16,185,129,0.2)]"><span class="text-[10px] font-black uppercase text-emerald-400 tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Final Net Profit</span><p id="fk_kpiNet" class="text-4xl font-black text-emerald-300 mt-2">₹0.00</p></div></div>
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/90 p-5 rounded-2xl border border-slate-700 shadow-md"><div class="flex items-center gap-3 w-full sm:w-auto"><div class="bg-indigo-500/20 p-2 rounded-lg text-indigo-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div><label class="text-xs font-bold text-white uppercase tracking-widest pl-2">Bulk Fill Missing Costs (₹):</label></div><div class="flex items-center gap-3 w-full sm:w-auto"><input type="number" id="fk_bulkCostInput" placeholder="e.g. 150" class="bg-slate-950 border border-slate-600 px-4 py-3 rounded-xl text-white font-black outline-none focus:border-blue-500 w-full sm:w-32 shadow-inner" /><button id="fk_applyBulkBtn" class="bg-slate-800 hover:bg-blue-600 border border-slate-600 text-white px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all btn-hover shadow-lg w-full sm:w-auto">Apply To Empty</button></div></div>
+        <div class="glass-panel rounded-3xl border border-slate-700 shadow-xl overflow-hidden"><div class="max-h-[550px] overflow-y-auto"><table class="w-full text-left text-sm whitespace-nowrap"><thead class="bg-slate-950 text-slate-400 text-[10px] font-black uppercase tracking-widest sticky top-0 border-b border-slate-700 z-10"><tr><th class="py-4 px-6">#</th><th class="py-4 px-6">SKU ID</th><th class="py-4 px-6 text-right">Net Units</th><th class="py-4 px-6 text-right">Total Settlement</th><th class="py-4 px-6 text-center">Your Mfg Cost (₹)</th><th class="py-4 px-6 text-right">Profit / Unit</th><th class="py-4 px-6 text-right">Total Profit</th></tr></thead><tbody id="fk_skuTableBody" class="divide-y divide-slate-800/60 font-medium"></tbody></table></div></div>
+        <div class="glass-panel p-8 rounded-3xl border border-rose-500/20 bg-gradient-to-r from-slate-900 to-rose-950/20 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-6"><div class="flex items-center gap-4"><div class="bg-rose-500/20 p-3 rounded-2xl text-rose-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg></div><div><h3 class="text-sm font-black text-white uppercase tracking-wider">Unclaimed Return & Damage Losses</h3><p class="text-xs text-slate-400 mt-1">Deduct missing items or packaging waste to find true net.</p></div></div><div class="flex items-center gap-4 w-full sm:w-auto"><div class="relative w-full sm:w-56"><span class="absolute left-4 top-3.5 text-slate-500 font-black text-base">₹</span><input type="number" id="fk_lossInput" value="0" class="w-full bg-slate-950 border border-slate-700 pl-9 pr-4 py-3.5 rounded-xl font-black text-rose-400 outline-none focus:border-rose-500 shadow-inner text-lg" /></div><button id="fk_recalcBtn" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black px-8 py-3.5 rounded-xl text-xs uppercase tracking-widest shadow-[0_0_20px_rgba(16,185,129,0.3)] btn-hover transition-all">Update P&L</button></div></div>
       </div>
     </div>
 
@@ -257,41 +135,53 @@
             <div class="relative bg-slate-950 p-8 rounded-2xl border-[3px] border-dashed border-slate-700 hover:border-pink-500 transition-colors text-center cursor-pointer shadow-inner group">
                 <input type="file" id="ms_ordInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer" />
                 <div class="bg-slate-800 w-14 h-14 mx-auto rounded-full flex items-center justify-center text-slate-400 group-hover:text-pink-400 group-hover:bg-pink-500/20 transition-colors mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div>
-                <p class="text-base font-black text-white">1. Orders File</p>
-                <p id="ms_labelOrd" class="text-[10px] text-pink-500 font-bold uppercase tracking-widest mt-2">Required: Sets the Base</p>
+                <p class="text-base font-black text-white">1. Orders File</p><p id="ms_labelOrd" class="text-[10px] text-pink-500 font-bold uppercase tracking-widest mt-2">Required: Sets the Base</p>
             </div>
-            
             <div class="relative bg-slate-950 p-8 rounded-2xl border-[3px] border-dashed border-slate-700 hover:border-pink-500 transition-colors text-center cursor-pointer shadow-inner group">
                 <input type="file" id="ms_payInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer" />
                 <div class="bg-slate-800 w-14 h-14 mx-auto rounded-full flex items-center justify-center text-slate-400 group-hover:text-pink-400 group-hover:bg-pink-500/20 transition-colors mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
-                <p class="text-base font-black text-white">2. Payments File</p>
-                <p id="ms_labelPay" class="text-[10px] text-pink-500 font-bold uppercase tracking-widest mt-2">Required: Maps Settled ₹</p>
+                <p class="text-base font-black text-white">2. Payments File</p><p id="ms_labelPay" class="text-[10px] text-pink-500 font-bold uppercase tracking-widest mt-2">Required: Maps Settled ₹ & Ads</p>
             </div>
-            
             <div class="relative bg-slate-950 p-8 rounded-2xl border-[3px] border-dashed border-slate-700 hover:border-pink-500 transition-colors text-center cursor-pointer shadow-inner group">
                 <input type="file" id="ms_retInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer" />
                 <div class="bg-slate-800 w-14 h-14 mx-auto rounded-full flex items-center justify-center text-slate-400 group-hover:text-pink-400 group-hover:bg-pink-500/20 transition-colors mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg></div>
-                <p class="text-base font-black text-white">3. Returns File</p>
-                <p id="ms_labelRet" class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2">Optional: Smart Filtered</p>
+                <p class="text-base font-black text-white">3. Returns File</p><p id="ms_labelRet" class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2">Optional: Smart Filtered</p>
             </div>
         </div>
       </div>
 
-      <div id="ms_calcSection" class="hidden space-y-6">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Net Settlement</span><p id="ms_kpiSettlement" class="text-4xl font-black text-blue-400 mt-2">₹0.00</p></div>
-          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Dispatched Orders</span><p id="ms_kpiDispatched" class="text-4xl font-black text-white mt-2">0</p></div>
-          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Delivered Orders</span><p id="ms_kpiDelivered" class="text-4xl font-black text-emerald-400 mt-2">0</p></div>
-          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">RTO / Cancellations</span><p id="ms_kpiReturns" class="text-4xl font-black text-rose-400 mt-2">0</p></div>
-          <div class="glass-panel border border-emerald-500/40 p-6 rounded-3xl bg-gradient-to-br from-emerald-900/50 to-slate-900 shadow-[0_0_30px_rgba(16,185,129,0.2)]"><span class="text-[10px] font-black uppercase text-emerald-400 tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Realized Net Profit</span><p id="ms_kpiNetProfit" class="text-4xl font-black text-emerald-300 mt-2">₹0.00</p></div>
+      <div id="ms_calcSection" class="hidden space-y-6 animate-fade-in">
+        <!-- SellerBox Style KPIs -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg">
+                <span class="text-[10px] font-black uppercase text-slate-400 tracking-widest flex items-center gap-2"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Gross Payout</span>
+                <p id="ms_kpiGross" class="text-3xl font-black text-white mt-2">₹0.00</p><p class="text-[9px] text-slate-500 mt-1 uppercase tracking-widest font-bold">Before Deductions</p>
+            </div>
+            <div class="glass-panel border border-rose-500/20 p-6 rounded-3xl shadow-lg bg-rose-900/10">
+                <span class="text-[10px] font-black uppercase text-rose-400 tracking-widest flex items-center gap-2"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg> Return Deductions</span>
+                <p id="ms_kpiReturnDed" class="text-3xl font-black text-rose-400 mt-2">-₹0.00</p><p class="text-[9px] text-rose-500/60 mt-1 uppercase tracking-widest font-bold">Meesho Return Fees</p>
+            </div>
+            <div class="glass-panel border border-indigo-500/20 p-6 rounded-3xl shadow-lg bg-indigo-900/10">
+                <span class="text-[10px] font-black uppercase text-indigo-400 tracking-widest flex items-center gap-2"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg> Ad Spend</span>
+                <p id="ms_kpiAds" class="text-3xl font-black text-indigo-400 mt-2">-₹0.00</p><p class="text-[9px] text-indigo-500/60 mt-1 uppercase tracking-widest font-bold">Deducted from settlements</p>
+            </div>
+            <div class="glass-panel border border-emerald-500/40 p-6 rounded-3xl bg-gradient-to-br from-emerald-900/30 to-slate-900 shadow-[0_0_30px_rgba(16,185,129,0.15)]">
+                <span class="text-[10px] font-black uppercase text-emerald-400 tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Net Settled</span>
+                <p id="ms_kpiSettlement" class="text-3xl font-black text-emerald-300 mt-2">₹0.00</p><p class="text-[9px] text-emerald-500/60 mt-1 uppercase tracking-widest font-bold">Reached your bank</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="glass-panel border border-slate-700 p-5 rounded-2xl"><span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Dispatched Orders</span><p id="ms_kpiDispatched" class="text-2xl font-black text-white mt-1">0</p></div>
+          <div class="glass-panel border border-slate-700 p-5 rounded-2xl"><span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Delivered Orders</span><p id="ms_kpiDelivered" class="text-2xl font-black text-emerald-400 mt-1">0</p></div>
+          <div class="glass-panel border border-slate-700 p-5 rounded-2xl"><span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">RTO / Customer Returns</span><p id="ms_kpiReturns" class="text-2xl font-black text-rose-400 mt-1">0</p></div>
+          <div class="glass-panel border border-emerald-500/30 p-5 rounded-2xl bg-emerald-950/30"><span class="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Realized True Net Profit</span><p id="ms_kpiNetProfit" class="text-2xl font-black text-emerald-300 mt-1">₹0.00</p></div>
         </div>
 
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/90 p-5 rounded-2xl border border-slate-700 shadow-md">
-            <div class="flex items-center gap-4 w-full sm:w-auto">
-                <div class="bg-pink-500/20 p-2 rounded-lg text-pink-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
-                <label class="text-xs font-bold text-white uppercase tracking-widest">Bulk Fill Missing Costs (₹):</label>
-                <input type="number" id="ms_bulkCostInput" placeholder="e.g. 120" class="bg-slate-950 border border-slate-600 px-4 py-3 rounded-xl text-white font-black outline-none focus:border-pink-500 w-32 shadow-inner" />
-                <button id="ms_applyBulkBtn" class="bg-slate-800 hover:bg-pink-600 border border-slate-600 text-white px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all btn-hover shadow-lg">Apply</button>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-3 w-full sm:w-auto"><div class="bg-pink-500/20 p-2 rounded-lg text-pink-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div><label class="text-xs font-bold text-white uppercase tracking-widest">Bulk Fill Missing Costs (₹):</label></div>
+                <div class="flex items-center gap-3 w-full sm:w-auto"><input type="number" id="ms_bulkCostInput" placeholder="e.g. 120" class="bg-slate-950 border border-slate-600 px-4 py-3 rounded-xl text-white font-black outline-none focus:border-pink-500 w-full sm:w-32 shadow-inner" /><button id="ms_applyBulkBtn" class="bg-slate-800 hover:bg-pink-600 border border-slate-600 text-white px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all btn-hover shadow-lg w-full sm:w-auto">Apply To Empty</button></div>
             </div>
             <button id="ms_exportBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-6 py-3 rounded-xl text-xs uppercase tracking-widest shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all btn-hover flex items-center gap-2 w-full sm:w-auto justify-center"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg> Download Excel</button>
         </div>
