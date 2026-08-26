@@ -1,22 +1,23 @@
-import { auth, db, provider, firebaseConfig } from './firebase-config.js';
+import { auth, db, provider } from './firebase-config.js';
 import { signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import { doc, getDoc, setDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const ADMIN_EMAIL = "vsshegur@gmail.com";
-const CHROME_EXTENSION_ID = "YOUR_EXTENSION_ID_HERE";
+const EXTENSION_ID = "YOUR_EXTENSION_ID_HERE";
 
-window.appState = { userSkus: {}, isUnlocked: false, currentUser: null };
+window.appState = { userSkus: {}, isUnlocked: false, currentUser: null, currentApp: 'labelCutter' };
 
 document.getElementById('appSelector').addEventListener('change', (e) => {
     if (!window.appState.isUnlocked) return;
+    window.appState.currentApp = e.target.value;
     document.getElementById('authPanel').classList.add('hidden');
     document.getElementById('labelWorkspace').classList.add('hidden');
     document.getElementById('fkPnlWorkspace').classList.add('hidden');
     document.getElementById('msPnlWorkspace').classList.add('hidden');
     
-    if (e.target.value === 'labelCutter') { document.getElementById('labelWorkspace').classList.remove('hidden'); window.dispatchEvent(new Event('appUnlocked')); } 
-    else if (e.target.value === 'fkPnlCalculator') { document.getElementById('fkPnlWorkspace').classList.remove('hidden'); } 
-    else if (e.target.value === 'msPnlCalculator') { document.getElementById('msPnlWorkspace').classList.remove('hidden'); }
+    if (window.appState.currentApp === 'labelCutter') { document.getElementById('labelWorkspace').classList.remove('hidden'); window.dispatchEvent(new Event('appUnlocked')); } 
+    else if (window.appState.currentApp === 'fkPnlCalculator') { document.getElementById('fkPnlWorkspace').classList.remove('hidden'); } 
+    else if (window.appState.currentApp === 'msPnlCalculator') { document.getElementById('msPnlWorkspace').classList.remove('hidden'); }
 });
 
 document.getElementById('themeToggle').addEventListener('click', () => {
@@ -72,9 +73,7 @@ if(auth) {
     document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(()=>location.reload()); });
     document.getElementById('expiredLogoutBtn').addEventListener('click', () => { signOut(auth).then(()=>location.reload()); });
 } else {
-    document.getElementById('googleSignInBtn').addEventListener('click', () => {
-        alert("⚠️ CRITICAL ERROR: Firebase API keys are missing. Open firebase-config.js and paste your keys.");
-    });
+    document.getElementById('googleSignInBtn').addEventListener('click', () => alert("⚠️ SYSTEM ERROR: Firebase API keys are missing. Open firebase-config.js and paste your keys."));
 }
 
 document.getElementById('adminToggleBtn').addEventListener('click', async () => {
@@ -83,8 +82,8 @@ document.getElementById('adminToggleBtn').addEventListener('click', async () => 
         document.getElementById('adminPanel').classList.remove('hidden'); document.getElementById('adminToggleBtn').textContent = "Back to App"; await loadAdminUsers();
     } else {
         document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('adminToggleBtn').textContent = "Admin Panel";
-        if(document.getElementById('appSelector').value === 'labelCutter') document.getElementById('labelWorkspace').classList.remove('hidden'); 
-        else if (document.getElementById('appSelector').value === 'fkPnlCalculator') document.getElementById('fkPnlWorkspace').classList.remove('hidden');
+        if(window.appState.currentApp === 'labelCutter') document.getElementById('labelWorkspace').classList.remove('hidden'); 
+        else if (window.appState.currentApp === 'fkPnlCalculator') document.getElementById('fkPnlWorkspace').classList.remove('hidden');
         else document.getElementById('msPnlWorkspace').classList.remove('hidden');
     }
 });
