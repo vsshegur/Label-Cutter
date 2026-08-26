@@ -3,37 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shegur's Ecommerce Suite | Advanced Automation</title>
+  <title>Shegur's Ecommerce Engine | Advanced Automation</title>
   
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%234f46e5%22/><text x=%2250%22 y=%2270%22 font-family=%22Arial, sans-serif%22 font-size=%2265%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22>S</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } } };</script>
   
+  <!-- Core Engines -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.1/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap');
     body { font-family: 'Inter', sans-serif; transition: background-color 0.2s, color 0.2s; }
     .glass-panel { backdrop-filter: blur(24px); background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255,255,255,0.05); }
     .btn-hover { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
-    .btn-hover:hover { transform: translateY(-3px); box-shadow: 0 20px 40px -5px rgba(79, 70, 229, 0.2); }
+    .btn-hover:hover { transform: translateY(-3px); box-shadow: 0 20px 40px -5px rgba(99, 102, 241, 0.25); }
     .btn-hover:active { transform: translateY(0px); }
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
     input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
   </style>
 
-  <!-- Global Error Catcher -->
+  <!-- Auto-Catcher for Typos -->
   <script>
     window.addEventListener('error', function(e) {
         const banner = document.getElementById('syntaxErrorBanner');
         if(banner) {
             banner.classList.remove('hidden');
-            banner.innerHTML = "⚠️ <b>CRITICAL SYSTEM CRASH:</b> " + e.message + "<br/><span class='text-xs font-medium'>You likely made a typo when pasting your Firebase Keys at the bottom of the file (missing a quote or comma). Fix it and redeploy to Vercel.</span>";
+            banner.innerHTML = "⚠️ <b>SYSTEM CRASH:</b> " + e.message + "<br/><span class='text-xs font-medium'>Did you make a typo when pasting your Firebase Keys? Fix it and redeploy.</span>";
         }
     });
   </script>
@@ -42,47 +43,48 @@
 
   <div id="syntaxErrorBanner" class="hidden bg-rose-600 text-white text-center py-4 px-6 shadow-2xl z-[999] relative font-bold text-sm tracking-wide"></div>
 
-  <!-- Ambient Glow Background -->
+  <!-- Animated Ambient Background -->
   <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-    <div class="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-blue-600/10 rounded-full blur-[150px]"></div>
-    <div class="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-pink-600/10 rounded-full blur-[150px]"></div>
+    <div class="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-indigo-600/10 rounded-full blur-[150px] animate-pulse"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-rose-600/10 rounded-full blur-[150px] animate-pulse" style="animation-delay: 2s;"></div>
   </div>
 
   <!-- Premium Header -->
-  <header class="glass-panel sticky top-0 z-50 shadow-2xl mb-8 border-b border-white/10">
+  <header class="glass-panel sticky top-0 z-50 shadow-2xl mb-8 border-b border-white/5">
     <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
       <div class="flex items-center gap-4 w-full md:w-auto justify-center md:justify-start">
-        <div class="bg-gradient-to-br from-indigo-500 to-blue-600 p-3 rounded-2xl shadow-[0_0_20px_rgba(79,70,229,0.4)] text-white">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        <div class="bg-gradient-to-br from-indigo-500 to-blue-600 p-3 rounded-2xl shadow-[0_0_20px_rgba(99,102,241,0.4)] text-white">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
         </div>
         <div>
           <h1 class="text-2xl font-black tracking-tight text-white">Shegur's <span class="text-indigo-400 font-semibold text-lg">Suite</span></h1>
-          <p class="text-slate-400 text-[10px] mt-0.5 font-bold tracking-widest uppercase flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.8)]"></span> Secure Terminal</p>
+          <p class="text-slate-400 text-[10px] mt-0.5 font-bold tracking-widest uppercase flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.8)]"></span> Authorized Terminal</p>
         </div>
       </div>
       
       <div class="flex items-center gap-4 w-full md:w-auto justify-center">
         <!-- App Navigation Selector -->
         <div id="appSelectorContainer" class="hidden relative">
-            <select id="appSelector" class="appearance-none bg-slate-900 border border-slate-700 text-white text-xs font-black uppercase tracking-widest rounded-xl py-3 pl-4 pr-10 outline-none shadow-sm cursor-pointer focus:ring-2 focus:border-indigo-500 transition-all hover:bg-slate-800">
+            <select id="appSelector" class="appearance-none bg-slate-900 border border-slate-700 text-white text-xs font-black uppercase tracking-widest rounded-xl py-3.5 pl-5 pr-12 outline-none shadow-inner cursor-pointer focus:ring-2 focus:border-indigo-500 transition-all hover:bg-slate-800">
                 <option value="labelCutter">✂️ Thermal Label Cutter</option>
                 <option value="fkPnlCalculator">🔵 Flipkart Profit Engine</option>
                 <option value="msPnlCalculator">🛍️ Meesho Profit Engine</option>
             </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
-                <svg class="fill-current h-4 w-4" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-indigo-400">
+                <svg class="fill-current h-5 w-5" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
             </div>
         </div>
 
-        <div id="userInfo" class="hidden flex items-center gap-3 bg-slate-900 border border-slate-700 p-1.5 pr-4 rounded-xl shadow-inner">
-           <img id="userAvatar" class="w-8 h-8 rounded-lg shadow-sm" src="" alt="Profile">
+        <!-- User Profile Dropdown -->
+        <div id="userInfo" class="hidden flex items-center gap-4 bg-slate-900 border border-slate-700 p-2 pr-5 rounded-2xl shadow-inner">
+           <img id="userAvatar" class="w-9 h-9 rounded-xl shadow-md" src="" alt="Profile">
            <div class="flex flex-col text-left hidden sm:flex">
                <span id="userName" class="text-[11px] font-bold text-white leading-tight">Loading...</span>
-               <span id="userPlan" class="text-[9px] font-black uppercase text-emerald-400 leading-tight">Checking Plan...</span>
+               <span id="userPlan" class="text-[9px] font-black uppercase text-emerald-400 leading-tight tracking-wider mt-0.5">Checking Plan...</span>
            </div>
            <div class="h-6 w-[1px] bg-slate-700 mx-2"></div>
-           <button id="adminToggleBtn" class="hidden bg-indigo-600 hover:bg-indigo-500 text-white font-black text-[9px] uppercase tracking-widest px-3 py-1.5 rounded-lg transition-colors shadow-lg">Admin</button>
-           <button id="logoutBtn" class="text-slate-400 hover:text-rose-400 font-black text-[9px] uppercase tracking-widest px-2 py-1.5 transition-colors">Logout</button>
+           <button id="adminToggleBtn" class="hidden bg-indigo-600 hover:bg-indigo-500 text-white font-black text-[10px] uppercase tracking-widest px-4 py-2 rounded-xl transition-colors shadow-[0_0_15px_rgba(99,102,241,0.4)]">Admin</button>
+           <button id="logoutBtn" class="text-slate-400 hover:text-rose-400 font-black text-[10px] uppercase tracking-widest px-2 py-2 transition-colors">Logout</button>
         </div>
       </div>
     </div>
@@ -93,42 +95,43 @@
     <!-- ============================================== -->
     <!-- SaaS LANDING PAGE & AUTH PANEL                 -->
     <!-- ============================================== -->
-    <div id="landingPage" class="glass-panel rounded-3xl shadow-2xl p-8 md:p-16 mb-10 border border-slate-700/50 relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-[80px] -z-10"></div>
+    <div id="landingPage" class="glass-panel rounded-[2rem] shadow-2xl p-8 md:p-16 mb-10 border border-slate-700/50 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] -z-10"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] -z-10"></div>
         
         <div class="flex flex-col items-center text-center max-w-4xl mx-auto mb-16 relative z-10">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-black uppercase tracking-widest mb-6 shadow-inner">
-                <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span> Cloud-Powered Seller Tools
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-[10px] font-black uppercase tracking-widest mb-8 shadow-inner">
+                <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span> E-Commerce Intelligence
             </div>
-            <h2 class="text-4xl md:text-6xl font-black text-white tracking-tight mb-6 leading-tight">
-                Scale Your Ecommerce <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Without The Chaos</span>
+            <h2 class="text-5xl md:text-7xl font-black text-white tracking-tight mb-8 leading-[1.1]">
+                Scale Your Operations <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">Without The Chaos</span>
             </h2>
-            <p class="text-base text-slate-400 font-medium leading-relaxed mb-10 max-w-2xl mx-auto">
-                The ultimate workspace for Flipkart & Meesho power sellers. Automate thermal label cropping, intelligently cross-reference settlement reports, and reveal your actual bottom-line net profit.
+            <p class="text-lg text-slate-400 font-medium leading-relaxed mb-12 max-w-2xl mx-auto">
+                The ultimate workspace for elite Flipkart & Meesho sellers. Crop thermal labels, map massive settlement reports, and reveal your absolute bottom-line net profit.
             </p>
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
-                <button id="googleSignInBtn" class="flex items-center gap-3 bg-white text-slate-900 hover:bg-slate-200 font-black py-4 px-10 rounded-xl shadow-[0_0_30px_rgba(255,255,255,0.2)] btn-hover text-sm tracking-widest uppercase transition-all">
+                <button id="googleSignInBtn" class="flex items-center justify-center gap-4 bg-white text-slate-900 hover:bg-slate-200 font-black py-4 px-10 rounded-2xl shadow-[0_0_40px_rgba(255,255,255,0.2)] btn-hover text-sm tracking-widest uppercase transition-all w-full sm:w-auto">
                     <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
                     Secure Login
                 </button>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 border-t border-slate-800 relative z-10">
-            <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-700/50 shadow-lg hover:border-blue-500/50 transition-colors">
-                <div class="bg-blue-500/20 w-14 h-14 rounded-2xl flex items-center justify-center text-blue-400 mb-6 shadow-inner"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg></div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-slate-800 relative z-10">
+            <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-700/50 shadow-xl hover:border-blue-500/50 transition-all hover:-translate-y-1 group">
+                <div class="bg-blue-500/10 w-14 h-14 rounded-2xl flex items-center justify-center text-blue-400 mb-6 border border-blue-500/20 group-hover:bg-blue-500/20 transition-colors"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg></div>
                 <h3 class="text-white font-black text-xl mb-3">A.I. Label Cutter</h3>
                 <p class="text-slate-400 text-sm font-medium leading-relaxed">Drop raw PDFs. Get perfect 4x6 or 3x5 thermal labels with auto-generated packing slips and transparent brand logos.</p>
             </div>
-            <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-700/50 shadow-lg hover:border-emerald-500/50 transition-colors">
-                <div class="bg-emerald-500/20 w-14 h-14 rounded-2xl flex items-center justify-center text-emerald-400 mb-6 shadow-inner"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg></div>
+            <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-700/50 shadow-xl hover:border-emerald-500/50 transition-all hover:-translate-y-1 group">
+                <div class="bg-emerald-500/10 w-14 h-14 rounded-2xl flex items-center justify-center text-emerald-400 mb-6 border border-emerald-500/20 group-hover:bg-emerald-500/20 transition-colors"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg></div>
                 <h3 class="text-white font-black text-xl mb-3">Flipkart Engine</h3>
                 <p class="text-slate-400 text-sm font-medium leading-relaxed">Parse SKU-level P&L exports. Input manufacturing costs to automatically deduce your real margins minus courier penalties.</p>
             </div>
-            <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-700/50 shadow-lg hover:border-pink-500/50 transition-colors">
-                <div class="bg-pink-500/20 w-14 h-14 rounded-2xl flex items-center justify-center text-pink-400 mb-6 shadow-inner"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg></div>
-                <h3 class="text-white font-black text-xl mb-3">Meesho Reconciliation</h3>
-                <p class="text-slate-400 text-sm font-medium leading-relaxed">Orders File driven. Smartly filters 6-month return dumps to identify exact RTOs vs. Customer returns on your active payout.</p>
+            <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-700/50 shadow-xl hover:border-pink-500/50 transition-all hover:-translate-y-1 group">
+                <div class="bg-pink-500/10 w-14 h-14 rounded-2xl flex items-center justify-center text-pink-400 mb-6 border border-pink-500/20 group-hover:bg-pink-500/20 transition-colors"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg></div>
+                <h3 class="text-white font-black text-xl mb-3">Meesho Engine</h3>
+                <p class="text-slate-400 text-sm font-medium leading-relaxed">Orders File driven. Smartly filters return dumps to perfectly reconcile Dispatched, Cancelled, and RTO units on your active payout.</p>
             </div>
         </div>
     </div>
@@ -145,11 +148,11 @@
     <!-- Admin Panel -->
     <div id="adminPanel" class="hidden glass-panel bg-slate-900/90 rounded-3xl p-8 mb-10 border border-indigo-500/40 shadow-[0_0_40px_rgba(79,70,229,0.2)]">
        <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
-          <h2 class="text-xl font-black text-white uppercase tracking-wider flex items-center gap-3"><span class="w-3 h-3 rounded-full bg-indigo-500"></span> System Administrator Control</h2>
+          <h2 class="text-xl font-black text-white uppercase tracking-wider flex items-center gap-3"><span class="w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,1)]"></span> Administrator Control</h2>
        </div>
        <div class="overflow-x-auto">
           <table class="w-full text-left">
-             <thead><tr class="text-xs uppercase tracking-widest text-slate-500 border-b border-slate-800"><th class="pb-4 px-4">User</th><th class="pb-4 px-4">Role</th><th class="pb-4 px-4">Plan</th><th class="pb-4 px-4">Time Left</th><th class="pb-4 px-4 text-right">Actions</th></tr></thead>
+             <thead><tr class="text-[10px] font-black uppercase tracking-widest text-slate-500 border-b border-slate-800"><th class="pb-4 px-4">User</th><th class="pb-4 px-4">Role</th><th class="pb-4 px-4">Plan</th><th class="pb-4 px-4">Time Left</th><th class="pb-4 px-4 text-right">Actions</th></tr></thead>
              <tbody id="adminUserTableBody" class="divide-y divide-slate-800/50"></tbody>
           </table>
        </div>
@@ -160,9 +163,9 @@
     <!-- ============================================== -->
     <div id="labelWorkspace" class="hidden animate-fade-in">
         <div class="flex justify-center mb-8">
-            <div class="flex bg-slate-900 p-1.5 rounded-xl border border-slate-700 shadow-inner">
-              <button id="lc_tabFk" type="button" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(37,99,235,0.4)]">Flipkart Labels</button>
-              <button id="lc_tabMs" type="button" class="text-slate-400 hover:text-white px-8 py-3 rounded-lg font-black text-xs uppercase tracking-widest transition-all">Meesho Labels</button>
+            <div class="flex bg-slate-900 p-1.5 rounded-2xl border border-slate-700 shadow-inner">
+              <button id="lc_tabFk" type="button" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(37,99,235,0.4)]">Flipkart Labels</button>
+              <button id="lc_tabMs" type="button" class="text-slate-400 hover:text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all">Meesho Labels</button>
             </div>
         </div>
 
@@ -170,7 +173,7 @@
           <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
             <!-- Dropzone -->
             <div class="lg:col-span-2 flex flex-col gap-4">
-              <div id="lc_dropzone" class="border-[3px] border-dashed rounded-3xl p-8 transition-all text-center flex flex-col justify-center items-center relative border-blue-500/50 bg-blue-500/5 hover:bg-blue-500/10 cursor-pointer min-h-[280px]">
+              <div id="lc_dropzone" class="border-[3px] border-dashed rounded-3xl p-8 transition-all text-center flex flex-col justify-center items-center relative border-blue-500/40 bg-blue-500/5 hover:bg-blue-500/10 cursor-pointer min-h-[280px]">
                 <input type="file" id="lc_pdfFileInput" accept="application/pdf" multiple class="absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" />
                 <div class="bg-blue-500/20 p-5 rounded-full text-blue-400 mb-5 shadow-inner"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg></div>
                 <p class="text-xl font-black text-white">Drop <span id="lc_platformName" class="text-blue-400">Flipkart</span> PDFs</p>
@@ -200,7 +203,7 @@
 
               <div class="mt-auto flex flex-col gap-5">
                 <div class="flex items-center gap-4 bg-slate-950 p-4 rounded-xl border border-slate-800 shadow-inner">
-                    <input type="checkbox" id="lc_includeSummary" checked class="w-5 h-5 rounded cursor-pointer accent-indigo-500" />
+                    <input type="checkbox" id="lc_includeSummary" checked class="w-5 h-5 rounded cursor-pointer accent-indigo-500 bg-slate-800 border-slate-600" />
                     <label for="lc_includeSummary" class="text-xs font-bold cursor-pointer text-slate-300">Append Master Packing Slips (Courier, Seller & SKU Tally)</label>
                 </div>
                 <div class="flex gap-4">
@@ -296,42 +299,47 @@
     <!-- ============================================== -->
     <div id="msPnlWorkspace" class="hidden space-y-8 animate-fade-in">
       
+      <!-- The Master Files Dropzone -->
       <div class="glass-panel p-8 rounded-3xl border border-pink-500/30 mb-6 bg-slate-900/90 shadow-[0_0_40px_rgba(219,39,119,0.1)]">
         <h3 class="text-base font-black text-white uppercase tracking-widest mb-6 flex items-center gap-3">
             <div class="bg-pink-500 p-2 rounded-lg text-white shadow-[0_0_15px_rgba(219,39,119,0.5)]"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg></div> 
             Intelligent 3-Way Reconciliation
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="relative bg-slate-950 p-8 rounded-2xl border-2 border-dashed border-slate-700 hover:border-pink-500 transition-colors text-center cursor-pointer shadow-inner group">
+            <!-- Orders Drop -->
+            <div class="relative bg-slate-950 p-8 rounded-2xl border-[3px] border-dashed border-slate-700 hover:border-pink-500 transition-colors text-center cursor-pointer shadow-inner group">
                 <input type="file" id="ms_ordInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer" />
-                <div class="bg-slate-800 w-12 h-12 mx-auto rounded-full flex items-center justify-center text-slate-400 group-hover:text-pink-400 group-hover:bg-pink-500/20 transition-colors mb-3"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div>
-                <p class="text-sm font-black text-white">1. Core Orders File</p>
-                <p id="ms_labelOrd" class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2">Required: Drives Data</p>
+                <div class="bg-slate-800 w-14 h-14 mx-auto rounded-full flex items-center justify-center text-slate-400 group-hover:text-pink-400 group-hover:bg-pink-500/20 transition-colors mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div>
+                <p class="text-base font-black text-white">1. Orders File</p>
+                <p id="ms_labelOrd" class="text-[10px] text-pink-500 font-bold uppercase tracking-widest mt-2">Required: Sets the Base</p>
             </div>
             
-            <div class="relative bg-slate-950 p-8 rounded-2xl border-2 border-dashed border-slate-700 hover:border-pink-500 transition-colors text-center cursor-pointer shadow-inner group">
+            <!-- Payments Drop -->
+            <div class="relative bg-slate-950 p-8 rounded-2xl border-[3px] border-dashed border-slate-700 hover:border-pink-500 transition-colors text-center cursor-pointer shadow-inner group">
                 <input type="file" id="ms_payInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer" />
-                <div class="bg-slate-800 w-12 h-12 mx-auto rounded-full flex items-center justify-center text-slate-400 group-hover:text-pink-400 group-hover:bg-pink-500/20 transition-colors mb-3"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
-                <p class="text-sm font-black text-white">2. Payments File</p>
-                <p id="ms_labelPay" class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2">Required: Maps Settled ₹</p>
+                <div class="bg-slate-800 w-14 h-14 mx-auto rounded-full flex items-center justify-center text-slate-400 group-hover:text-pink-400 group-hover:bg-pink-500/20 transition-colors mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                <p class="text-base font-black text-white">2. Payments File</p>
+                <p id="ms_labelPay" class="text-[10px] text-pink-500 font-bold uppercase tracking-widest mt-2">Required: Maps Settled ₹</p>
             </div>
             
-            <div class="relative bg-slate-950 p-8 rounded-2xl border-2 border-dashed border-slate-700 hover:border-pink-500 transition-colors text-center cursor-pointer shadow-inner group">
+            <!-- Returns Drop -->
+            <div class="relative bg-slate-950 p-8 rounded-2xl border-[3px] border-dashed border-slate-700 hover:border-pink-500 transition-colors text-center cursor-pointer shadow-inner group">
                 <input type="file" id="ms_retInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer" />
-                <div class="bg-slate-800 w-12 h-12 mx-auto rounded-full flex items-center justify-center text-slate-400 group-hover:text-pink-400 group-hover:bg-pink-500/20 transition-colors mb-3"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg></div>
-                <p class="text-sm font-black text-white">3. Returns File</p>
-                <p id="ms_labelRet" class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2">Optional: 6-Month Filter</p>
+                <div class="bg-slate-800 w-14 h-14 mx-auto rounded-full flex items-center justify-center text-slate-400 group-hover:text-pink-400 group-hover:bg-pink-500/20 transition-colors mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg></div>
+                <p class="text-base font-black text-white">3. Returns File</p>
+                <p id="ms_labelRet" class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2">Optional: Smart Filtered</p>
             </div>
         </div>
       </div>
 
+      <!-- Meesho Calculator Section -->
       <div id="ms_calcSection" class="hidden space-y-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Net Settlement</span><p id="ms_kpiSettlement" class="text-3xl font-black text-blue-400 mt-2">₹0.00</p></div>
-          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Dispatched Orders</span><p id="ms_kpiDispatched" class="text-3xl font-black text-white mt-2">0</p></div>
-          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Delivered Orders</span><p id="ms_kpiDelivered" class="text-3xl font-black text-emerald-400 mt-2">0</p></div>
-          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">RTO / Cancellations</span><p id="ms_kpiReturns" class="text-3xl font-black text-rose-400 mt-2">0</p></div>
-          <div class="glass-panel border border-emerald-500/40 p-6 rounded-3xl bg-gradient-to-br from-emerald-900/50 to-slate-900 shadow-[0_0_30px_rgba(16,185,129,0.2)]"><span class="text-[10px] font-black uppercase text-emerald-400 tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Realized Net Profit</span><p id="ms_kpiNetProfit" class="text-3xl font-black text-emerald-300 mt-2">₹0.00</p></div>
+          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Net Settlement</span><p id="ms_kpiSettlement" class="text-4xl font-black text-blue-400 mt-2">₹0.00</p></div>
+          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Dispatched Orders</span><p id="ms_kpiDispatched" class="text-4xl font-black text-white mt-2">0</p></div>
+          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Delivered Orders</span><p id="ms_kpiDelivered" class="text-4xl font-black text-emerald-400 mt-2">0</p></div>
+          <div class="glass-panel border border-slate-700 p-6 rounded-3xl shadow-lg"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">RTO / Cancellations</span><p id="ms_kpiReturns" class="text-4xl font-black text-rose-400 mt-2">0</p></div>
+          <div class="glass-panel border border-emerald-500/40 p-6 rounded-3xl bg-gradient-to-br from-emerald-900/50 to-slate-900 shadow-[0_0_30px_rgba(16,185,129,0.2)]"><span class="text-[10px] font-black uppercase text-emerald-400 tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Realized Net Profit</span><p id="ms_kpiNetProfit" class="text-4xl font-black text-emerald-300 mt-2">₹0.00</p></div>
         </div>
 
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/90 p-5 rounded-2xl border border-slate-700 shadow-md">
@@ -385,23 +393,32 @@
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-    // ✅ PASTE YOUR FIREBASE CONFIGURATION HERE ✅
+    // =========================================================================
+    // ⚠️ PASTE YOUR FIREBASE CONFIGURATION BETWEEN THE QUOTES BELOW ⚠️
+    // =========================================================================
     const firebaseConfig = {
-  apiKey: "AIzaSyDSksHc8RucBx0qW_A6OBP6Ccn1g3hGKKE",
-  authDomain: "labelcutter-f7eb6.firebaseapp.com",
-  projectId: "labelcutter-f7eb6",
-  storageBucket: "labelcutter-f7eb6.firebasestorage.app",
-  messagingSenderId: "66842510048",
-  appId: "1:66842510048:web:02697d801892172e9d0685",
-  measurementId: "G-M42PECLE2Y"
-};
+      apiKey: "",
+      authDomain: "",
+      projectId: "",
+      storageBucket: "",
+      messagingSenderId: "",
+      appId: ""
+    };
+    // =========================================================================
 
     let app, auth, db;
-    
+    const provider = new GoogleAuthProvider();
+    const ADMIN_EMAIL = "vsshegur@gmail.com";
+    const CHROME_EXTENSION_ID = "YOUR_EXTENSION_ID_HERE";
+
+    let app_currentUserData = null; let app_isAppUnlocked = false; let app_currentApp = 'labelCutter'; 
+    let currentPlatform = 'flipkart'; let app_userSavedSkus = {}; 
+    const DEFAULT_BRAND_LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAABLCAMAAAD9JUoRAAAAP1BMVEXoEhK2AgLhFxfhFxfgFhZ/AAAAAADdFhbjFxfcFhbcFhbYFxfdFhbcFhbbFhbcFhYAAAAAAAAAAAAAAAAAAACY8OZZAAAAEHRSTlMPA85QoAIA/f6xUhTPbi+Pff8FGgAACahJREFUeNrtnIl24yoMhuWkNTu8/9teViNAeMltmp5MPOdMZ2LHhg8hxC+5sF4+FiucWv/FA65+QUnBOJcfWMeHdZpzxj6w1kVZGQ9LzzKIRsXYBxZIpz2FeDAmTOIlKxVlNIuk3goWgAoHqAuwQN4SKC2ccyJgcfZ7XYXI563LRvVmsEzulDwPy4pIgmsJlQ0T0uoMy3GE6p1giTSXxHIalkzziwtkjDbdpsC6sbeEtehkJHDaZ5nstduvKBeWvTINlRXsDaehjZ062x3Px+YZxm13ztMqsPD0fidYMvbGnV4NQWdWgy2C4BgWovU2sEKXzk7CAEtmBARf21jWhvWNYLlLETYsosAy1L1Ef+u3ghWGn7vTuxhQxW9TAGwLy7wCFizPu7fv/PlJGKLRzQ8ZivyLYVkjbu6Jt7+mCSBYgorZXgpLhW0D2a4f8+/8ylAgWIzYH0n5QlgQ9xXPhOW4vqLMga3BkzseiN+ElRffJ8Ly8fuljiBYpNd6IawQE/OnTkPlzLXhq8HTMa1fhRWcrxZCELDUbAGzduZsfkQHh2YXcxBzELDgbpw/pN35Yr7G3K3atXEZL3NGAiTDMuGnktB1XDBBPS0I3sxSN3Ya+yaQuck7FuSvSY3xzTHSqtgiD0thPYELewFWaHfRC4Wkcakir4aLbmY69C5oaFFM8z+1sd7iqWvVXYcbjdSjNsnHuZGeX78BrjR5Mj2SCso2TSr+Q8fhgWaDHNZEA2dhSZ111XTPL2pU4zXM9903OvggRiWGIHU0m7WK4plghE/IEiRnQJ8YHIn90unzDEshYY6Epb5ip5KaFzXUANv/sQkWiIbWjnE1sJTgNyeldNsWQA9fVCI+V5b/hKtu/VWLSUkQ125vmZYTG+1h1RMtLPx5giWxgyZDpfIEDCF+K8NasY+Pd3H2GJa98WyDVm+0usenM9sIZvGoY6qKSqtwgJXaoRrrqzaBYeHcAILVCuGJjOGNxwEqSM1R1NIHMQVW7e4BLgTLoikPm221z0+DgFYzR4iM5dnNpLC8tdU+BVBhtScqLBDt5wFWQIFm4TjNS0eG/aJFsEZa3s2oHVjMNOFc/dy2AXj3mR2ZVjVNEWJQ+VSxNgVQYfXJgQ2WHmCZcKkOKaxZjsLx2c5PIFjZnzS49B3msDrnoKmnmGxHy3id7IH22wez3VAl7+M0oy3rLhhpWX5FaR1UcAIm+OzkZQmXBXoKS2JYcZnocQ3LG5JKW0PdhgS1wOYsCKaa0VTTmoW5cpgsIJFnahy8FZMxBIe+4SfP5izDRCJcVnUng2xjG1jtSrGFEVNYk74h2y4ttdQN7KYnURN4m7ANfstIB98s560jQtIua/bM3sSJnTDUrstB+GphRUGkN642ojeT1qK+mW6YWmuXnSqLbqh6VW7s/vTx5NXtIHb5GEtFWYDMpA9bRAcrhHDDXMSpRNRaMTNg113bWrTsnMJmEr3hI5uo06U+pQ9K3QSWqrOlsyRBRFmAJjrvYnNYe1jrInWHq+mFmS27VZsWg3uiLDD3tvZlB1adPXU16GHNGvaN3Fk7z6X4XqcOPi1wYzwAwxarp4Uc4VR1GGGVT9oBrXrQAawV9fIELDkbRTGdC2ovjszhk7OwC2t0Xd025CQsS1q/bT3oDiz907DOKFeq63nc0S97sPp1kVcDvgBLnoEFp6Yh/ASsc2UycoyfmKjei5QYlGllmwdgGTLYlN0NHOGZdhz847A4s2czGIwN4XnBNdFj5I3anj8Ai/kNBjp4OUy/tNtZMCDXH4F1UiqVbKAVcMk9WG1YLK/DqjG9oI68OUBL+ywoRfPzN2CtTbVQF3BOlT5FhMWPwBIHTuIgmsSf/wosHz61gkVxJ7BXrVw3EZvfeQTWQXZ8AtVRos/vwAo5A8H44Ordbmm3HcLyh3yWPUqkEr2pwpJafx9WK7IiZwQn8hP/C9ZR1qzIHU03y16p2Wz9JiyClx84uMOOaT3us/ZLKNpsxaCrJ7/vvapaXwcry7DItiTshLbQK74PRPAnIpwlpX3qlFPpAyFnXvS3YLW4vP/cq3AQnSR1ARaKKg9KKDwaJ2O5zM2oZf3OmUEiD/lsWIrKPNSI069Ve9MkV2boB4JSFJzvm5anGorQc2pT6/i3I5OX11WHa7As6V+RFgE7tyn63SPbneq0yJxTEyQUmPnVITstBXCzJVb8DCxm9ly3h7WzH4eezBVYgHW378EVqBqfnC+RMpNtMcyUUjI5MDdyJva8kZ+GO401fZrvCqwmFdTVm9hax+ADh/OwZiWdhrOfsCxg9FVuS7PMPXDZuMlj14DyIpSk22ahwfvMMjOhZMZr/UoppgnVNOp4TDrx2Ex2IWdUB5igKLAMzIWxbFjI48ykbnrf22QLQp2FJwHKxjQ8oO6HhG54k81TEjoXsOTSHN2tT7TTcnxWvYgwylOwyMtyIp1ZSOr81OabSTIVaas3x71wnUobRZq465KNraRTGVK3228D03EHFgdVm0kIDOerGtPVY33OZs/+DhEW42MhEFHFgUSmbnI7ch6AG7oey2WQxysNGTAd5pckeoiVkySZm2WFpwsaYVvZsLzf9RG8jOFzGwOCSUPetHRq7haFudgSwZHaEGrOt54wwrQW0gnF5Evwf36xkHTGC6vE/Pg3BgBZFGPyp0Gi8aZg+5A5BtGxOgQpbz7yx4dLNY+wLp0Ire+o5DP0pctyt+Vf5hBWu/Smcu9NVszlZNg9ppTMt7WmlfH8ZJX7b/dCrSECNN5hfG8pZxDmjTI6vfJrQlDo3WyaFmgszE1Xv1u8b7gDiOGEP1MNMtX914LDzoKbNXMGq9VpTLlhek05jqdlbcNMWGapQx44+NqDjIIlO1JZ6IJcpnJrH+iaAl8Pa5CGIywrxhPihmN2JYUulZlOLmN8cmxbnT5vxFbpWRopv5rnG29Zdzked9gXZXzQ4vu1LTbpGVR2B2y8VIjDuuLLhwIbDrUQ2z1tO9loG6+dlUyl+8H6jANCcyE1uX3Gc553+pB+Yiy15jkQypaKax/F+jeOF8PK9RkhII1HKDlfsqGLD6wu3hNnkhkaPrDCKiYOth8fWEhuEyfyZJ9pmC1Ln0gvcfeBFX0WO/Gu0J95ff3Vq+Gu1ThOKu7/KizJud1DeboO7V+A5ffFc1VZcvKNoH8WVkxYTGwrvyal7fqBhTQn6r1OiMWa/C+xej2s+Iqn7t9hVumVSPpdzn8Y1qq+opYWkqsq/AY+G7LTaVv99YfM6m/ACnJkeuEtZTSq+PXXfnXsX9l13d0muQaVxkn7B3/J7n94d0MQBQOGIgAAAABJRU5ErkJggg==";
+
     // Safety Catch for Missing Firebase Keys
-    if (!firebaseConfig.apiKey) {
+    if (!firebaseConfig.apiKey || firebaseConfig.apiKey.trim() === "") {
         document.getElementById('googleSignInBtn').addEventListener('click', () => {
-            alert("⚠️ SYSTEM ERROR: Firebase API keys are missing! \n\nPlease open index.html, scroll to the bottom (around line 333), and paste your Firebase keys into the 'firebaseConfig' section before logging in.");
+            alert("⚠️ SYSTEM ERROR: Firebase API keys are missing! \n\nPlease open index.html, scroll to the bottom (Line 354), and paste your Firebase keys into the 'firebaseConfig' section before logging in.");
         });
     } else {
         try {
@@ -413,20 +430,15 @@
         }
     }
 
-    const provider = new GoogleAuthProvider();
-    const ADMIN_EMAIL = "vsshegur@gmail.com";
-    const CHROME_EXTENSION_ID = "YOUR_EXTENSION_ID_HERE";
-
-    let app_currentUserData = null; let app_isAppUnlocked = false; let app_currentApp = 'labelCutter'; 
-    let currentPlatform = 'flipkart'; let app_userSavedSkus = {}; 
-    const DEFAULT_BRAND_LOGO = "data:image/png;base64,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";
-
     function broadcastToExtension(isUnlocked) {
         if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.sendMessage) {
             try { chrome.runtime.sendMessage(CHROME_EXTENSION_ID, { action: "verifySubscription", isAuthorized: isUnlocked }, function() {}); } catch(e) {}
         }
     }
 
+    // -------------------------------------------------------------------------
+    // UI NAVIGATION
+    // -------------------------------------------------------------------------
     document.getElementById('appSelector').addEventListener('change', (e) => {
         if (!app_isAppUnlocked) return;
         app_currentApp = e.target.value;
@@ -446,6 +458,9 @@
         document.getElementById('lc_logoPreview').className = `h-full object-contain p-1 ${document.documentElement.classList.contains('dark') ? '' : 'invert'}`;
     });
 
+    // -------------------------------------------------------------------------
+    // AUTHENTICATION & CLOUD SYNC
+    // -------------------------------------------------------------------------
     if(auth) {
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -494,18 +509,23 @@
             }
         });
 
+        // The Bulletproof Login Button
         document.getElementById('googleSignInBtn').addEventListener('click', () => { 
             const btn = document.getElementById('googleSignInBtn');
             btn.innerHTML = `<svg class="animate-spin h-5 w-5 mr-3 text-indigo-500" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Connecting...`;
+            
             signInWithPopup(auth, provider).catch(e => {
-                alert("⚠️ LOGIN FAILED: \n" + e.message + "\n\nMake sure 'madhvishegur.vercel.app' is added to Authorized Domains in Firebase.");
+                alert("⚠️ LOGIN FAILED: \n\n" + e.message + "\n\nMake sure 'madhvishegur.vercel.app' is added to Authorized Domains in your Firebase Authentication Settings.");
                 btn.innerHTML = `<svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Secure Login`;
             });
         });
-        document.getElementById('logoutBtn').addEventListener('click', () => { if(auth) signOut(auth).then(()=>location.reload()); });
-        document.getElementById('expiredLogoutBtn').addEventListener('click', () => { if(auth) signOut(auth).then(()=>location.reload()); });
+        document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(()=>location.reload()); });
+        document.getElementById('expiredLogoutBtn').addEventListener('click', () => { signOut(auth).then(()=>location.reload()); });
     }
 
+    // -------------------------------------------------------------------------
+    // ADMIN CONTROLS
+    // -------------------------------------------------------------------------
     document.getElementById('adminToggleBtn').addEventListener('click', async () => {
         if (document.getElementById('adminPanel').classList.contains('hidden')) {
             document.getElementById('landingPage').classList.add('hidden'); document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); document.getElementById('msPnlWorkspace').classList.add('hidden');
@@ -537,9 +557,9 @@
         if(snap.exists()) { const u = snap.data(); let baseTime = u.expiresAt > Date.now() ? u.expiresAt : Date.now(); let newExp = baseTime + (daysToChange * 24 * 60 * 60 * 1000); await updateDoc(userRef, { expiresAt: newExp, planType: 'Paid Plan' }); loadAdminUsers(); }
     }
 
-    // ==========================================
+    // -------------------------------------------------------------------------
     // LABEL CUTTER ENGINE
-    // ==========================================
+    // -------------------------------------------------------------------------
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     let lc_rawFiles = []; let lc_parsedData = []; let lc_customLogoBase64 = null;
 
@@ -563,16 +583,16 @@
     function lc_setPlatform(platform) {
       currentPlatform = platform; document.getElementById('lc_results').classList.add('hidden'); lc_parsedData = [];
       if (platform === 'flipkart') {
-        document.getElementById('lc_tabFk').className = "bg-blue-600 text-white px-8 py-2.5 rounded-lg font-black text-xs uppercase tracking-widest shadow-[0_0_15px_rgba(37,99,235,0.4)] transition-all cursor-pointer";
-        document.getElementById('lc_tabMs').className = "text-slate-400 bg-transparent hover:text-white px-8 py-2.5 rounded-lg font-black text-xs uppercase tracking-widest transition-all cursor-pointer";
+        document.getElementById('lc_tabFk').className = "bg-blue-600 text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(37,99,235,0.4)] cursor-pointer";
+        document.getElementById('lc_tabMs').className = "text-slate-400 bg-transparent hover:text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all cursor-pointer";
         document.getElementById('lc_platformName').textContent = "Flipkart"; document.getElementById('lc_platformName').className = "text-blue-400 relative z-10";
-        document.getElementById('lc_dropzone').className = "border-[3px] border-dashed rounded-3xl p-8 transition-all text-center flex flex-col justify-center items-center relative border-blue-500/50 bg-blue-500/5 hover:bg-blue-500/10 cursor-pointer min-h-[250px]";
+        document.getElementById('lc_dropzone').className = "border-[3px] border-dashed rounded-3xl p-8 transition-all text-center flex flex-col justify-center items-center relative border-blue-500/40 bg-blue-500/5 hover:bg-blue-500/10 cursor-pointer min-h-[280px]";
         document.getElementById('lc_printFormat').innerHTML = `<option value="fk-4x6-no-inv" selected>4" x 6" Without Invoice</option><option value="fk-4x6-with-inv">4" x 6" With Invoice</option><option value="fk-3x5-no-inv">3" x 5" Without Invoice</option><option value="fk-3x5-with-inv">3" x 5" With Invoice</option>`;
       } else {
-        document.getElementById('lc_tabMs').className = "bg-pink-600 text-white px-8 py-2.5 rounded-lg font-black text-xs uppercase tracking-widest shadow-[0_0_15px_rgba(219,39,119,0.4)] transition-all cursor-pointer";
-        document.getElementById('lc_tabFk').className = "text-slate-400 bg-transparent hover:text-white px-8 py-2.5 rounded-lg font-black text-xs uppercase tracking-widest transition-all cursor-pointer";
+        document.getElementById('lc_tabMs').className = "bg-pink-600 text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(219,39,119,0.4)] cursor-pointer";
+        document.getElementById('lc_tabFk').className = "text-slate-400 bg-transparent hover:text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all cursor-pointer";
         document.getElementById('lc_platformName').textContent = "Meesho"; document.getElementById('lc_platformName').className = "text-pink-400 relative z-10";
-        document.getElementById('lc_dropzone').className = "border-[3px] border-dashed rounded-3xl p-8 transition-all text-center flex flex-col justify-center items-center relative border-pink-500/50 bg-pink-500/5 hover:bg-pink-500/10 cursor-pointer min-h-[250px]";
+        document.getElementById('lc_dropzone').className = "border-[3px] border-dashed rounded-3xl p-8 transition-all text-center flex flex-col justify-center items-center relative border-pink-500/40 bg-pink-500/5 hover:bg-pink-500/10 cursor-pointer min-h-[280px]";
         document.getElementById('lc_printFormat').innerHTML = `<option value="ms-3x5-no-inv" selected>3" x 5" Without Invoice</option><option value="ms-3x5-with-inv">3" x 5" With Invoice</option><option value="ms-4x4-with-inv">4" x 4" With Invoice</option><option value="ms-4x6-with-inv">4" x 6" With Store Link</option>`;
       }
     }
@@ -694,7 +714,7 @@
           document.getElementById('loader').classList.add('hidden');
           document.getElementById('lc_metricTotal').textContent = lc_parsedData.length; document.getElementById('lc_metricPieces').textContent = lc_parsedData.reduce((s,i)=>s+i.qty,0);
           document.getElementById('lc_results').classList.remove('hidden'); document.getElementById('lc_processBtn').disabled = false;
-      } catch (err) { console.error(err); alert("Error processing PDF"); document.getElementById('loader').classList.add('hidden'); document.getElementById('lc_processBtn').disabled = false; }
+      } catch (err) { console.error(err); alert("Error processing PDF: " + err.message); document.getElementById('loader').classList.add('hidden'); document.getElementById('lc_processBtn').disabled = false; }
     });
 
     async function lc_generatePdf() {
@@ -796,9 +816,9 @@
         const req = store.get(id); req.onsuccess = () => { if (!req.result) return; const bytes = req.result.data; const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" })); if (action === 'download') { const a = document.createElement('a'); a.href = url; a.download = `Shegurs_${req.result.platform.toUpperCase()}_Recovered_${id}.pdf`; a.click(); URL.revokeObjectURL(url); } else if (action === 'preview') { window.open(url, '_blank'); setTimeout(() => URL.revokeObjectURL(url), 10000); } };
     };
 
-    // ==========================================
+    // -------------------------------------------------------------------------
     // FLIPKART P&L LOGIC
-    // ==========================================
+    // -------------------------------------------------------------------------
     let fk_rawSkuData = [];
     document.getElementById('fk_excelInput').addEventListener('change', fk_handleExcel);
     document.getElementById('fk_applyBulkBtn').addEventListener('click', fk_applyBulkCost);
@@ -834,8 +854,8 @@
       const tbody = document.getElementById('fk_skuTableBody'); tbody.innerHTML = '';
       fk_rawSkuData.sort((a, b) => { if (a.costOfProduct === 0 && b.costOfProduct !== 0) return -1; if (a.costOfProduct !== 0 && b.costOfProduct === 0) return 1; return b.bankSettlement - a.bankSettlement; });
       fk_rawSkuData.forEach((item, index) => {
-        const tr = document.createElement('tr'); const isMissing = item.costOfProduct === 0; tr.className = `border-b border-slate-800/50 ${isMissing ? 'bg-orange-500/10' : 'hover:bg-slate-800/30'}`;
-        tr.innerHTML = `<td class="py-4 px-6 text-slate-500">${index + 1}</td><td class="py-4 px-6 font-bold ${isMissing ? 'text-orange-400' : 'text-slate-200'}">${item.skuId}</td><td class="py-4 px-6 text-right">${item.netUnits}</td><td class="py-4 px-6 text-right text-blue-400">₹${item.bankSettlement.toFixed(2)}</td><td class="py-4 px-6 text-center"><input type="number" step="0.01" value="${item.costOfProduct || ''}" placeholder="0.00" class="fk-cost-input w-24 bg-slate-900 border ${isMissing ? 'border-orange-500' : 'border-slate-600'} text-white px-2 py-1.5 rounded-lg text-center outline-none focus:border-indigo-500" data-index="${index}" /></td><td id="fk_pUnit_${index}" class="py-4 px-6 text-right font-bold text-slate-300">₹0.00</td><td id="fk_tProf_${index}" class="py-4 px-6 text-right font-bold text-slate-300">₹0.00</td>`;
+        const tr = document.createElement('tr'); const isMissing = item.costOfProduct === 0; tr.className = `border-b border-slate-800/50 ${isMissing ? 'bg-orange-500/10' : 'hover:bg-slate-800/30'} transition-colors`;
+        tr.innerHTML = `<td class="py-4 px-6 text-slate-500">${index + 1}</td><td class="py-4 px-6 font-bold ${isMissing ? 'text-orange-400' : 'text-slate-200'}">${item.skuId}</td><td class="py-4 px-6 text-right">${item.netUnits}</td><td class="py-4 px-6 text-right text-blue-400">₹${item.bankSettlement.toFixed(2)}</td><td class="py-4 px-6 text-center"><input type="number" step="0.01" value="${item.costOfProduct || ''}" placeholder="0.00" class="fk-cost-input w-24 bg-slate-900 border ${isMissing ? 'border-orange-500' : 'border-slate-600'} text-white px-3 py-2 rounded-xl text-center outline-none focus:border-indigo-500 transition-colors shadow-inner" data-index="${index}" /></td><td id="fk_pUnit_${index}" class="py-4 px-6 text-right font-bold text-slate-300">₹0.00</td><td id="fk_tProf_${index}" class="py-4 px-6 text-right font-bold text-slate-300">₹0.00</td>`;
         tbody.appendChild(tr);
       });
       document.querySelectorAll('.fk-cost-input').forEach(input => {
@@ -874,9 +894,9 @@
       document.getElementById('fk_kpiNet').textContent = `₹${fnP.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; document.getElementById('fk_kpiNet').className = `text-4xl font-black mt-2 ${fnP >= 0 ? 'text-emerald-300' : 'text-rose-400'}`;
     }
 
-    // ==========================================
+    // -------------------------------------------------------------------------
     // MEESHO P&L LOGIC (3-WAY SMART FILTERING)
-    // ==========================================
+    // -------------------------------------------------------------------------
     const ms_state = { pay: [], ord: [], ret: [] }; let ms_reconciledData = [];
     document.getElementById('ms_payInput').addEventListener('change', (e) => ms_loadReport(e, 'pay', 'ms_labelPay'));
     document.getElementById('ms_ordInput').addEventListener('change', (e) => ms_loadReport(e, 'ord', 'ms_labelOrd'));
@@ -890,7 +910,7 @@
       reader.onload = function(e) {
         const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' }); let targetSheet = null;
         for (const sheetName of workbook.SheetNames) { const parsed = ms_parseSmart(workbook.Sheets[sheetName]); if (parsed.length > 0) { targetSheet = parsed; break; } }
-        ms_state[type] = targetSheet || []; document.getElementById(labelId).textContent = file.name.substring(0, 20) + '...'; document.getElementById(labelId).className = "text-[11px] text-emerald-400 font-bold mt-1";
+        ms_state[type] = targetSheet || []; document.getElementById(labelId).textContent = file.name.substring(0, 20) + '...'; document.getElementById(labelId).className = "text-[11px] text-emerald-400 font-black tracking-widest uppercase mt-2";
         if (ms_state.pay.length > 0 && ms_state.ord.length > 0) ms_reconcile();
       }; reader.readAsArrayBuffer(file);
     }
@@ -912,20 +932,17 @@
     function ms_reconcile() {
       const subOrderMap = new Map(); const skuMap = new Map();
       
-      // Base Map from Orders File
       ms_state.ord.forEach(row => {
           const sid = ms_cleanId(ms_findVal(row, ['suborderno', 'suborder', 'subordernumber', 'orderno', 'orderid']));
           if (sid) subOrderMap.set(sid, { sku: String(ms_findVal(row, ['sku', 'skuid', 'productsku']) || 'MISC_SKU').trim(), qty: parseInt(ms_findVal(row, ['quantity', 'qty', 'units'])) || 1, status: String(ms_findVal(row, ['status', 'orderstatus', 'deliverystatus']) || '').toUpperCase(), settlement: 0, returnType: '' });
       });
 
-      // Add Payouts
       ms_state.pay.forEach(row => {
           const sid = ms_cleanId(ms_findVal(row, ['suborderno', 'suborder', 'subordernumber', 'orderno', 'orderid']));
           const net = parseFloat(String(ms_findVal(row, ['finalsettlementamount', 'netsettlementamount', 'banksettlementamount', 'totalpayout', 'netpayout', 'settlementamount'])).replace(/[^0-9.-]/g, '')) || 0;
           if (sid && subOrderMap.has(sid)) { subOrderMap.get(sid).settlement += net; } else if (sid) { subOrderMap.set(sid, { sku: String(ms_findVal(row, ['sku', 'productsku', 'skuid']) || 'UNMAPPED_SKU').trim(), qty: 1, status: net >= 0 ? 'DELIVERED' : 'RETURNED', settlement: net, returnType: net < 0 ? 'CUSTOMER' : '' }); }
       });
       
-      // Safe Returns Filtering (Only apply if order exists in the time range)
       ms_state.ret.forEach(row => {
           const sid = ms_cleanId(ms_findVal(row, ['suborderno', 'suborder', 'subordernumber', 'orderid', 'orderno']));
           if (sid && subOrderMap.has(sid)) subOrderMap.get(sid).returnType = String(ms_findVal(row, ['returntype', 'typeofreturn', 'trackingtype']) || '').toUpperCase().includes('CUSTOMER') ? 'CUSTOMER' : 'RTO';
@@ -935,14 +952,7 @@
         if (!skuMap.has(val.sku)) skuMap.set(val.sku, { sku: val.sku, disp: 0, del: 0, cr: 0, rto: 0, can: 0, set: 0, cost: app_userSavedSkus[val.sku] || 0 });
         const item = skuMap.get(val.sku); 
         item.set += val.settlement;
-        
-        // Accurate Tracking
-        if (val.status.includes('CANCEL')) {
-            item.can += val.qty;
-        } else {
-            item.disp += val.qty;
-        }
-        
+        if (val.status.includes('CANCEL')) { item.can += val.qty; } else { item.disp += val.qty; }
         if (val.returnType === 'CUSTOMER' || val.status.includes('CUSTOMER') || (val.settlement < 0 && !val.status.includes('RTO'))) item.cr += val.qty;
         else if (val.returnType === 'RTO' || val.status.includes('RTO')) item.rto += val.qty;
         else if (val.status.includes('DELIVERED') || val.settlement > 0) item.del += val.qty;
@@ -955,8 +965,8 @@
       const tbody = document.getElementById('ms_skuTableBody'); tbody.innerHTML = '';
       ms_reconciledData.sort((a, b) => { if (a.cost === 0 && b.cost !== 0) return -1; if (a.cost !== 0 && b.cost === 0) return 1; return b.set - a.set; });
       ms_reconciledData.forEach((item, index) => {
-        const tr = document.createElement('tr'); const isMis = item.cost === 0; tr.className = `border-b border-slate-800/50 ${isMis ? 'bg-orange-500/10' : 'hover:bg-slate-800/30'}`;
-        tr.innerHTML = `<td class="py-4 px-6 text-slate-500">${index + 1}</td><td class="py-4 px-6 font-bold ${isMis ? 'text-orange-400' : 'text-slate-200'}">${item.sku}</td><td class="py-4 px-6 text-right text-white">${item.disp}</td><td class="py-4 px-6 text-right text-emerald-400">${item.del}</td><td class="py-4 px-6 text-right text-rose-400">${item.rto + item.can + item.cr}</td><td class="py-4 px-6 text-right text-blue-400">₹${item.set.toFixed(2)}</td><td class="py-4 px-6 text-center"><input type="number" step="0.01" value="${item.cost || ''}" placeholder="0.00" class="ms-cost-box w-24 bg-slate-900 border ${isMis ? 'border-orange-500' : 'border-slate-600'} text-white px-2 py-1.5 rounded-xl text-center outline-none focus:border-pink-500" data-index="${index}" /></td><td id="ms_tProf_${index}" class="py-4 px-6 text-right font-bold text-slate-300">₹0.00</td>`;
+        const tr = document.createElement('tr'); const isMis = item.cost === 0; tr.className = `border-b border-slate-800/50 ${isMis ? 'bg-orange-500/10' : 'hover:bg-slate-800/30'} transition-colors`;
+        tr.innerHTML = `<td class="py-4 px-6 text-slate-500">${index + 1}</td><td class="py-4 px-6 font-bold ${isMis ? 'text-orange-400' : 'text-slate-200'}">${item.sku}</td><td class="py-4 px-6 text-right text-white">${item.disp}</td><td class="py-4 px-6 text-right text-emerald-400">${item.del}</td><td class="py-4 px-6 text-right text-rose-400">${item.rto + item.can + item.cr}</td><td class="py-4 px-6 text-right text-blue-400">₹${item.set.toFixed(2)}</td><td class="py-4 px-6 text-center"><input type="number" step="0.01" value="${item.cost || ''}" placeholder="0.00" class="ms-cost-box w-24 bg-slate-900 border ${isMis ? 'border-orange-500' : 'border-slate-600'} text-white px-3 py-2 rounded-xl text-center outline-none focus:border-pink-500 transition-colors shadow-inner" data-index="${index}" /></td><td id="ms_tProf_${index}" class="py-4 px-6 text-right font-bold text-slate-300">₹0.00</td>`;
         tbody.appendChild(tr);
       });
       document.querySelectorAll('.ms-cost-box').forEach(input => {
@@ -988,7 +998,7 @@
       document.getElementById('ms_kpiSettlement').textContent = `₹${tS.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
       document.getElementById('ms_kpiDispatched').textContent = tDis.toLocaleString();
       document.getElementById('ms_kpiDelivered').textContent = tD.toLocaleString(); document.getElementById('ms_kpiReturns').textContent = tR.toLocaleString();
-      document.getElementById('ms_kpiNetProfit').textContent = `₹${fP.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; document.getElementById('ms_kpiNetProfit').className = `text-3xl font-black mt-2 ${fP >= 0 ? 'text-emerald-300' : 'text-rose-400'}`;
+      document.getElementById('ms_kpiNetProfit').textContent = `₹${fP.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; document.getElementById('ms_kpiNetProfit').className = `text-4xl font-black mt-2 ${fP >= 0 ? 'text-emerald-300' : 'text-rose-400'}`;
     }
   </script>
 </body>
