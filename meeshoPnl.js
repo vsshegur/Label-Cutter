@@ -1,7 +1,7 @@
 import { db } from './firebase-config.js';
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-const ms_state = { pay: [], ord: [], ret: [] }; let ms_reconciledData = [];
+const ms_state = { pay: [], ord: [], ret: [], ads: [] }; let ms_reconciledData = [];
 document.getElementById('ms_payInput').addEventListener('change', (e) => ms_loadReport(e, 'pay', 'ms_labelPay'));
 document.getElementById('ms_ordInput').addEventListener('change', (e) => ms_loadReport(e, 'ord', 'ms_labelOrd'));
 document.getElementById('ms_retInput').addEventListener('change', (e) => ms_loadReport(e, 'ret', 'ms_labelRet'));
@@ -36,16 +36,26 @@ document.getElementById('ms_exportBtn').addEventListener('click', () => {
 function ms_loadReport(event, type, labelId) {
   const file = event.target.files[0]; if (!file) return; const reader = new FileReader();
   reader.onload = function(e) {
-    const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' }); let targetSheet = null;
-    for (const sheetName of workbook.SheetNames) { const parsed = ms_parseSmart(workbook.Sheets[sheetName]); if (parsed.length > 0) { targetSheet = parsed; break; } }
-    ms_state[type] = targetSheet || []; document.getElementById(labelId).textContent = file.name.substring(0, 20) + '...'; document.getElementById(labelId).className = "text-[11px] text-emerald-400 font-bold mt-2 uppercase tracking-widest";
+    const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' }); 
+    
+    if (type === 'pay') {
+        let paySheetName = workbook.SheetNames.find(n => n.toLowerCase().includes('order payment')) || workbook.SheetNames[0];
+        let adsSheetName = workbook.SheetNames.find(n => n.toLowerCase().includes('ads cost'));
+        ms_state.pay = ms_parseSmart(workbook.Sheets[paySheetName]);
+        if (adsSheetName) ms_state.ads = ms_parseSmart(workbook.Sheets[adsSheetName]);
+    } else {
+        let targetSheet = workbook.SheetNames.find(n => !n.toLowerCase().includes('disclaimer')) || workbook.SheetNames[0];
+        ms_state[type] = ms_parseSmart(workbook.Sheets[targetSheet]);
+    }
+    
+    document.getElementById(labelId).textContent = file.name.substring(0, 20) + '...'; document.getElementById(labelId).className = "text-[11px] text-emerald-400 font-bold mt-2 uppercase tracking-widest";
     if (ms_state.pay.length > 0 && ms_state.ord.length > 0) ms_reconcile();
   }; reader.readAsArrayBuffer(file);
 }
 
 function ms_parseSmart(sheet) {
   const rawRows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' }); if (!rawRows || rawRows.length === 0) return []; let hrIdx = -1;
-  for (let i = 0; i < Math.min(rawRows.length, 15); i++) { const rowStr = rawRows[i].map(c => String(c).toLowerCase().replace(/\s+/g, '')).join(' '); if (rowStr.includes('suborderno') || rowStr.includes('suppliersku') || rowStr.includes('finalsettlementamount') || rowStr.includes('awbnumber')) { hrIdx = i; break; } }
+  for (let i = 0; i < Math.min(rawRows.length, 15); i++) { const rowStr = rawRows[i].map(c => String(c).toLowerCase().replace(/\s+/g, '')).join(' '); if (rowStr.includes('suborderno') || rowStr.includes('reasonforcreditentry') || rowStr.includes('totaladscost')) { hrIdx = i; break; } }
   if (hrIdx === -1) return []; 
   const headers = rawRows[hrIdx].map(h => String(h).trim()); const dataRows = [];
   for (let i = hrIdx + 1; i < rawRows.length; i++) { 
@@ -67,28 +77,37 @@ function ms_cleanId(val) { return (!val) ? '' : String(val).trim().replace(/\.0$
 function ms_reconcile() {
   const subOrderMap = new Map(); const skuMap = new Map();
   
+  // Base Map from Orders File
   ms_state.ord.forEach(row => {
       const sid = ms_cleanId(ms_findVal(row, ['suborderno', 'suborder', 'subordernumber', 'orderno', 'orderid']));
-      if (sid) subOrderMap.set(sid, { sku: String(ms_findVal(row, ['sku', 'skuid', 'productsku']) || 'MISC_SKU').trim(), qty: parseInt(ms_findVal(row, ['quantity', 'qty', 'units'])) || 1, status: String(ms_findVal(row, ['status', 'orderstatus', 'deliverystatus']) || '').toUpperCase(), settlement: 0, returnType: '' });
+      if (sid) subOrderMap.set(sid, { sku: String(ms_findVal(row, ['sku', 'skuid', 'productsku', 'suppliersku']) || 'MISC_SKU').trim(), qty: parseInt(ms_findVal(row, ['quantity', 'qty', 'units'])) || 1, status: String(ms_findVal(row, ['reasonforcreditentry', 'status', 'orderstatus', 'deliverystatus']) || '').toUpperCase(), settlement: 0, gross: 0, retDed: 0, returnType: '' });
   });
 
+  // Add Payouts (Strict Matching)
   ms_state.pay.forEach(row => {
       const rawSid = String(ms_findVal(row, ['suborderno', 'suborder', 'subordernumber', 'orderno', 'orderid']) || '').trim();
       if (!rawSid || rawSid.includes('+') || rawSid.includes('(')) return; 
       const sid = rawSid.replace(/\.0$/, '');
       const net = parseFloat(String(ms_findVal(row, ['finalsettlementamount', 'netsettlementamount', 'banksettlementamount', 'totalpayout', 'netpayout', 'settlementamount'])).replace(/[^0-9.-]/g, '')) || 0;
-      if (sid && subOrderMap.has(sid)) { subOrderMap.get(sid).settlement += net; } else if (sid) { subOrderMap.set(sid, { sku: String(ms_findVal(row, ['sku', 'productsku', 'skuid']) || 'UNMAPPED_SKU').trim(), qty: 1, status: net >= 0 ? 'DELIVERED' : 'RETURNED', settlement: net, returnType: net < 0 ? 'CUSTOMER' : '' }); }
+      const gross = parseFloat(String(ms_findVal(row, ['totalsaleamount', 'grossamount'])).replace(/[^0-9.-]/g, '')) || 0;
+      const retDed = (parseFloat(String(ms_findVal(row, ['returnshippingcharge'])).replace(/[^0-9.-]/g, '')) || 0) + (parseFloat(String(ms_findVal(row, ['returnpremium'])).replace(/[^0-9.-]/g, '')) || 0);
+
+      if (sid && subOrderMap.has(sid)) { 
+          const ord = subOrderMap.get(sid); ord.settlement += net; ord.gross += gross; ord.retDed += retDed; 
+      }
   });
   
+  // Safe Returns Filtering (Only apply if order exists in the time range)
   ms_state.ret.forEach(row => {
       const sid = ms_cleanId(ms_findVal(row, ['suborderno', 'suborder', 'subordernumber', 'orderid', 'orderno']));
       if (sid && subOrderMap.has(sid)) subOrderMap.get(sid).returnType = String(ms_findVal(row, ['returntype', 'typeofreturn', 'trackingtype']) || '').toUpperCase().includes('CUSTOMER') ? 'CUSTOMER' : 'RTO';
   });
 
   subOrderMap.forEach((val) => {
-    if (!skuMap.has(val.sku)) skuMap.set(val.sku, { sku: val.sku, disp: 0, del: 0, cr: 0, rto: 0, can: 0, set: 0, cost: window.appState.userSkus[val.sku] || 0 });
+    if (!skuMap.has(val.sku)) skuMap.set(val.sku, { sku: val.sku, disp: 0, del: 0, cr: 0, rto: 0, can: 0, set: 0, gross: 0, retDed: 0, cost: window.appState.userSkus[val.sku] || 0 });
     const item = skuMap.get(val.sku); 
-    item.set += val.settlement;
+    item.set += val.settlement; item.gross += val.gross; item.retDed += val.retDed;
+    
     if (val.status.includes('CANCEL')) { item.can += val.qty; } else { item.disp += val.qty; }
     if (val.returnType === 'CUSTOMER' || val.status.includes('CUSTOMER') || (val.settlement < 0 && !val.status.includes('RTO'))) item.cr += val.qty;
     else if (val.returnType === 'RTO' || val.status.includes('RTO')) item.rto += val.qty;
@@ -123,15 +142,26 @@ function ms_applyBulkCost() {
 }
 
 function ms_computeTotals() {
-  let tS = 0; let tDis = 0; let tD = 0; let tR = 0; let tG = 0;
+  let tS = 0; let tDis = 0; let tD = 0; let tR = 0; let tG = 0; let grossOut = 0; let retDeductions = 0;
   ms_reconciledData.forEach((item, index) => {
     const tP = document.getElementById(`ms_tProf_${index}`);
+    grossOut += item.gross; retDeductions += item.retDed;
     if (item.cost === 0 || isNaN(item.cost)) { if (tP) tP.innerHTML = `<span class="text-[10px] text-orange-400 font-black uppercase">Excluded</span>`; return; }
     tS += item.set; tDis += item.disp; tD += item.del; tR += (item.cr + item.rto + item.can); 
     const skuP = item.set - (item.del * item.cost); tG += skuP;
     if (tP) { tP.textContent = `₹${skuP.toFixed(2)}`; tP.className = `py-4 px-6 text-right font-black ${skuP >= 0 ? 'text-emerald-400' : 'text-rose-400'}`; }
   });
-  const fP = tG - (parseFloat(document.getElementById('ms_lossInput').value) || 0);
+  
+  let adSpend = 0;
+  if(ms_state.ads && ms_state.ads.length > 0) {
+      ms_state.ads.forEach(r => { adSpend += parseFloat(String(ms_findVal(r, ['totaladscost', 'adcost'])).replace(/[^0-9.-]/g, '')) || 0; });
+  }
+
+  const fP = tG - Math.abs(adSpend) - (parseFloat(document.getElementById('ms_lossInput').value) || 0);
+  
+  document.getElementById('ms_kpiGross').textContent = `₹${grossOut.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+  document.getElementById('ms_kpiReturnDed').textContent = `-₹${Math.abs(retDeductions).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+  document.getElementById('ms_kpiAds').textContent = `-₹${Math.abs(adSpend).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
   document.getElementById('ms_kpiSettlement').textContent = `₹${tS.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
   document.getElementById('ms_kpiDispatched').textContent = tDis.toLocaleString();
   document.getElementById('ms_kpiDelivered').textContent = tD.toLocaleString(); document.getElementById('ms_kpiReturns').textContent = tR.toLocaleString();
