@@ -74,6 +74,9 @@
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
 
+    <!-- ============================================== -->
+    <!-- SaaS LANDING PAGE & AUTH PANEL                 -->
+    <!-- ============================================== -->
     <div id="landingPage" class="glass-panel rounded-3xl shadow-2xl p-8 md:p-16 mb-10 border border-slate-700">
         <div class="flex flex-col items-center text-center max-w-4xl mx-auto mb-16">
             <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-black uppercase tracking-widest mb-6">
@@ -95,7 +98,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 border-t border-slate-800">
             <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-800"><div class="bg-blue-500/20 w-12 h-12 rounded-xl flex items-center justify-center text-blue-400 mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg></div><h3 class="text-white font-black text-lg mb-2">A.I. Label Cutter</h3><p class="text-slate-400 text-xs font-medium leading-relaxed">Drop raw PDFs. Get perfect 4x6 or 3x5 thermal labels with auto-generated packing slips and transparent brand logos.</p></div>
             <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-800"><div class="bg-emerald-500/20 w-12 h-12 rounded-xl flex items-center justify-center text-emerald-400 mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg></div><h3 class="text-white font-black text-lg mb-2">Flipkart Engine</h3><p class="text-slate-400 text-xs font-medium leading-relaxed">Parse SKU-level P&L exports. Input manufacturing costs to automatically deduce your real margins minus courier penalties.</p></div>
-            <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-800"><div class="bg-pink-500/20 w-12 h-12 rounded-xl flex items-center justify-center text-pink-400 mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg></div><h3 class="text-white font-black text-lg mb-2">Meesho Reconciliation</h3><p class="text-slate-400 text-xs font-medium leading-relaxed">3-way file matching. Smartly filters 6-month return dumps to identify exact RTOs vs. Customer returns on your active payout.</p></div>
+            <div class="bg-slate-900/50 p-6 rounded-2xl border border-slate-800"><div class="bg-pink-500/20 w-12 h-12 rounded-xl flex items-center justify-center text-pink-400 mb-4"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg></div><h3 class="text-white font-black text-lg mb-2">Meesho Reconciliation</h3><p class="text-slate-400 text-xs font-medium leading-relaxed">Single file engine. Drop the official Meesho payment file to instantly parse Delievered, RTO, and Cancelled units for pure net profit.</p></div>
         </div>
     </div>
 
@@ -105,6 +108,7 @@
         <h2 class="text-4xl font-black text-white mb-4">Subscription Expired</h2>
         <p class="text-slate-400 max-w-lg mb-8">Your access to Shegur's Ecommerce Suite has concluded. Renew your plan to unlock automated labels and P&L tools.</p>
         <a href="https://wa.me/919970836509" target="_blank" class="bg-emerald-500 hover:bg-emerald-600 text-white font-black py-4 px-10 rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.3)] btn-hover text-sm tracking-widest uppercase mb-4">Renew via WhatsApp</a>
+        <button id="expiredLogoutBtn" class="text-slate-500 hover:text-slate-300 font-bold text-xs underline cursor-pointer">Sign out</button>
     </div>
 
     <!-- Admin Panel -->
@@ -113,7 +117,9 @@
        <div class="overflow-x-auto"><table class="w-full text-left"><thead><tr class="text-xs uppercase tracking-widest text-slate-500 border-b border-slate-800"><th class="pb-3 px-4">User</th><th class="pb-3 px-4">Role</th><th class="pb-3 px-4">Plan</th><th class="pb-3 px-4">Time Left</th><th class="pb-3 px-4 text-right">Actions</th></tr></thead><tbody id="adminUserTableBody" class="divide-y divide-slate-800/50"></tbody></table></div>
     </div>
 
-    <!-- 1: LABEL CUTTER -->
+    <!-- ============================================== -->
+    <!-- APP 1: LABEL CUTTER WORKSPACE                  -->
+    <!-- ============================================== -->
     <div id="labelWorkspace" class="hidden animate-fade-in">
         <div class="flex justify-center mb-8"><div class="flex bg-slate-900 p-1.5 rounded-xl border border-slate-700 shadow-inner"><button id="lc_tabFk" type="button" class="bg-blue-600 text-white px-8 py-2.5 rounded-lg font-black text-xs uppercase tracking-widest transition-all shadow-md">Flipkart Labels</button><button id="lc_tabMs" type="button" class="text-slate-400 hover:text-white px-8 py-2.5 rounded-lg font-black text-xs uppercase tracking-widest transition-all">Meesho Labels</button></div></div>
         <div class="glass-panel rounded-3xl shadow-2xl p-8 mb-10 border border-slate-700">
@@ -138,58 +144,140 @@
         <div id="recoveryPanel" class="hidden glass-panel bg-slate-900/80 rounded-3xl p-6 mb-10 border border-slate-700 shadow-xl"><div class="flex justify-between items-center mb-4 border-b border-slate-800 pb-4"><h2 class="text-sm font-black uppercase tracking-widest text-white">Cloud Recovery (Last 6 Hours)</h2><span class="bg-indigo-500/20 text-indigo-400 text-[9px] font-black px-2 py-1 rounded uppercase tracking-widest">Auto-Deletes</span></div><ul id="savedBatchesList" class="space-y-3 max-h-48 overflow-y-auto pr-2"></ul></div>
     </div>
 
-    <!-- 2: FLIPKART P&L -->
+    <!-- ============================================== -->
+    <!-- APP 2: FLIPKART P&L WORKSPACE                  -->
+    <!-- ============================================== -->
     <div id="fkPnlWorkspace" class="hidden space-y-8 animate-fade-in">
-      <div class="w-full bg-slate-900/60 p-10 rounded-3xl border-2 border-dashed border-blue-500/30 hover:border-blue-500 transition-colors text-center cursor-pointer relative shadow-lg"><input type="file" id="fk_excelInput" accept=".xlsx, .xls" class="absolute inset-0 opacity-0 z-10 cursor-pointer" /><div class="flex flex-col items-center justify-center gap-3 pointer-events-none"><div class="p-4 bg-blue-500/20 text-blue-400 rounded-full"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg></div><p class="text-xl font-black text-white">Drop Official Flipkart P&L Report Here</p><p class="text-xs text-slate-400 font-medium uppercase tracking-widest">Requires 'SKU-level P&L' Sheet</p></div></div>
-      <div id="fk_calcSection" class="hidden space-y-6">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"><div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Net Units</span><p id="fk_kpiUnits" class="text-3xl font-black text-white mt-1">0</p></div><div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Settlement</span><p id="fk_kpiSettlement" class="text-3xl font-black text-blue-400 mt-1">₹0.00</p></div><div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Gross Profit (Valid SKUs)</span><p id="fk_kpiGross" class="text-3xl font-black text-emerald-400 mt-1">₹0.00</p></div><div class="glass-panel border border-emerald-500/30 p-6 rounded-2xl bg-gradient-to-br from-emerald-900/40 to-slate-900 shadow-[0_0_20px_rgba(16,185,129,0.15)]"><span class="text-[10px] font-black uppercase text-emerald-400 tracking-widest">Final Net Profit</span><p id="fk_kpiNet" class="text-3xl font-black text-emerald-300 mt-1">₹0.00</p></div></div>
-        <div class="flex items-center gap-3 bg-slate-900 p-4 rounded-2xl border border-slate-700 shadow-md"><label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2">Bulk Fill Missing Product Costs (₹):</label><input type="number" id="fk_bulkCostInput" class="bg-slate-950 border border-slate-700 px-4 py-2 rounded-xl text-white font-bold outline-none focus:border-blue-500 w-32" /><button id="fk_applyBulkBtn" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-colors btn-hover">Apply To Empty</button></div>
-        <div class="glass-panel rounded-3xl border border-slate-700 shadow-xl overflow-hidden"><div class="max-h-[500px] overflow-y-auto"><table class="w-full text-left text-sm whitespace-nowrap"><thead class="bg-slate-950 text-slate-400 text-[10px] font-black uppercase tracking-widest sticky top-0 border-b border-slate-700 z-10"><tr><th class="py-4 px-6">#</th><th class="py-4 px-6">SKU ID</th><th class="py-4 px-6 text-right">Net Units</th><th class="py-4 px-6 text-right">Total Settlement</th><th class="py-4 px-6 text-center">Your Mfg Cost (₹)</th><th class="py-4 px-6 text-right">Profit / Unit</th><th class="py-4 px-6 text-right">Total Profit</th></tr></thead><tbody id="fk_skuTableBody" class="divide-y divide-slate-800 font-medium"></tbody></table></div></div>
-        <div class="glass-panel p-6 rounded-2xl border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-6"><div><h3 class="text-sm font-black text-white uppercase tracking-wider">Unclaimed Return & Damage Losses</h3><p class="text-xs text-slate-400 mt-1">Deduct missing items or packaging waste.</p></div><div class="flex items-center gap-4 w-full sm:w-auto"><div class="relative w-full sm:w-56"><span class="absolute left-4 top-3.5 text-slate-500 font-black text-sm">₹</span><input type="number" id="fk_lossInput" value="0" class="w-full bg-slate-950 border border-slate-700 pl-8 pr-4 py-3 rounded-xl font-black text-rose-400 outline-none focus:border-rose-500 shadow-inner" /></div><button id="fk_recalcBtn" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black px-8 py-3 rounded-xl text-xs uppercase tracking-widest btn-hover">Update</button></div></div>
-      </div>
-    </div>
-
-    <!-- 3: MEESHO P&L -->
-    <div id="msPnlWorkspace" class="hidden space-y-8 animate-fade-in">
-      <div class="glass-panel p-6 rounded-3xl border border-slate-700 mb-6 bg-slate-900/80"><h3 class="text-sm font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2"><div class="bg-pink-500 w-2 h-2 rounded-full"></div> 3-Way Reconciliation</h3>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="relative bg-slate-950 p-6 rounded-2xl border border-slate-800 hover:border-pink-500/50 transition-colors text-center cursor-pointer shadow-inner"><input type="file" id="ms_ordInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 opacity-0 z-10 cursor-pointer" /><p class="text-sm font-black text-white">1. Orders File</p><p id="ms_labelOrd" class="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Status & SKU Map</p></div>
-            <div class="relative bg-slate-950 p-6 rounded-2xl border border-slate-800 hover:border-pink-500/50 transition-colors text-center cursor-pointer shadow-inner"><input type="file" id="ms_payInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 opacity-0 z-10 cursor-pointer" /><p class="text-sm font-black text-white">2. Payments File</p><p id="ms_labelPay" class="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Settlement Details</p></div>
-            <div class="relative bg-slate-950 p-6 rounded-2xl border border-slate-800 hover:border-pink-500/50 transition-colors text-center cursor-pointer shadow-inner"><input type="file" id="ms_retInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 opacity-0 z-10 cursor-pointer" /><p class="text-sm font-black text-white">3. Returns File (Optional)</p><p id="ms_labelRet" class="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Smart 6-Month Filter</p></div>
+      <div class="w-full bg-slate-900/60 p-10 rounded-3xl border-2 border-dashed border-blue-500/30 hover:border-blue-500 transition-colors text-center cursor-pointer relative shadow-lg">
+        <input type="file" id="fk_excelInput" accept=".xlsx, .xls" class="absolute inset-0 opacity-0 z-10 cursor-pointer" />
+        <div class="flex flex-col items-center justify-center gap-3 pointer-events-none">
+          <div class="p-4 bg-blue-500/20 text-blue-400 rounded-full"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg></div>
+          <p class="text-xl font-black text-white">Drop Official Flipkart P&L Report Here</p>
+          <p class="text-xs text-slate-400 font-medium uppercase tracking-widest">Requires 'SKU-level P&L' Sheet</p>
         </div>
       </div>
-      <div id="ms_calcSection" class="hidden space-y-6">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"><div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Net Settlement</span><p id="ms_kpiSettlement" class="text-2xl font-black text-blue-400 mt-1">₹0.00</p></div><div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Dispatched Orders</span><p id="ms_kpiDispatched" class="text-2xl font-black text-white mt-1">0</p></div><div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Delivered Orders</span><p id="ms_kpiDelivered" class="text-2xl font-black text-emerald-400 mt-1">0</p></div><div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">RTO / Cancellations</span><p id="ms_kpiReturns" class="text-2xl font-black text-rose-400 mt-1">0</p></div><div class="glass-panel border border-emerald-500/30 p-6 rounded-2xl bg-gradient-to-br from-emerald-900/40 to-slate-900 shadow-[0_0_20px_rgba(16,185,129,0.15)]"><span class="text-[10px] font-black uppercase text-emerald-400 tracking-widest">Realized Net Profit</span><p id="ms_kpiNetProfit" class="text-2xl font-black text-emerald-300 mt-1">₹0.00</p></div></div>
-        <div class="flex items-center gap-3 bg-slate-900 p-4 rounded-2xl border border-slate-700 shadow-md"><label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2">Bulk Fill Missing Product Costs (₹):</label><input type="number" id="ms_bulkCostInput" class="bg-slate-950 border border-slate-700 px-4 py-2 rounded-xl text-white font-bold outline-none focus:border-pink-500 w-32" /><button id="ms_applyBulkBtn" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-colors btn-hover">Apply To Empty</button></div>
-        <div class="glass-panel rounded-3xl border border-slate-700 shadow-xl overflow-hidden"><div class="max-h-[500px] overflow-y-auto"><table class="w-full text-left text-sm whitespace-nowrap"><thead class="bg-slate-950 text-slate-400 text-[10px] font-black uppercase tracking-widest sticky top-0 border-b border-slate-700 z-10"><tr><th class="py-4 px-6">#</th><th class="py-4 px-6">SKU ID</th><th class="py-4 px-6 text-right">Dispatched</th><th class="py-4 px-6 text-right">Delivered</th><th class="py-4 px-6 text-right">RTO / Cancels</th><th class="py-4 px-6 text-right">Net Payout</th><th class="py-4 px-6 text-center">Your Mfg Cost (₹)</th><th class="py-4 px-6 text-right">Total Profit</th></tr></thead><tbody id="ms_skuTableBody" class="divide-y divide-slate-800 font-medium"></tbody></table></div></div>
-        <div class="glass-panel p-6 rounded-2xl border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-6"><div><h3 class="text-sm font-black text-white uppercase tracking-wider">Additional Warehouse Losses</h3><p class="text-xs text-slate-400 mt-1">Deduct missing inventory not covered by SPF.</p></div><div class="flex items-center gap-4 w-full sm:w-auto"><div class="relative w-full sm:w-56"><span class="absolute left-4 top-3.5 text-slate-500 font-black text-sm">₹</span><input type="number" id="ms_lossInput" value="0" class="w-full bg-slate-950 border border-slate-700 pl-8 pr-4 py-3 rounded-xl font-black text-rose-400 outline-none focus:border-rose-500 shadow-inner" /></div><button id="ms_recalcBtn" class="bg-gradient-to-r from-pink-500 to-rose-600 text-white font-black px-8 py-3 rounded-xl text-xs uppercase tracking-widest btn-hover">Update</button></div></div>
+      
+      <div id="fk_calcSection" class="hidden space-y-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Net Units</span><p id="fk_kpiUnits" class="text-3xl font-black text-white mt-1">0</p></div>
+          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Settlement</span><p id="fk_kpiSettlement" class="text-3xl font-black text-blue-400 mt-1">₹0.00</p></div>
+          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Gross Profit (Valid SKUs)</span><p id="fk_kpiGross" class="text-3xl font-black text-emerald-400 mt-1">₹0.00</p></div>
+          <div class="glass-panel border border-emerald-500/30 p-6 rounded-2xl bg-gradient-to-br from-emerald-900/40 to-slate-900 shadow-[0_0_20px_rgba(16,185,129,0.15)]"><span class="text-[10px] font-black uppercase text-emerald-400 tracking-widest">Final Net Profit</span><p id="fk_kpiNet" class="text-3xl font-black text-emerald-300 mt-1">₹0.00</p></div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center gap-3 bg-slate-900 p-4 rounded-2xl border border-slate-700 shadow-md">
+            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2">Bulk Fill Missing Product Costs (₹):</label>
+            <input type="number" id="fk_bulkCostInput" class="bg-slate-950 border border-slate-700 px-4 py-2 rounded-xl text-white font-bold outline-none focus:border-blue-500 w-full sm:w-32" />
+            <button id="fk_applyBulkBtn" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-colors btn-hover w-full sm:w-auto">Apply To Empty</button>
+        </div>
+
+        <div class="glass-panel rounded-3xl border border-slate-700 shadow-xl overflow-hidden">
+          <div class="max-h-[500px] overflow-y-auto">
+            <table class="w-full text-left text-sm whitespace-nowrap">
+              <thead class="bg-slate-950 text-slate-400 text-[10px] font-black uppercase tracking-widest sticky top-0 border-b border-slate-700 z-10">
+                <tr><th class="py-4 px-6">#</th><th class="py-4 px-6">SKU ID</th><th class="py-4 px-6 text-right">Net Units</th><th class="py-4 px-6 text-right">Total Settlement</th><th class="py-4 px-6 text-center">Your Mfg Cost (₹)</th><th class="py-4 px-6 text-right">Profit / Unit</th><th class="py-4 px-6 text-right">Total Profit</th></tr>
+              </thead>
+              <tbody id="fk_skuTableBody" class="divide-y divide-slate-800 font-medium"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="glass-panel p-6 rounded-2xl border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div><h3 class="text-sm font-black text-white uppercase tracking-wider">Unclaimed Return & Damage Losses</h3><p class="text-xs text-slate-400 mt-1">Deduct missing items or packaging waste.</p></div>
+          <div class="flex items-center gap-4 w-full sm:w-auto">
+            <div class="relative w-full sm:w-56"><span class="absolute left-4 top-3.5 text-slate-500 font-black text-sm">₹</span><input type="number" id="fk_lossInput" value="0" class="w-full bg-slate-950 border border-slate-700 pl-8 pr-4 py-3 rounded-xl font-black text-rose-400 outline-none focus:border-rose-500 shadow-inner" /></div>
+            <button id="fk_recalcBtn" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black px-8 py-3 rounded-xl text-xs uppercase tracking-widest btn-hover">Update</button>
+          </div>
+        </div>
       </div>
     </div>
+
+    <!-- ============================================== -->
+    <!-- APP 3: MEESHO P&L WORKSPACE                    -->
+    <!-- ============================================== -->
+    <div id="msPnlWorkspace" class="hidden space-y-8 animate-fade-in">
+      
+      <div class="w-full bg-slate-900/60 p-10 rounded-3xl border-2 border-dashed border-pink-500/30 hover:border-pink-500 transition-colors text-center cursor-pointer relative shadow-lg">
+        <input type="file" id="ms_excelInput" accept=".xlsx, .xls, .csv" class="absolute inset-0 opacity-0 z-10 cursor-pointer" />
+        <div class="flex flex-col items-center justify-center gap-3 pointer-events-none">
+          <div class="p-4 bg-pink-500/20 text-pink-400 rounded-full"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg></div>
+          <p class="text-xl font-black text-white">Drop Official Meesho Payments File Here</p>
+          <p id="ms_fileName" class="text-xs text-slate-400 font-medium uppercase tracking-widest">Auto-extracts Delivered, RTOs, & Settlements directly</p>
+        </div>
+      </div>
+
+      <div id="ms_calcSection" class="hidden space-y-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Total Net Settlement</span><p id="ms_kpiSettlement" class="text-2xl font-black text-blue-400 mt-1">₹0.00</p></div>
+          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Dispatched Orders</span><p id="ms_kpiDispatched" class="text-2xl font-black text-white mt-1">0</p></div>
+          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Delivered Orders</span><p id="ms_kpiDelivered" class="text-2xl font-black text-emerald-400 mt-1">0</p></div>
+          <div class="glass-panel border border-slate-700 p-6 rounded-2xl"><span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">RTO / Cancellations</span><p id="ms_kpiReturns" class="text-2xl font-black text-rose-400 mt-1">0</p></div>
+          <div class="glass-panel border border-emerald-500/30 p-6 rounded-2xl bg-gradient-to-br from-emerald-900/40 to-slate-900 shadow-[0_0_20px_rgba(16,185,129,0.15)]"><span class="text-[10px] font-black uppercase text-emerald-400 tracking-widest">Realized Net Profit</span><p id="ms_kpiNetProfit" class="text-2xl font-black text-emerald-300 mt-1">₹0.00</p></div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center gap-3 bg-slate-900 p-4 rounded-2xl border border-slate-700 shadow-md">
+            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2">Bulk Fill Missing Product Costs (₹):</label>
+            <input type="number" id="ms_bulkCostInput" class="bg-slate-950 border border-slate-700 px-4 py-2 rounded-xl text-white font-bold outline-none focus:border-pink-500 w-full sm:w-32" />
+            <button id="ms_applyBulkBtn" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-colors btn-hover w-full sm:w-auto">Apply To Empty</button>
+        </div>
+
+        <div class="glass-panel rounded-3xl border border-slate-700 shadow-xl overflow-hidden">
+          <div class="max-h-[500px] overflow-y-auto">
+            <table class="w-full text-left text-sm whitespace-nowrap">
+              <thead class="bg-slate-950 text-slate-400 text-[10px] font-black uppercase tracking-widest sticky top-0 border-b border-slate-700 z-10">
+                <tr><th class="py-4 px-6">#</th><th class="py-4 px-6">SKU ID</th><th class="py-4 px-6 text-right">Dispatched</th><th class="py-4 px-6 text-right">Delivered</th><th class="py-4 px-6 text-right">RTO/Ret/Can</th><th class="py-4 px-6 text-right">Net Payout</th><th class="py-4 px-6 text-center">Your Mfg Cost (₹)</th><th class="py-4 px-6 text-right">Total Profit</th></tr>
+              </thead>
+              <tbody id="ms_skuTableBody" class="divide-y divide-slate-800 font-medium"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="glass-panel p-6 rounded-2xl border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div><h3 class="text-sm font-black text-white uppercase tracking-wider">Additional Warehouse Losses</h3><p class="text-xs text-slate-400 mt-1">Deduct missing inventory not covered by SPF.</p></div>
+          <div class="flex items-center gap-4 w-full sm:w-auto">
+            <div class="relative w-full sm:w-56"><span class="absolute left-4 top-3.5 text-slate-500 font-black text-sm">₹</span><input type="number" id="ms_lossInput" value="0" class="w-full bg-slate-950 border border-slate-700 pl-8 pr-4 py-3 rounded-xl font-black text-rose-400 outline-none focus:border-rose-500 shadow-inner" /></div>
+            <button id="ms_recalcBtn" class="bg-gradient-to-r from-pink-500 to-rose-600 text-white font-black px-8 py-3 rounded-xl text-xs uppercase tracking-widest btn-hover">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </main>
 
+  <!-- Processing Loader -->
   <div id="loader" class="hidden fixed bottom-10 left-1/2 transform -translate-x-1/2 z-[100] bg-slate-800/90 backdrop-blur-xl p-5 px-8 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-slate-600 flex items-center gap-5">
-    <div class="inline-block animate-spin rounded-full h-6 w-6 border-[3px] border-slate-600 border-t-indigo-500"></div><p id="loaderText" class="text-sm font-black text-white tracking-wider uppercase">Processing Data...</p>
+    <div class="inline-block animate-spin rounded-full h-6 w-6 border-[3px] border-slate-600 border-t-indigo-500"></div>
+    <p id="loaderText" class="text-sm font-black text-white tracking-wider uppercase">Processing Data...</p>
   </div>
 
+  <!-- ============================================== -->
+  <!-- SINGLE UNIFIED SCRIPT BLOCK                    -->
+  <!-- ============================================== -->
   <script type="module">
-    // Direct initialization instead of external files to prevent CORS errors on file:///
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
     // ✅ PASTE YOUR FIREBASE CONFIGURATION HERE ✅
-    const firebaseConfig = {
-      // apiKey: "...",
-      // authDomain: "...",
-      // projectId: "...",
-      // storageBucket: "...",
-      // messagingSenderId: "...",
-      // appId: "..."
-    };
+   const firebaseConfig = {
+  apiKey: "AIzaSyDSksHc8RucBx0qW_A6OBP6Ccn1g3hGKKE",
+  authDomain: "labelcutter-f7eb6.firebaseapp.com",
+  projectId: "labelcutter-f7eb6",
+  storageBucket: "labelcutter-f7eb6.firebasestorage.app",
+  messagingSenderId: "66842510048",
+  appId: "1:66842510048:web:02697d801892172e9d0685",
+  measurementId: "G-M42PECLE2Y"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+    let app, auth, db;
+    try {
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+    } catch(err) {
+        console.error("Firebase Config Error:", err.message);
+    }
+
     const provider = new GoogleAuthProvider();
     const ADMIN_EMAIL = "vsshegur@gmail.com";
     const CHROME_EXTENSION_ID = "YOUR_EXTENSION_ID_HERE";
@@ -223,56 +311,58 @@
         document.getElementById('lc_logoPreview').className = `h-full object-contain p-1 ${document.documentElement.classList.contains('dark') ? '' : 'invert'}`;
     });
 
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            document.getElementById('authWarning').classList.add('hidden');
-            const userRef = doc(db, 'users', user.uid);
-            const userSnap = await getDoc(userRef);
-            if (!userSnap.exists()) {
-                app_currentUserData = { email: user.email, name: user.displayName || 'User', photo: user.photoURL || '', role: user.email === ADMIN_EMAIL ? 'admin' : 'user', planType: 'Free Trial', createdAt: Date.now(), expiresAt: Date.now() + (2 * 24 * 60 * 60 * 1000), isActive: true };
-                await setDoc(userRef, app_currentUserData);
-            } else {
-                app_currentUserData = userSnap.data();
-                if (user.email === ADMIN_EMAIL && app_currentUserData.role !== 'admin') { app_currentUserData.role = 'admin'; await updateDoc(userRef, { role: 'admin' }); }
-            }
-            try { const memSnap = await getDoc(doc(db, 'users', user.uid, 'skus', 'memory')); if(memSnap.exists()) app_userSavedSkus = memSnap.data() || {}; } catch(e){}
-            
-            document.getElementById('userAvatar').src = user.photoURL || 'https://via.placeholder.com/32';
-            document.getElementById('userName').textContent = user.displayName || 'User';
-            document.getElementById('userInfo').classList.remove('hidden');
-            
-            const isAdmin = app_currentUserData.role === 'admin'; const now = Date.now(); const isExpired = !isAdmin && (now > app_currentUserData.expiresAt || !app_currentUserData.isActive);
-            if (isAdmin) {
-                document.getElementById('userPlan').textContent = "ADMINISTRATOR"; document.getElementById('userPlan').className = "text-[9px] font-black uppercase text-indigo-400";
-                document.getElementById('adminToggleBtn').classList.remove('hidden'); document.getElementById('authPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.remove('hidden'); document.getElementById('adminPanel').classList.remove('hidden'); document.getElementById('landingPage').classList.add('hidden');
-                broadcastToExtension(true); loadAdminUsers();
-            } else {
-                document.getElementById('adminToggleBtn').classList.add('hidden');
-                const daysLeft = Math.ceil((app_currentUserData.expiresAt - now) / (1000 * 60 * 60 * 24));
-                if (daysLeft > 0) { document.getElementById('userPlan').textContent = `${app_currentUserData.planType} • ${daysLeft} Days Left`; document.getElementById('userPlan').className = "text-[9px] font-black uppercase text-emerald-400"; } 
-                else { document.getElementById('userPlan').textContent = "PLAN EXPIRED"; document.getElementById('userPlan').className = "text-[9px] font-black uppercase text-rose-500"; }
-                
-                if (isExpired) {
-                    document.getElementById('authPanel').classList.remove('hidden'); document.getElementById('authWarning').classList.add('hidden'); document.getElementById('expiredWarning').classList.remove('hidden'); document.getElementById('appSelectorContainer').classList.add('hidden'); document.getElementById('landingPage').classList.add('hidden');
-                    broadcastToExtension(false);
+    if(auth) {
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                document.getElementById('authWarning').classList.add('hidden');
+                const userRef = doc(db, 'users', user.uid);
+                const userSnap = await getDoc(userRef);
+                if (!userSnap.exists()) {
+                    app_currentUserData = { email: user.email, name: user.displayName || 'User', photo: user.photoURL || '', role: user.email === ADMIN_EMAIL ? 'admin' : 'user', planType: 'Free Trial', createdAt: Date.now(), expiresAt: Date.now() + (2 * 24 * 60 * 60 * 1000), isActive: true };
+                    await setDoc(userRef, app_currentUserData);
                 } else {
-                    app_isAppUnlocked = true; document.getElementById('authPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.remove('hidden'); document.getElementById('landingPage').classList.add('hidden');
-                    document.getElementById('appSelector').value = "labelCutter"; document.getElementById('labelWorkspace').classList.remove('hidden'); lc_setPlatform('flipkart'); lc_loadRecoveredPdfs(); broadcastToExtension(true);
+                    app_currentUserData = userSnap.data();
+                    if (user.email === ADMIN_EMAIL && app_currentUserData.role !== 'admin') { app_currentUserData.role = 'admin'; await updateDoc(userRef, { role: 'admin' }); }
                 }
+                try { const memSnap = await getDoc(doc(db, 'users', user.uid, 'skus', 'memory')); if(memSnap.exists()) app_userSavedSkus = memSnap.data() || {}; } catch(e){}
+                
+                document.getElementById('userAvatar').src = user.photoURL || 'https://via.placeholder.com/32';
+                document.getElementById('userName').textContent = user.displayName || 'User';
+                document.getElementById('userInfo').classList.remove('hidden');
+                
+                const isAdmin = app_currentUserData.role === 'admin'; const now = Date.now(); const isExpired = !isAdmin && (now > app_currentUserData.expiresAt || !app_currentUserData.isActive);
+                if (isAdmin) {
+                    document.getElementById('userPlan').textContent = "ADMINISTRATOR"; document.getElementById('userPlan').className = "text-[9px] font-black uppercase text-indigo-400";
+                    document.getElementById('adminToggleBtn').classList.remove('hidden'); document.getElementById('authPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.remove('hidden'); document.getElementById('adminPanel').classList.remove('hidden'); document.getElementById('landingPage').classList.add('hidden');
+                    broadcastToExtension(true); loadAdminUsers();
+                } else {
+                    document.getElementById('adminToggleBtn').classList.add('hidden');
+                    const daysLeft = Math.ceil((app_currentUserData.expiresAt - now) / (1000 * 60 * 60 * 24));
+                    if (daysLeft > 0) { document.getElementById('userPlan').textContent = `${app_currentUserData.planType} • ${daysLeft} Days Left`; document.getElementById('userPlan').className = "text-[9px] font-black uppercase text-emerald-400"; } 
+                    else { document.getElementById('userPlan').textContent = "PLAN EXPIRED"; document.getElementById('userPlan').className = "text-[9px] font-black uppercase text-rose-500"; }
+                    
+                    if (isExpired) {
+                        document.getElementById('authPanel').classList.remove('hidden'); document.getElementById('authWarning').classList.add('hidden'); document.getElementById('expiredWarning').classList.remove('hidden'); document.getElementById('appSelectorContainer').classList.add('hidden'); document.getElementById('landingPage').classList.add('hidden');
+                        broadcastToExtension(false);
+                    } else {
+                        app_isAppUnlocked = true; document.getElementById('authPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.remove('hidden'); document.getElementById('landingPage').classList.add('hidden');
+                        document.getElementById('appSelector').value = "labelCutter"; document.getElementById('labelWorkspace').classList.remove('hidden'); lc_setPlatform('flipkart'); lc_loadRecoveredPdfs(); broadcastToExtension(true);
+                    }
+                }
+            } else {
+                app_currentUserData = null; app_userSavedSkus = {}; app_isAppUnlocked = false;
+                document.getElementById('authPanel').classList.remove('hidden'); document.getElementById('authWarning').classList.remove('hidden'); document.getElementById('expiredWarning').classList.add('hidden'); 
+                document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); document.getElementById('msPnlWorkspace').classList.add('hidden');
+                document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.add('hidden'); document.getElementById('userInfo').classList.add('hidden');
+                document.getElementById('landingPage').classList.remove('hidden');
+                broadcastToExtension(false);
             }
-        } else {
-            app_currentUserData = null; app_userSavedSkus = {}; app_isAppUnlocked = false;
-            document.getElementById('authPanel').classList.remove('hidden'); document.getElementById('authWarning').classList.remove('hidden'); document.getElementById('expiredWarning').classList.add('hidden'); 
-            document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); document.getElementById('msPnlWorkspace').classList.add('hidden');
-            document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.add('hidden'); document.getElementById('userInfo').classList.add('hidden');
-            document.getElementById('landingPage').classList.remove('hidden');
-            broadcastToExtension(false);
-        }
-    });
+        });
 
-    document.getElementById('googleSignInBtn').addEventListener('click', () => signInWithPopup(auth, provider).catch(e => alert(e.message)));
-    document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth).then(()=>location.reload()));
-    document.getElementById('expiredLogoutBtn').addEventListener('click', () => signOut(auth).then(()=>location.reload()));
+        document.getElementById('googleSignInBtn').addEventListener('click', () => { if(auth) signInWithPopup(auth, provider).catch(e => alert("Login Error: " + e.message)); });
+        document.getElementById('logoutBtn').addEventListener('click', () => { if(auth) signOut(auth).then(()=>location.reload()); });
+        document.getElementById('expiredLogoutBtn').addEventListener('click', () => { if(auth) signOut(auth).then(()=>location.reload()); });
+    }
 
     document.getElementById('adminToggleBtn').addEventListener('click', async () => {
         if (document.getElementById('adminPanel').classList.contains('hidden')) {
@@ -519,7 +609,7 @@
       }
 
       const pdfBytes = await outDoc.save(); 
-      if(auth.currentUser) {
+      if(auth && auth.currentUser) {
           const tx = lc_dbLocal.transaction('pdfs', 'readwrite');
           tx.objectStore('pdfs').put({ id: Date.now(), userId: auth.currentUser.uid, platform: currentPlatform, totalOrders: lc_parsedData.length, totalPieces: lc_parsedData.reduce((s,i)=>s+i.qty,0), data: pdfBytes, timestamp: Date.now() });
           tx.oncomplete = () => lc_loadRecoveredPdfs();
@@ -538,6 +628,31 @@
     let lc_dbLocal; const lc_dbRequest = indexedDB.open("ShegursLabelDB", 6);
     lc_dbRequest.onupgradeneeded = (e) => { lc_dbLocal = e.target.result; if (!lc_dbLocal.objectStoreNames.contains('pdfs')) { lc_dbLocal.createObjectStore('pdfs', { keyPath: 'id' }).createIndex('userId', 'userId', { unique: false }); } };
     lc_dbRequest.onsuccess = (e) => { lc_dbLocal = e.target.result; };
+
+    function lc_loadRecoveredPdfs() {
+        if (!lc_dbLocal || !app_isAppUnlocked || !auth.currentUser) return;
+        const tx = lc_dbLocal.transaction('pdfs', 'readwrite'); const req = tx.objectStore('pdfs').getAll();
+        req.onsuccess = () => {
+            const now = Date.now(); const validItems = []; const currentUid = auth.currentUser.uid;
+            req.result.forEach(item => { const ageHours = (now - item.timestamp) / (1000 * 60 * 60); if (ageHours >= 6) tx.objectStore('pdfs').delete(item.id); else if (item.userId === currentUid) validItems.push(item); });
+            validItems.sort((a,b) => b.timestamp - a.timestamp); lc_renderRecoveryList(validItems);
+        };
+    }
+
+    function lc_renderRecoveryList(items) {
+        const panel = document.getElementById('recoveryPanel'); const list = document.getElementById('savedBatchesList'); list.innerHTML = '';
+        if (items.length === 0 || !app_isAppUnlocked) { panel.classList.add('hidden'); return; } panel.classList.remove('hidden');
+        items.forEach(item => {
+            const timeStr = new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); const pColor = item.platform === 'flipkart' ? 'text-blue-400' : 'text-pink-400'; const li = document.createElement('li'); li.className = "flex justify-between items-center bg-slate-900 border border-slate-700 shadow-sm p-3 rounded-xl";
+            li.innerHTML = `<div><span class="font-black text-sm uppercase ${pColor}">${item.platform}</span><span class="text-[10px] font-bold text-slate-400 ml-2 bg-slate-800 px-2 py-0.5 rounded">${timeStr}</span><div class="text-xs font-bold text-slate-300 mt-1">${item.totalOrders} Orders | ${item.totalPieces} Items</div></div><div class="flex gap-2"><button onclick="lc_handleRecovery(${item.id}, 'preview')" class="bg-slate-800 text-white text-[10px] font-black uppercase px-3 py-1.5 rounded-lg border border-slate-600">Preview</button><button onclick="lc_handleRecovery(${item.id}, 'download')" class="bg-emerald-500 text-white text-[10px] font-black uppercase px-3 py-1.5 rounded-lg">Save</button><button onclick="lc_handleRecovery(${item.id}, 'delete')" class="bg-rose-500/20 text-rose-400 text-[10px] font-black uppercase px-2 py-1.5 rounded-lg border border-rose-500/30">✕</button></div>`; list.appendChild(li);
+        });
+    }
+
+    window.lc_handleRecovery = function(id, action) {
+        if (!lc_dbLocal) return; const tx = lc_dbLocal.transaction('pdfs', action === 'delete' ? 'readwrite' : 'readonly'); const store = tx.objectStore('pdfs');
+        if (action === 'delete') { store.delete(id); tx.oncomplete = () => lc_loadRecoveredPdfs(); return; }
+        const req = store.get(id); req.onsuccess = () => { if (!req.result) return; const bytes = req.result.data; const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" })); if (action === 'download') { const a = document.createElement('a'); a.href = url; a.download = `Shegurs_${req.result.platform.toUpperCase()}_Recovered_${id}.pdf`; a.click(); URL.revokeObjectURL(url); } else if (action === 'preview') { window.open(url, '_blank'); setTimeout(() => URL.revokeObjectURL(url), 10000); } };
+    };
 
     // ==========================================
     // FLIPKART P&L LOGIC
@@ -586,7 +701,7 @@
           const idx = parseInt(e.target.getAttribute('data-index')); const nCost = parseFloat(e.target.value) || 0; fk_rawSkuData[idx].costOfProduct = nCost;
           const tr = e.target.closest('tr'); const sc = tr.querySelector('td:nth-child(2)');
           if(nCost === 0 || isNaN(nCost)) { tr.classList.add('bg-orange-500/10'); sc.classList.add('text-orange-400'); sc.classList.remove('text-slate-200'); e.target.classList.add('border-orange-500'); e.target.classList.remove('border-slate-600'); } else { tr.classList.remove('bg-orange-500/10'); sc.classList.remove('text-orange-400'); sc.classList.add('text-slate-200'); e.target.classList.remove('border-orange-500'); e.target.classList.add('border-slate-600'); }
-          fk_updateCalculations(); clearTimeout(tid); tid = setTimeout(() => { app_userSavedSkus[fk_rawSkuData[idx].skuId] = nCost; if(auth.currentUser) setDoc(doc(db, 'users', auth.currentUser.uid, 'skus', 'memory'), { [fk_rawSkuData[idx].skuId]: nCost }, { merge: true }); }, 1000);
+          fk_updateCalculations(); clearTimeout(tid); tid = setTimeout(() => { app_userSavedSkus[fk_rawSkuData[idx].skuId] = nCost; if(auth && auth.currentUser) setDoc(doc(db, 'users', auth.currentUser.uid, 'skus', 'memory'), { [fk_rawSkuData[idx].skuId]: nCost }, { merge: true }); }, 1000);
         });
       });
     }
@@ -599,7 +714,7 @@
               if(inputEl) { inputEl.value = val; inputEl.classList.remove('border-orange-500'); inputEl.classList.add('border-slate-600'); const tr = inputEl.closest('tr'); tr.classList.remove('bg-orange-500/10'); tr.querySelector('td:nth-child(2)').classList.remove('text-orange-400'); tr.querySelector('td:nth-child(2)').classList.add('text-slate-200'); }
           }
       });
-      fk_updateCalculations(); Object.assign(app_userSavedSkus, bulkUpdates); if(auth.currentUser) setDoc(doc(db, 'users', auth.currentUser.uid, 'skus', 'memory'), bulkUpdates, { merge: true });
+      fk_updateCalculations(); Object.assign(app_userSavedSkus, bulkUpdates); if(auth && auth.currentUser) setDoc(doc(db, 'users', auth.currentUser.uid, 'skus', 'memory'), bulkUpdates, { merge: true });
     }
 
     function fk_updateCalculations() {
@@ -633,7 +748,7 @@
       reader.onload = function(e) {
         const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' }); let targetSheet = null;
         for (const sheetName of workbook.SheetNames) { const parsed = ms_parseSmart(workbook.Sheets[sheetName]); if (parsed.length > 0) { targetSheet = parsed; break; } }
-        ms_state[type] = targetSheet || []; document.getElementById(labelId).textContent = file.name.substring(0, 20) + '...'; document.getElementById(labelId).className = "text-[11px] text-emerald-400 font-bold";
+        ms_state[type] = targetSheet || []; document.getElementById(labelId).textContent = file.name.substring(0, 20) + '...'; document.getElementById(labelId).className = "text-[11px] text-emerald-400 font-bold mt-1";
         if (ms_state.pay.length > 0 && ms_state.ord.length > 0) ms_reconcile();
       }; reader.readAsArrayBuffer(file);
     }
@@ -698,7 +813,7 @@
           const idx = parseInt(e.target.getAttribute('data-index')); const nCost = parseFloat(e.target.value) || 0; ms_reconciledData[idx].cost = nCost;
           const tr = e.target.closest('tr'); const sc = tr.querySelector('td:nth-child(2)');
           if(nCost === 0 || isNaN(nCost)) { tr.classList.add('bg-orange-500/10'); sc.classList.add('text-orange-400'); sc.classList.remove('text-slate-200'); e.target.classList.add('border-orange-500'); e.target.classList.remove('border-slate-600'); } else { tr.classList.remove('bg-orange-500/10'); sc.classList.remove('text-orange-400'); sc.classList.add('text-slate-200'); e.target.classList.remove('border-orange-500'); e.target.classList.add('border-slate-600'); }
-          ms_computeTotals(); clearTimeout(tid); tid = setTimeout(() => { app_userSavedSkus[ms_reconciledData[idx].sku] = nCost; if(auth.currentUser) setDoc(doc(db, 'users', auth.currentUser.uid, 'skus', 'memory'), { [ms_reconciledData[idx].sku]: nCost }, { merge: true }); }, 1000);
+          ms_computeTotals(); clearTimeout(tid); tid = setTimeout(() => { app_userSavedSkus[ms_reconciledData[idx].sku] = nCost; if(auth && auth.currentUser) setDoc(doc(db, 'users', auth.currentUser.uid, 'skus', 'memory'), { [ms_reconciledData[idx].sku]: nCost }, { merge: true }); }, 1000);
         });
       });
     }
@@ -706,7 +821,7 @@
     function ms_applyBulkCost() {
       const val = parseFloat(document.getElementById('ms_bulkCostInput').value); if (isNaN(val)) return; const bU = {};
       ms_reconciledData.forEach((item, index) => { if(item.cost === 0 || isNaN(item.cost)) { item.cost = val; bU[item.sku] = val; const inp = document.querySelector(`.ms-cost-box[data-index="${index}"]`); if(inp) { inp.value = val; inp.classList.remove('border-orange-500'); inp.classList.add('border-slate-600'); const tr = inp.closest('tr'); tr.classList.remove('bg-orange-500/10'); tr.querySelector('td:nth-child(2)').classList.remove('text-orange-400'); tr.querySelector('td:nth-child(2)').classList.add('text-slate-200'); } } });
-      ms_computeTotals(); Object.assign(app_userSavedSkus, bU); if(auth.currentUser) setDoc(doc(db, 'users', auth.currentUser.uid, 'skus', 'memory'), bU, { merge: true });
+      ms_computeTotals(); Object.assign(app_userSavedSkus, bU); if(auth && auth.currentUser) setDoc(doc(db, 'users', auth.currentUser.uid, 'skus', 'memory'), bU, { merge: true });
     }
 
     function ms_computeTotals() {
