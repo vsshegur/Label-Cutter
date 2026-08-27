@@ -301,7 +301,7 @@ function lc_readFile(file) {
     }); 
 }
 
-// Extraction Phase (Yields cleanly to not freeze)
+// Extraction Phase
 document.getElementById('lc_processBtn').addEventListener('click', async () => {
   if (lc_rawFiles.length === 0) return;
   try {
@@ -362,7 +362,7 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
   }
 });
 
-// INSTANT Generation Phase (No loops or yielding to stall the i3)
+// Instant Generation without PC hanging
 async function lc_generatePdf() {
   const { PDFDocument, rgb, StandardFonts } = PDFLib; 
   const outDoc = await PDFDocument.create(); 
@@ -380,10 +380,10 @@ async function lc_generatePdf() {
   showSimpleSpinner("Compiling PDF Engine (Please wait...)");
   await new Promise(r => setTimeout(r, 50)); 
 
-  // Sequential loading to prevent RAM spikes on old hardware
+  // Memory-Safe Sequential Loading (Stops i3 crashing)
   const srcDocs = [];
   for (let i = 0; i < lc_rawFiles.length; i++) {
-      if (i % 2 === 0) await new Promise(r => setTimeout(r, 0));
+      if (i % 2 === 0) await new Promise(r => setTimeout(r, 0)); // Micro-yield to keep UI alive
       const buf = await lc_readFile(lc_rawFiles[i].file);
       const doc = await PDFDocument.load(buf);
       srcDocs.push(doc);
@@ -391,13 +391,17 @@ async function lc_generatePdf() {
   
   let logo = null;
   try { 
-      if (lc_customLogoBase64 && lc_customLogoBase64.startsWith('data:image')) { 
-          logo = await outDoc.embedPng(lc_customLogoBase64); 
-      } else if (lc_customLogoBase64) { 
-          const imgBytes = await fetch(lc_customLogoBase64).then((res) => res.arrayBuffer()); 
-          logo = await outDoc.embedPng(imgBytes); 
+      // Bulletproof Logo Watermark fetch
+      if (lc_customLogoBase64) { 
+          const res = await fetch(lc_customLogoBase64);
+          const imgBytes = await res.arrayBuffer(); 
+          if (lc_customLogoBase64.includes('jpeg') || lc_customLogoBase64.includes('jpg')) {
+              logo = await outDoc.embedJpg(imgBytes);
+          } else {
+              logo = await outDoc.embedPng(imgBytes); 
+          }
       } 
-  } catch(e) {}
+  } catch(e) { console.error("Logo fetch bypassed", e); }
 
   const isMulti = item => (item.qty > 1 || (item.sku && item.sku.includes('+'))); 
   const sortFn = (a, b) => { 
@@ -407,8 +411,9 @@ async function lc_generatePdf() {
   };
   const sortedData = [...lc_parsedData.filter(i => !isMulti(i)).sort(sortFn), ...lc_parsedData.filter(i => isMulti(i)).sort(sortFn)];
 
-  // Fast loop, no heavy interruptions
   for (let i = 0; i < sortedData.length; i++) {
+      
+      // Micro-Yield to prevent UI Freeze during generation
       if (i % 25 === 0) await new Promise(r => setTimeout(r, 0));
 
       const item = sortedData[i];
@@ -541,7 +546,7 @@ async function lc_generatePdf() {
     });
   }
 
-  await new Promise(r => setTimeout(r, 10)); // Yield before the save operation
+  await new Promise(r => setTimeout(r, 10)); // Yield before the heavy save operation
   
   const pdfBytes = await outDoc.save(); 
   
