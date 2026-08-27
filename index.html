@@ -30,7 +30,7 @@
         const banner = document.getElementById('syntaxErrorBanner');
         if(banner) {
             banner.classList.remove('hidden');
-            banner.innerHTML = "⚠️ <b>SYSTEM CRASH:</b> " + e.message + "<br/><span class='text-xs font-medium'>Did you make a typo when pasting your Firebase Keys?</span>";
+            banner.innerHTML = "⚠️ <b>SYSTEM ERROR:</b> " + e.message;
         }
     });
   </script>
@@ -120,28 +120,18 @@
         </div>
 
         <div id="expiredWarning" class="hidden absolute inset-0 glass-panel z-20 flex flex-col items-center justify-center text-center p-12 bg-slate-950/90 backdrop-blur-xl border border-rose-500/30">
-            <div class="bg-rose-500/20 p-6 rounded-full mb-6 shadow-[0_0_30px_rgba(244,63,94,0.3)]"><svg class="w-14 h-14 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
             <h2 class="text-4xl font-black text-white mb-4">Subscription Expired</h2>
-            <p class="text-slate-400 max-w-lg mb-8 text-base">Your access to Shegur's Ecommerce Suite has concluded. Renew your plan to unlock automated labels and P&L tools.</p>
-            <a href="https://wa.me/919970836509" target="_blank" class="bg-emerald-500 hover:bg-emerald-400 text-white font-black py-4 px-12 rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.4)] btn-hover text-sm tracking-widest uppercase mb-6 transition-all">Renew via WhatsApp</a>
-            <button id="expiredLogoutBtn" class="text-slate-500 hover:text-white font-bold text-xs uppercase tracking-widest transition-colors cursor-pointer border border-slate-700 px-6 py-2 rounded-lg">Sign out</button>
+            <a href="https://wa.me/919970836509" target="_blank" class="bg-emerald-500 text-white font-black py-4 px-12 rounded-xl text-sm tracking-widest uppercase mb-6">Renew via WhatsApp</a>
+            <button id="expiredLogoutBtn" class="text-slate-500 font-bold text-xs uppercase tracking-widest cursor-pointer border border-slate-700 px-6 py-2 rounded-lg">Sign out</button>
         </div>
     </div>
 
     <!-- ADMIN PANEL -->
     <div id="adminPanel" class="hidden glass-panel bg-slate-900/90 rounded-3xl p-8 mb-10 border border-indigo-500/40 shadow-[0_0_40px_rgba(79,70,229,0.2)]">
-       <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
-          <h2 class="text-xl font-black text-white uppercase tracking-wider flex items-center gap-3"><span class="w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,1)]"></span> Administrator Control</h2>
-       </div>
-       <div class="overflow-x-auto">
-          <table class="w-full text-left">
-             <thead><tr class="text-[10px] font-black uppercase tracking-widest text-slate-500 border-b border-slate-800"><th class="pb-4 px-4">User</th><th class="pb-4 px-4">Role</th><th class="pb-4 px-4">Plan</th><th class="pb-4 px-4">Time Left</th><th class="pb-4 px-4 text-right">Actions</th></tr></thead>
-             <tbody id="adminUserTableBody" class="divide-y divide-slate-800/50"></tbody>
-          </table>
-       </div>
+       <div class="overflow-x-auto"><table class="w-full text-left"><tbody id="adminUserTableBody" class="divide-y divide-slate-800/50"></tbody></table></div>
     </div>
 
-    <!-- LABEL CUTTER WORKSPACE -->
+    <!-- LABEL CUTTER -->
     <div id="labelWorkspace" class="hidden animate-fade-in">
         <div class="flex justify-center mb-8">
             <div class="flex bg-slate-900 p-1.5 rounded-2xl border border-slate-700 shadow-inner">
@@ -152,11 +142,9 @@
 
         <div class="glass-panel rounded-3xl shadow-2xl p-8 mb-10 border border-slate-700">
           <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
-            <!-- Dropzone -->
             <div class="lg:col-span-2 flex flex-col gap-4">
               <div id="lc_dropzone" class="border-[3px] border-dashed rounded-3xl p-8 transition-all text-center flex flex-col justify-center items-center relative border-blue-500/40 bg-blue-500/5 hover:bg-blue-500/10 cursor-pointer min-h-[280px]">
                 <input type="file" id="lc_pdfFileInput" accept="application/pdf" multiple class="absolute inset-0 w-full h-full opacity-0 z-50 cursor-pointer" />
-                <div class="bg-blue-500/20 p-5 rounded-full text-blue-400 mb-5 shadow-inner"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg></div>
                 <p class="text-xl font-black text-white">Drop <span id="lc_platformName" class="text-blue-400">Flipkart</span> PDFs</p>
                 <div class="mt-5 bg-slate-800 border border-slate-600 hover:border-slate-400 transition-colors text-white text-[10px] font-black uppercase tracking-widest px-8 py-3 rounded-xl shadow-md">Browse Files</div>
               </div>
@@ -166,7 +154,6 @@
               </div>
             </div>
 
-            <!-- Settings -->
             <div class="lg:col-span-3 flex flex-col justify-between bg-slate-900/60 p-8 rounded-3xl border border-slate-700 shadow-inner">
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
                 <div class="space-y-2">
@@ -196,7 +183,6 @@
           </div>
         </div>
 
-        <!-- Results Banner -->
         <div id="lc_results" class="hidden mb-10 p-8 glass-panel bg-slate-900/90 rounded-3xl border border-emerald-500/30 shadow-[0_0_40px_rgba(16,185,129,0.15)] flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="flex items-center gap-10">
               <div><span class="block text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Orders Parsed</span><span id="lc_metricTotal" class="text-5xl font-black text-white">0</span></div>
@@ -209,7 +195,6 @@
             </div>
         </div>
         
-        <!-- Cloud Recovery -->
         <div id="recoveryPanel" class="hidden glass-panel bg-slate-900/80 rounded-3xl p-8 mb-10 border border-slate-700 shadow-xl">
             <div class="flex justify-between items-center mb-5 border-b border-slate-800 pb-4">
                 <h2 class="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2"><svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg> Cloud Recovery</h2>
@@ -219,12 +204,11 @@
         </div>
     </div>
 
-    <!-- FLIPKART P&L WORKSPACE -->
+    <!-- FLIPKART P&L -->
     <div id="fkPnlWorkspace" class="hidden space-y-8 animate-fade-in">
       <div class="w-full bg-slate-900/80 p-12 rounded-3xl border-[3px] border-dashed border-blue-500/40 hover:border-blue-400 transition-colors text-center cursor-pointer relative shadow-[0_0_30px_rgba(59,130,246,0.1)]">
         <input type="file" id="fk_excelInput" accept=".xlsx, .xls" class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer" />
         <div class="flex flex-col items-center justify-center gap-4 pointer-events-none">
-          <div class="p-5 bg-blue-500/20 text-blue-400 rounded-full shadow-inner"><svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 0115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg></div>
           <p class="text-2xl font-black text-white tracking-tight">Drop Official Flipkart P&L Excel</p>
           <p class="text-xs text-blue-400 font-bold uppercase tracking-widest bg-blue-500/10 px-4 py-1.5 rounded-lg">Requires 'SKU-level P&L' Sheet</p>
         </div>
@@ -240,7 +224,6 @@
 
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/90 p-5 rounded-2xl border border-slate-700 shadow-md">
             <div class="flex items-center gap-3 w-full sm:w-auto">
-                <div class="bg-indigo-500/20 p-2 rounded-lg text-indigo-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
                 <label class="text-xs font-bold text-white uppercase tracking-widest pl-2">Bulk Fill Missing Costs (₹):</label>
             </div>
             <div class="flex items-center gap-3 w-full sm:w-auto">
@@ -262,7 +245,6 @@
 
         <div class="glass-panel p-8 rounded-3xl border border-rose-500/20 bg-gradient-to-r from-slate-900 to-rose-950/20 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-6">
           <div class="flex items-center gap-4">
-              <div class="bg-rose-500/20 p-3 rounded-2xl text-rose-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg></div>
               <div><h3 class="text-sm font-black text-white uppercase tracking-wider">Unclaimed Return & Damage Losses</h3><p class="text-xs text-slate-400 mt-1">Deduct missing items or packaging waste to find true net.</p></div>
           </div>
           <div class="flex items-center gap-4 w-full sm:w-auto">
@@ -272,16 +254,23 @@
         </div>
       </div>
     </div>
-
   </main>
 
-  <!-- Processing Loader -->
-  <div id="loader" class="hidden fixed bottom-10 left-1/2 transform -translate-x-1/2 z-[100] bg-slate-800/95 backdrop-blur-xl p-6 px-10 rounded-full shadow-[0_20px_60px_rgba(0,0,0,0.6)] border border-slate-600 flex items-center gap-5">
-    <div class="inline-block animate-spin rounded-full h-7 w-7 border-[4px] border-slate-600 border-t-indigo-500"></div>
-    <p id="loaderText" class="text-sm font-black text-white tracking-widest uppercase">Processing Data...</p>
+  <!-- Optimized Loader with Percentage Bar -->
+  <div id="loader" class="hidden fixed bottom-10 left-1/2 transform -translate-x-1/2 z-[100] bg-slate-900/95 backdrop-blur-2xl p-6 px-10 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.7)] border border-slate-700 flex flex-col items-center gap-4 min-w-[340px] max-w-md">
+    <div class="flex items-center justify-between w-full">
+        <div class="flex items-center gap-3">
+            <div class="inline-block animate-spin rounded-full h-5 w-5 border-[3px] border-slate-600 border-t-indigo-500"></div>
+            <p id="loaderText" class="text-xs font-black text-white tracking-widest uppercase">Processing...</p>
+        </div>
+        <span id="loaderPercent" class="text-xs font-black text-indigo-400">0%</span>
+    </div>
+    <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden p-0.5 border border-slate-700">
+        <div id="loaderProgressBar" class="bg-gradient-to-r from-indigo-500 to-blue-500 h-full rounded-full transition-all duration-150 ease-out" style="width: 0%"></div>
+    </div>
   </div>
 
-  <!-- MODULE IMPORTS -->
+  <!-- SCRIPTS -->
   <script type="module" src="./firebase-config.js"></script>
   <script type="module" src="./auth.js"></script>
   <script type="module" src="./labelCutter.js"></script>
