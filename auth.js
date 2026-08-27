@@ -26,6 +26,13 @@ document.getElementById('appSelector').addEventListener('change', (e) => {
     }
 });
 
+// Settings Hook: Make Profile Clickable
+document.getElementById('openSettingsBtn').addEventListener('click', () => {
+    if (!window.appState.isUnlocked) return;
+    document.getElementById('appSelector').value = 'settings';
+    document.getElementById('appSelector').dispatchEvent(new Event('change'));
+});
+
 document.getElementById('themeToggle').addEventListener('click', () => {
     document.documentElement.classList.toggle('dark');
     localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
@@ -92,7 +99,6 @@ if(auth) {
     document.getElementById('expiredLogoutBtn').addEventListener('click', () => { signOut(auth).then(()=>location.reload()); });
 }
 
-// Settings Logic
 function renderSettings() {
     document.getElementById('set_userName').textContent = window.appState.currentUser.displayName;
     document.getElementById('set_userEmail').textContent = window.appState.currentUser.email;
@@ -102,7 +108,7 @@ function renderSettings() {
     const list = document.getElementById('set_storeList');
     list.innerHTML = '';
     window.appState.storeLinks.forEach((store, idx) => {
-        list.innerHTML += `<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50"><td class="py-3 px-4">${store.name}</td><td class="py-3 px-4 text-blue-600 dark:text-blue-400">${store.url}</td><td class="py-3 px-4 text-center"><button onclick="removeStore(${idx})" class="text-rose-600 dark:text-rose-400 hover:text-white bg-rose-100 hover:bg-rose-500 dark:bg-rose-500/20 px-3 py-1 rounded text-[10px] font-black uppercase transition-colors">Del</button></td></tr>`;
+        list.innerHTML += `<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50"><td class="py-3 px-4 font-bold text-slate-800 dark:text-slate-200">${store.name}</td><td class="py-3 px-4 text-blue-600 dark:text-blue-400">${store.url}</td><td class="py-3 px-4 text-center"><button onclick="removeStore(${idx})" class="text-rose-600 dark:text-rose-400 hover:text-white bg-rose-100 hover:bg-rose-500 dark:bg-rose-500/20 px-3 py-1 rounded text-[10px] font-black uppercase transition-colors">Del</button></td></tr>`;
     });
 }
 
