@@ -11,9 +11,11 @@ document.getElementById('appSelector').addEventListener('change', (e) => {
     document.getElementById('authPanel').classList.add('hidden');
     document.getElementById('labelWorkspace').classList.add('hidden');
     document.getElementById('fkPnlWorkspace').classList.add('hidden');
+    document.getElementById('msPnlWorkspace').classList.add('hidden');
     
     if (window.appState.currentApp === 'labelCutter') { document.getElementById('labelWorkspace').classList.remove('hidden'); window.dispatchEvent(new Event('appUnlocked')); } 
     else if (window.appState.currentApp === 'fkPnlCalculator') { document.getElementById('fkPnlWorkspace').classList.remove('hidden'); } 
+    else if (window.appState.currentApp === 'msPnlCalculator') { document.getElementById('msPnlWorkspace').classList.remove('hidden'); }
 });
 
 document.getElementById('themeToggle').addEventListener('click', () => {
@@ -53,7 +55,7 @@ if(auth) {
         } else {
             window.appState.currentUser = null; window.appState.userSkus = {}; window.appState.isUnlocked = false;
             document.getElementById('authPanel').classList.remove('hidden'); document.getElementById('authWarning').classList.remove('hidden'); document.getElementById('authFeatures').classList.remove('hidden'); 
-            document.getElementById('expiredWarning').classList.add('hidden'); document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); 
+            document.getElementById('expiredWarning').classList.add('hidden'); document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); document.getElementById('msPnlWorkspace').classList.add('hidden');
             document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.add('hidden'); document.getElementById('userInfo').classList.add('hidden');
             document.getElementById('googleSignInBtn').innerHTML = `Secure Login`;
         }
@@ -72,12 +74,13 @@ if(auth) {
 
 document.getElementById('adminToggleBtn').addEventListener('click', async () => {
     if (document.getElementById('adminPanel').classList.contains('hidden')) {
-        document.getElementById('authPanel').classList.add('hidden'); document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden');
+        document.getElementById('authPanel').classList.add('hidden'); document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); document.getElementById('msPnlWorkspace').classList.add('hidden');
         document.getElementById('adminPanel').classList.remove('hidden'); document.getElementById('adminToggleBtn').textContent = "Back to App"; await loadAdminUsers();
     } else {
         document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('adminToggleBtn').textContent = "Admin Panel";
         if(window.appState.currentApp === 'labelCutter') document.getElementById('labelWorkspace').classList.remove('hidden'); 
         else if (window.appState.currentApp === 'fkPnlCalculator') document.getElementById('fkPnlWorkspace').classList.remove('hidden');
+        else document.getElementById('msPnlWorkspace').classList.remove('hidden');
     }
 });
 
