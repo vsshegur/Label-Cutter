@@ -18,14 +18,6 @@ function updateProgress(percent, statusText) {
     if (lText && statusText) lText.textContent = statusText;
 }
 
-function showSimpleSpinner(text) {
-    document.getElementById('loaderProgressBar').style.width = '100%';
-    document.getElementById('loaderPercent').textContent = '';
-    document.getElementById('loaderText').textContent = text;
-    document.getElementById('loaderBarContainer').classList.add('hidden');
-    document.getElementById('loader').classList.remove('hidden');
-}
-
 window.addEventListener('appUnlocked', () => {
     lc_setPlatform('flipkart');
     try { 
@@ -173,13 +165,11 @@ async function lc_extract(page, platform) {
   });
   if (midMarker) { splitY = midMarker.y + 15; } else { isStandaloneLabel = true; splitY = 0; }
 
+  // Fallback Extraction (Dynamic Matching handles Meesho later)
   const sbMatch = fullText.match(/Sold [Bb]y\s*[:]?\s*([^,]+?)(?:\,|\s+34\/3\/16|\s+SHEGUR|\s+GSTIN)/i);
   if (sbMatch && sbMatch[1]) { 
       let extracted = sbMatch[1].trim(); 
       if(extracted.length > 3) soldBy = extracted.substring(0, 40); 
-  } else { 
-      if (fullText.toUpperCase().includes('VIJAYALAXMI TEXTILES')) soldBy = 'VIJAYALAXMI TEXTILES'; 
-      if (fullText.toUpperCase().includes('VIPUL TEXTILES')) soldBy = 'VIPUL TEXTILES'; 
   }
 
   if (platform === 'flipkart') { 
@@ -289,7 +279,8 @@ async function lc_extract(page, platform) {
           if (fbm) { sku = fbm[1]; qty = parseInt(fbm[2], 10); } 
       }
   }
-  return { pdfW, pdfH, splitY, lBox, iBox, fullBox, fkGstin, msGap, sku, qty, courier, soldBy };
+  
+  return { pdfW, pdfH, splitY, lBox, iBox, fullBox, fkGstin, msGap, sku, qty, courier, soldBy, rawText: fullText };
 }
 
 function lc_readFile(file) { 
@@ -342,7 +333,7 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
                   w: data.pdfW, h: data.pdfH, splitY: data.splitY,
                   lBox: data.lBox, iBox: data.iBox, fullBox: data.fullBox,
                   fkPos: data.fkGstin, msPos: data.msGap,
-                  sku: data.sku, qty: data.qty, courier: data.courier, soldBy: data.soldBy
+                  sku: data.sku, qty: data.qty, courier: data.courier, soldBy: data.soldBy, rawText: data.rawText
               });
 
               completedPages++;
@@ -362,7 +353,7 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
   }
 });
 
-// RAM-Safe Generation Phase 
+// Generation Phase (Memory-Safe Sequential Loading)
 async function lc_generatePdf() {
   const { PDFDocument, rgb, StandardFonts } = PDFLib; 
   const outDoc = await PDFDocument.create(); 
@@ -379,14 +370,13 @@ async function lc_generatePdf() {
   
   document.getElementById('loaderBarContainer').classList.remove('hidden');
   document.getElementById('loader').classList.remove('hidden');
-  updateProgress(0, "Loading Memory Safely...");
+  updateProgress(0, "Preparing to Build...");
 
-  // Sequential loading with UI updates to prevent RAM crashing and browser freezing
+  // Load sequentially to prevent RAM crashes on i3 processors
   const srcDocs = [];
   for (let i = 0; i < lc_rawFiles.length; i++) {
       updateProgress((i / lc_rawFiles.length) * 10, `Loading File ${i + 1} of ${lc_rawFiles.length}...`);
-      await new Promise(r => setTimeout(r, 10)); // Force UI to update
-      
+      await new Promise(r => setTimeout(r, 0)); // Yield to prevent browser freeze
       const buf = await lc_readFile(lc_rawFiles[i].file);
       const doc = await PDFDocument.load(buf, { ignoreEncryption: true }); 
       srcDocs.push(doc);
@@ -395,7 +385,7 @@ async function lc_generatePdf() {
   let logo = null;
   if (lc_customLogoBase64) {
       try { 
-          // Parse Logo Safely
+          // Bulletproof Logo Parsing
           const base64Data = lc_customLogoBase64.split(',')[1];
           const imgBytes = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
           if (lc_customLogoBase64.includes('jpeg') || lc_customLogoBase64.includes('jpg')) {
@@ -403,7 +393,7 @@ async function lc_generatePdf() {
           } else {
               logo = await outDoc.embedPng(imgBytes); 
           }
-      } catch(e) { console.error("Logo fetch bypassed", e); }
+      } catch(e) { console.error("Logo Error Bypassed:", e); }
   }
 
   const isMulti = item => (item.qty > 1 || (item.sku && item.sku.includes('+'))); 
@@ -415,10 +405,11 @@ async function lc_generatePdf() {
   const sortedData = [...lc_parsedData.filter(i => !isMulti(i)).sort(sortFn), ...lc_parsedData.filter(i => isMulti(i)).sort(sortFn)];
 
   for (let i = 0; i < sortedData.length; i++) {
-      // Light yield to prevent UI Freeze during generation
-      if (i % 25 === 0) {
+      
+      // Micro-Yield to prevent UI Freeze
+      if (i % 20 === 0) {
           const genPercent = 10 + ((i + 1) / sortedData.length) * 85;
-          updateProgress(genPercent, `Rendering PDF: ${Math.round(genPercent)}%`);
+          updateProgress(genPercent, `Rendering Layout: ${Math.round(genPercent)}%`);
           await new Promise(r => setTimeout(r, 0));
       }
 
@@ -445,11 +436,18 @@ async function lc_generatePdf() {
           p.drawPage(embedded, { x: margin + (printableW - (eW*scale)) / 2, y: margin + bannerH + margin + (contentH - (eH*scale)) / 2, xScale: scale, yScale: scale });
           p.drawRectangle({ x: margin, y: margin, width: printableW, height: bannerH, color: rgb(0.97, 0.97, 0.97), borderColor: rgb(0.8, 0.8, 0.8), borderWidth: 1 });
           
+          // ==========================================
+          // BRAND NEW DYNAMIC QR CODE ENGINE
+          // ==========================================
           let storeUrl = "";
-          if (window.appState && window.appState.storeLinks && item.soldBy) {
-              const cleanedSeller = item.soldBy.toLowerCase();
-              const matchedStore = window.appState.storeLinks.find(s => cleanedSeller.includes(s.name.toLowerCase()));
-              if (matchedStore) storeUrl = matchedStore.url;
+          let storeNameMatch = "";
+          if (window.appState && window.appState.storeLinks && item.rawText) {
+              const cleanedText = item.rawText.toLowerCase();
+              const matchedStore = window.appState.storeLinks.find(s => cleanedText.includes(s.name.toLowerCase()));
+              if (matchedStore) {
+                  storeUrl = matchedStore.url;
+                  storeNameMatch = matchedStore.name;
+              }
           }
           
           if (storeUrl) {
@@ -459,9 +457,9 @@ async function lc_generatePdf() {
                   const qrImage = await outDoc.embedPng(qrBytes); 
                   p.drawImage(qrImage, { x: margin + 12, y: margin + (bannerH - 75) / 2, width: 75, height: 75 }); 
                   const textX = margin + 12 + 75 + 15; 
-                  p.drawText("Visit Store", { x: textX, y: margin + bannerH - 28, size: 11, font, color: rgb(0.1, 0.1, 0.1) }); 
-                  p.drawText("Scan QR to open brand store.", { x: textX, y: margin + bannerH - 44, size: 8.5, font: fontReg, color: rgb(0.3, 0.3, 0.3) }); 
-                  p.drawText(storeUrl, { x: textX, y: margin + bannerH - 60, size: 7, font: fontReg, color: rgb(0.4, 0.4, 0.4) }); 
+                  p.drawText("Visit Our Brand Store", { x: textX, y: margin + bannerH - 24, size: 12, font, color: rgb(0.1, 0.1, 0.1) }); 
+                  p.drawText(storeNameMatch.toUpperCase(), { x: textX, y: margin + bannerH - 42, size: 10, font: fontReg, color: rgb(0.2, 0.2, 0.2) }); 
+                  p.drawText(storeUrl, { x: textX, y: margin + bannerH - 58, size: 8, font: fontReg, color: rgb(0.4, 0.4, 0.4) }); 
               } catch (e) { console.error("QR Code Error:", e); }
           }
       } else {
@@ -565,7 +563,7 @@ async function lc_generatePdf() {
   }
 
   updateProgress(98, "Finalizing Document (This may take a moment)...");
-  await new Promise(r => setTimeout(r, 10)); // Yield before heavy save operation
+  await new Promise(r => setTimeout(r, 10)); 
   
   const pdfBytes = await outDoc.save(); 
   
