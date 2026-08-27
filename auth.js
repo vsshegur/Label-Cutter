@@ -61,10 +61,10 @@ if(auth) {
             const isExpired = !isAdmin && (now > uData.expiresAt || !uData.isActive);
             const daysLeft = Math.ceil((uData.expiresAt - now) / (1000 * 60 * 60 * 24));
             
-            window.appState.userPlan = { planType: isAdmin ? "ADMIN" : uData.planType, daysLeft: isAdmin ? '∞' : daysLeft };
+            window.appState.userPlan = { planType: isAdmin ? "ADMIN" : uData.planType, daysLeft: isAdmin ? 'Lifetime Access' : `${daysLeft} Days Left` };
             
             if (isAdmin || !isExpired) {
-                document.getElementById('userPlan').textContent = `${window.appState.userPlan.planType} • ${daysLeft} Days Left`;
+                document.getElementById('userPlan').textContent = `${window.appState.userPlan.planType} • ${window.appState.userPlan.daysLeft}`;
                 if(isAdmin) document.getElementById('adminToggleBtn').classList.remove('hidden');
                 
                 window.appState.isUnlocked = true; document.getElementById('authPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.remove('hidden');
@@ -102,7 +102,7 @@ function renderSettings() {
     const list = document.getElementById('set_storeList');
     list.innerHTML = '';
     window.appState.storeLinks.forEach((store, idx) => {
-        list.innerHTML += `<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50"><td class="py-3 px-4">${store.name}</td><td class="py-3 px-4 text-blue-500">${store.url}</td><td class="py-3 px-4 text-center"><button onclick="removeStore(${idx})" class="text-rose-500 hover:text-white bg-rose-100 hover:bg-rose-500 dark:bg-rose-500/20 px-3 py-1 rounded text-[10px] font-black uppercase transition-colors">Del</button></td></tr>`;
+        list.innerHTML += `<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50"><td class="py-3 px-4">${store.name}</td><td class="py-3 px-4 text-blue-600 dark:text-blue-400">${store.url}</td><td class="py-3 px-4 text-center"><button onclick="removeStore(${idx})" class="text-rose-600 dark:text-rose-400 hover:text-white bg-rose-100 hover:bg-rose-500 dark:bg-rose-500/20 px-3 py-1 rounded text-[10px] font-black uppercase transition-colors">Del</button></td></tr>`;
     });
 }
 
