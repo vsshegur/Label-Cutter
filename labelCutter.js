@@ -28,13 +28,23 @@ document.getElementById('lc_logoInput').addEventListener('change', (e) => {
 });
 
 document.getElementById('lc_tabFk').addEventListener('click', () => lc_setPlatform('flipkart'));
+document.getElementById('lc_tabMs').addEventListener('click', () => lc_setPlatform('meesho'));
 
 function lc_setPlatform(platform) {
   currentPlatform = platform; document.getElementById('lc_results').classList.add('hidden'); lc_parsedData = [];
-  document.getElementById('lc_tabFk').className = "bg-blue-600 text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(37,99,235,0.4)] cursor-pointer";
-  document.getElementById('lc_platformName').textContent = "Flipkart"; document.getElementById('lc_platformName').className = "text-blue-400 relative z-10";
-  document.getElementById('lc_dropzone').className = "border-[3px] border-dashed rounded-3xl p-8 transition-all text-center flex flex-col justify-center items-center relative border-blue-500/40 bg-blue-500/5 hover:bg-blue-500/10 cursor-pointer min-h-[280px]";
-  document.getElementById('lc_printFormat').innerHTML = `<option value="fk-4x6-no-inv" selected>4" x 6" Without Invoice</option><option value="fk-4x6-with-inv">4" x 6" With Invoice</option><option value="fk-3x5-no-inv">3" x 5" Without Invoice</option><option value="fk-3x5-with-inv">3" x 5" With Invoice</option>`;
+  if (platform === 'flipkart') {
+    document.getElementById('lc_tabFk').className = "bg-blue-600 text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(37,99,235,0.4)] cursor-pointer";
+    document.getElementById('lc_tabMs').className = "text-slate-400 bg-transparent hover:text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all cursor-pointer";
+    document.getElementById('lc_platformName').textContent = "Flipkart"; document.getElementById('lc_platformName').className = "text-blue-400 relative z-10";
+    document.getElementById('lc_dropzone').className = "border-[3px] border-dashed rounded-3xl p-8 transition-all text-center flex flex-col justify-center items-center relative border-blue-500/40 bg-blue-500/5 hover:bg-blue-500/10 cursor-pointer min-h-[280px]";
+    document.getElementById('lc_printFormat').innerHTML = `<option value="fk-4x6-no-inv" selected>4" x 6" Without Invoice</option><option value="fk-4x6-with-inv">4" x 6" With Invoice</option><option value="fk-3x5-no-inv">3" x 5" Without Invoice</option><option value="fk-3x5-with-inv">3" x 5" With Invoice</option>`;
+  } else {
+    document.getElementById('lc_tabMs').className = "bg-pink-600 text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(219,39,119,0.4)] cursor-pointer";
+    document.getElementById('lc_tabFk').className = "text-slate-400 bg-transparent hover:text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all cursor-pointer";
+    document.getElementById('lc_platformName').textContent = "Meesho"; document.getElementById('lc_platformName').className = "text-pink-400 relative z-10";
+    document.getElementById('lc_dropzone').className = "border-[3px] border-dashed rounded-3xl p-8 transition-all text-center flex flex-col justify-center items-center relative border-pink-500/40 bg-pink-500/5 hover:bg-pink-500/10 cursor-pointer min-h-[280px]";
+    document.getElementById('lc_printFormat').innerHTML = `<option value="ms-3x5-no-inv" selected>3" x 5" Without Invoice</option><option value="ms-3x5-with-inv">3" x 5" With Invoice</option><option value="ms-4x4-with-inv">4" x 4" With Invoice</option><option value="ms-4x6-with-inv">4" x 6" With Store Link</option>`;
+  }
 }
 
 document.getElementById('lc_pdfFileInput').addEventListener('change', e => {
@@ -101,6 +111,12 @@ async function lc_extract(page, platform) {
   const aB = lc_getBounds(lines, 0, pdfH);
   fullBox = { left: isFinite(aB.minX) ? Math.max(0, aB.minX - padX) : 10, right: isFinite(aB.maxX) ? Math.min(pdfW, aB.maxX + padX) : pdfW - 10, bottom: isFinite(aB.minY) ? Math.max(0, aB.minY - padY) : 10, top: isFinite(aB.maxY) ? Math.min(pdfH, aB.maxY + padY) : pdfH - 10 };
 
+  if (platform === 'meesho') {
+      let headerLine = lines.find(l => /IF UNDELIVERED|RETURN TO/i.test(l.text)); let productLine = lines.find(l => /PRODUCT DETAILS|SKU SIZE QTY/i.test(l.text)); let headY = headerLine ? headerLine.y : pdfH * 0.85; let prodY = productLine ? productLine.y : pdfH * 0.35; let addressLines = lines.filter(l => l.y < headY - 2 && l.y > prodY + 2 && l.items.some(i => i.x < pdfW * 0.48)); let gapTopY = headY - 15; let minX = headerLine ? headerLine.items[0].x : 15; let maxX = minX + 120;
+      if (addressLines.length > 0) { gapTopY = Math.min(...addressLines.map(l => l.y)); let allItems = addressLines.flatMap(l => l.items.filter(i => i.x < pdfW * 0.48)); if(allItems.length > 0) { minX = Math.min(...allItems.map(i => i.x)); maxX = Math.max(...allItems.map(i => i.x + i.width)); } }
+      msGap = { x: minX, y: prodY + 10, w: Math.min(Math.max(maxX, minX + 120), (pdfW*0.48)-5) - minX, h: Math.max((gapTopY - 5) - (prodY + 10), 15) };
+  }
+
   let qty = 1; let sku = 'Unknown SKU'; let courier = 'Unknown Courier';
   const cleanFull = fullText.replace(/\s+/g, ' '); const cMatch = cleanFull.match(/E-Kart|Shadowfax|Delhivery|Xpress Bees|Xpressbees|Valmo|Ecom Express|DTDC/i); if(cMatch) courier = cMatch[0];
 
@@ -119,6 +135,12 @@ async function lc_extract(page, platform) {
       }
       if (fkSkus.length > 0) { let uniqueSkus = [...new Set(fkSkus)]; sku = uniqueSkus.join(' + '); qty = totalQtyVal !== null ? totalQtyVal : fkSkus.length;
       } else { const safeText = cleanFull.replace(/GSTIN\s*[:\-]?\s*[A-Z0-9]+/ig, ''); const sMatch = safeText.match(/(?:FSN|SKU(?: ID)?)\s*[:\-]?\s*([A-Za-z0-9_\-\.\/\^\+]+)/i); if (sMatch && !/^(ID|Description|QTY|Name|Price|Tax|Invoice|Amount)$/i.test(sMatch[1])) { sku = sMatch[1].trim(); } if (totalQtyVal !== null) qty = totalQtyVal; }
+  } else {
+      let detailsMatch = cleanFull.match(/Product Details(.*?)TAX INVOICE/i) || cleanFull.match(/Product Details(.*?)Original For Recipient/i);
+      if (detailsMatch) {
+          let block = detailsMatch[1].replace(/SKU|Size|Qty|Color|Order No\.?|Free Size|Multicolor/ig, '').replace(/\|/g, ' ').trim(); let words = block.split(/\s+/).filter(w => w.length > 0);
+          if (words.length > 0) { sku = words[0]; for(let w = 1; w < words.length; w++) { if(!isNaN(words[w]) && parseInt(words[w]) < 100 && parseInt(words[w]) > 0) { qty = parseInt(words[w]); break; } } }
+      } else { const fbm = cleanFull.match(/([A-Za-z0-9_\-\.\/]{4,50})\s+(?:Free\s*Size|[A-Za-z0-9\-]+)\s+(\d{1,3})/i); if (fbm) { sku = fbm[1]; qty = parseInt(fbm[2], 10); } }
   }
   return { pdfW, pdfH, splitY, lBox, iBox, fullBox, fkGstin, msGap, sku, qty, courier, soldBy };
 }
