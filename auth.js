@@ -52,14 +52,21 @@ if(auth) {
             const daysLeft = Math.ceil((uData.expiresAt - now) / (1000 * 60 * 60 * 24));
             
             if (isAdmin || !isExpired) {
+                // Shows the plan AND days left for everyone
                 const planText = isAdmin ? "ADMIN" : uData.planType;
                 document.getElementById('userPlan').textContent = `${planText} • ${daysLeft} Days Left`;
+                
                 if(isAdmin) document.getElementById('adminToggleBtn').classList.remove('hidden');
                 
-                window.appState.isUnlocked = true; document.getElementById('authPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.remove('hidden');
-                document.getElementById('appSelector').value = "labelCutter"; document.getElementById('labelWorkspace').classList.remove('hidden'); window.dispatchEvent(new Event('appUnlocked'));
+                window.appState.isUnlocked = true; 
+                document.getElementById('authPanel').classList.add('hidden'); 
+                document.getElementById('appSelectorContainer').classList.remove('hidden');
+                document.getElementById('appSelector').value = "labelCutter"; 
+                document.getElementById('labelWorkspace').classList.remove('hidden'); 
+                window.dispatchEvent(new Event('appUnlocked'));
             } else {
-                document.getElementById('userPlan').textContent = "PLAN EXPIRED"; document.getElementById('expiredWarning').classList.remove('hidden');
+                document.getElementById('userPlan').textContent = "PLAN EXPIRED"; 
+                document.getElementById('expiredWarning').classList.remove('hidden');
             }
         } else {
             window.appState.currentUser = null; window.appState.userSkus = {}; window.appState.isUnlocked = false;
