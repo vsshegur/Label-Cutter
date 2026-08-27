@@ -9,7 +9,6 @@ const DEFAULT_BRAND_LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAA
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-// Visual Progress Updater
 function updateProgress(percent, statusText) {
     const pBar = document.getElementById('loaderProgressBar');
     const pText = document.getElementById('loaderPercent');
@@ -295,7 +294,7 @@ function lc_readFile(file) {
 }
 
 // =========================================================================
-// OPTIMIZED SEQUENTIAL EXTRACTION ENGINE (Safe for older i3 Processors)
+// FAST EXTRACTION ENGINE WITH ZERO-DELAY YIELDING (Safe for i3 Processors)
 // =========================================================================
 document.getElementById('lc_processBtn').addEventListener('click', async () => {
   if (lc_rawFiles.length === 0) return;
@@ -324,8 +323,8 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
           const pdf = docs[fIdx];
           for (let pIdx = 1; pIdx <= pdf.numPages; pIdx++) {
               
-              // YIELD TO MAIN THREAD: This absolutely prevents the browser from hanging/freezing!
-              await new Promise(r => setTimeout(r, 5)); 
+              // YIELD TO MAIN THREAD: 0ms delay lets the browser draw the Progress Bar instantly without freezing!
+              if (completedPages % 5 === 0) await new Promise(r => setTimeout(r, 0)); 
 
               const page = await pdf.getPage(pIdx);
               const data = await lc_extract(page, currentPlatform);
@@ -397,7 +396,11 @@ async function lc_generatePdf() {
   for (let i = 0; i < sortedData.length; i++) {
       
       // YIELD TO MAIN THREAD: Prevents rendering phase from freezing PC
-      if (i % 5 === 0) await new Promise(r => setTimeout(r, 5));
+      if (i % 10 === 0) {
+          await new Promise(r => setTimeout(r, 0));
+          const genPercent = 10 + (i / sortedData.length) * 85;
+          updateProgress(genPercent, `Rendering PDF: ${Math.round(genPercent)}%`);
+      }
 
       const item = sortedData[i];
       const doc = srcDocs[item.fileIndex]; 
@@ -446,8 +449,16 @@ async function lc_generatePdf() {
           const xOff = margin + (sw - (embW*scale)) / 2; const yOff = margin + (sh - (embH*scale)) / 2; 
           p1.drawPage(embedded, { x: xOff, y: yOff, xScale: scale, yScale: scale });
           
-          if (currentPlatform === 'flipkart' && logo && item.fkPos) { 
-              p1.drawImage(logo, { x: xOff + ((item.fkPos.x - embBox.left + 125)*scale), y: yOff + ((item.fkPos.y - embBox.bottom - 2)*scale), width: 60*scale, height: 18*scale }); 
+          // ==========================================
+          // BRAND WATERMARK FALLBACK FIX
+          // ==========================================
+          if (currentPlatform === 'flipkart' && logo) { 
+              if (item.fkPos) {
+                  p1.drawImage(logo, { x: xOff + ((item.fkPos.x - embBox.left + 125)*scale), y: yOff + ((item.fkPos.y - embBox.bottom - 2)*scale), width: 60*scale, height: 18*scale }); 
+              } else {
+                  // If GSTIN line isn't found, safely place logo at the top right of the label box
+                  p1.drawImage(logo, { x: xOff + (embW - 140) * scale, y: yOff + (embH - 30) * scale, width: 60*scale, height: 18*scale });
+              }
           }
           if (currentPlatform === 'meesho' && logo && item.msPos) { 
               let lh = Math.min(26 * scale, item.msPos.h * scale * 0.90); 
@@ -472,12 +483,6 @@ async function lc_generatePdf() {
               const iScale = Math.min((invFw - margin*2) / invW, (invFh - margin*2) / invH); 
               p2.drawPage(embeddedInv, { x: margin + ((invFw - margin*2) - (invW*iScale)) / 2, y: margin + ((invFh - margin*2) - (invH*iScale)) / 2, xScale: iScale, yScale: iScale });
           }
-      }
-
-      // Update UI Progress for PDF Generation
-      if (i % 5 === 0) {
-          const genPercent = 10 + (i / sortedData.length) * 85;
-          updateProgress(genPercent, `Rendering PDF: ${Math.round(genPercent)}%`);
       }
   }
 
