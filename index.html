@@ -62,7 +62,6 @@
             <select id="appSelector" class="appearance-none bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-xs font-black uppercase tracking-widest rounded-xl py-3.5 pl-5 pr-12 outline-none shadow-sm dark:shadow-inner cursor-pointer focus:ring-2 focus:border-indigo-500 transition-all hover:bg-slate-200 dark:hover:bg-slate-800">
                 <option value="labelCutter">✂️ Thermal Label Cutter</option>
                 <option value="fkPnlCalculator">🔵 Flipkart Profit Engine</option>
-                <option value="settings">⚙️ Account Settings</option>
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-indigo-600 dark:text-indigo-400">
                 <svg class="fill-current h-5 w-5" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
@@ -75,11 +74,14 @@
         </button>
 
         <div id="userInfo" class="hidden flex items-center gap-4 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 p-2 pr-5 rounded-2xl shadow-sm dark:shadow-inner">
-           <img id="userAvatar" class="w-9 h-9 rounded-xl shadow-md" src="" alt="Profile">
-           <div class="flex flex-col text-left hidden sm:flex">
-               <span id="userName" class="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">Loading...</span>
-               <span id="userPlan" class="text-[9px] font-black uppercase text-emerald-600 dark:text-emerald-400 leading-tight tracking-wider mt-0.5">Checking Plan...</span>
-           </div>
+           <!-- Clickable Profile to open Settings -->
+           <button id="settingsToggleBtn" class="flex items-center gap-4 text-left transition-opacity hover:opacity-80 outline-none">
+               <img id="userAvatar" class="w-9 h-9 rounded-xl shadow-md border border-slate-300 dark:border-slate-700" src="" alt="Profile">
+               <div class="flex flex-col text-left hidden sm:flex">
+                   <span id="userName" class="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">Loading...</span>
+                   <span id="userPlan" class="text-[9px] font-black uppercase text-emerald-600 dark:text-emerald-400 leading-tight tracking-wider mt-0.5">Checking Plan...</span>
+               </div>
+           </button>
            <div class="h-6 w-[1px] bg-slate-300 dark:bg-slate-700 mx-2"></div>
            <button id="adminToggleBtn" class="hidden bg-indigo-600 hover:bg-indigo-700 dark:hover:bg-indigo-500 text-white font-black text-[10px] uppercase tracking-widest px-4 py-2 rounded-xl transition-colors shadow-md">Admin</button>
            <button id="logoutBtn" class="text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 font-black text-[10px] uppercase tracking-widest px-2 py-2 transition-colors">Logout</button>
@@ -131,6 +133,48 @@
         </div>
     </div>
 
+    <!-- SETTINGS WORKSPACE -->
+    <div id="settingsWorkspace" class="hidden animate-fade-in">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+            <!-- Plan Details -->
+            <div class="bg-white/90 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-xl p-8 border border-slate-200 dark:border-slate-700">
+                <div class="flex justify-between items-center mb-6 border-b border-slate-200 dark:border-slate-800 pb-4">
+                    <h3 class="text-lg font-black text-slate-900 dark:text-white uppercase tracking-widest">Account & Plan</h3>
+                    <button id="set_backBtn" class="bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-white px-4 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-colors">Back to App</button>
+                </div>
+                <div class="space-y-4">
+                    <div><span class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Name</span><p id="set_userName" class="text-lg font-black text-slate-900 dark:text-white"></p></div>
+                    <div><span class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Email</span><p id="set_userEmail" class="text-lg font-black text-slate-900 dark:text-white"></p></div>
+                    <div class="flex gap-4 pt-4">
+                        <div class="bg-slate-100 dark:bg-slate-800 p-4 rounded-2xl w-full border border-slate-200 dark:border-slate-700 shadow-sm dark:shadow-inner"><span class="block text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Active Plan</span><p id="set_planType" class="text-xl font-black text-emerald-600 dark:text-emerald-400"></p></div>
+                        <div class="bg-slate-100 dark:bg-slate-800 p-4 rounded-2xl w-full border border-slate-200 dark:border-slate-700 shadow-sm dark:shadow-inner"><span class="block text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Time Remaining</span><p id="set_daysLeft" class="text-xl font-black text-blue-600 dark:text-blue-400"></p></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Store Links Matcher -->
+            <div class="bg-white/90 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-xl p-8 border border-slate-200 dark:border-slate-700">
+                <h3 class="text-lg font-black text-slate-900 dark:text-white uppercase tracking-widest mb-6 border-b border-slate-200 dark:border-slate-800 pb-4">Meesho Store QR Mapping</h3>
+                <p class="text-xs text-slate-600 dark:text-slate-400 mb-6 font-medium leading-relaxed">Add your brand names and store links below. When generating a "4x6 with store link" label, the AI scans the label for your Store Name. If it matches, it automatically generates and prints the custom QR code at the bottom of the slip.</p>
+                
+                <div class="flex gap-3 mb-6">
+                    <input type="text" id="set_storeName" placeholder="Store Name (e.g. VIPUL)" class="w-1/3 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white px-4 py-3 rounded-xl text-sm outline-none focus:border-indigo-500 shadow-inner" />
+                    <input type="text" id="set_storeUrl" placeholder="Store URL (e.g. https://meesho.com/...)" class="w-2/3 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white px-4 py-3 rounded-xl text-sm outline-none focus:border-indigo-500 shadow-inner" />
+                    <button id="set_addStoreBtn" class="bg-indigo-600 hover:bg-indigo-700 dark:hover:bg-indigo-500 text-white font-black px-6 py-3 rounded-xl text-xs uppercase tracking-widest transition-colors shadow-md">Add</button>
+                </div>
+
+                <div class="max-h-[200px] overflow-y-auto rounded-xl border border-slate-200 dark:border-slate-700">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-100 dark:bg-slate-950 text-slate-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest sticky top-0 border-b border-slate-200 dark:border-slate-700">
+                            <tr><th class="py-3 px-4">Match Target</th><th class="py-3 px-4">QR URL Output</th><th class="py-3 px-4 text-center">Delete</th></tr>
+                        </thead>
+                        <tbody id="set_storeList" class="divide-y divide-slate-200 dark:divide-slate-800/50 text-slate-800 dark:text-slate-200 font-medium bg-white dark:bg-slate-900/50"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ADMIN PANEL -->
     <div id="adminPanel" class="hidden bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl rounded-3xl p-8 mb-10 border border-slate-200 dark:border-indigo-500/40 shadow-xl dark:shadow-[0_0_40px_rgba(79,70,229,0.2)]">
        <div class="flex justify-between items-center mb-6 border-b border-slate-200 dark:border-slate-700 pb-4">
@@ -142,43 +186,6 @@
              <tbody id="adminUserTableBody" class="divide-y divide-slate-200 dark:divide-slate-800/50"></tbody>
           </table>
        </div>
-    </div>
-
-    <!-- SETTINGS WORKSPACE -->
-    <div id="settingsWorkspace" class="hidden animate-fade-in">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-            <div class="bg-white/90 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-xl p-8 border border-slate-200 dark:border-slate-700">
-                <h3 class="text-lg font-black text-slate-900 dark:text-white uppercase tracking-widest mb-6 border-b border-slate-200 dark:border-slate-800 pb-4">Plan Details</h3>
-                <div class="space-y-4">
-                    <div><span class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Name</span><p id="set_userName" class="text-lg font-black text-slate-900 dark:text-white"></p></div>
-                    <div><span class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Email</span><p id="set_userEmail" class="text-lg font-black text-slate-900 dark:text-white"></p></div>
-                    <div class="flex gap-4 pt-4">
-                        <div class="bg-slate-100 dark:bg-slate-800 p-4 rounded-2xl w-full border border-slate-200 dark:border-slate-700"><span class="block text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Active Plan</span><p id="set_planType" class="text-xl font-black text-emerald-600 dark:text-emerald-400"></p></div>
-                        <div class="bg-slate-100 dark:bg-slate-800 p-4 rounded-2xl w-full border border-slate-200 dark:border-slate-700"><span class="block text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Time Remaining</span><p id="set_daysLeft" class="text-xl font-black text-blue-600 dark:text-blue-400"></p></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white/90 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-xl p-8 border border-slate-200 dark:border-slate-700">
-                <h3 class="text-lg font-black text-slate-900 dark:text-white uppercase tracking-widest mb-6 border-b border-slate-200 dark:border-slate-800 pb-4">Meesho QR Store Links</h3>
-                <p class="text-xs text-slate-600 dark:text-slate-400 mb-6 font-medium leading-relaxed">Add your brand names and store links below. When generating a 4x6 label for Meesho, if the "Sold By" name matches your entry, the AI will automatically generate and print your custom QR code.</p>
-                
-                <div class="flex gap-3 mb-6">
-                    <input type="text" id="set_storeName" placeholder="Store Name (e.g. VIPUL)" class="w-1/3 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white px-4 py-3 rounded-xl text-sm outline-none focus:border-indigo-500" />
-                    <input type="text" id="set_storeUrl" placeholder="Store URL (e.g. https://meesho.com/...)" class="w-2/3 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white px-4 py-3 rounded-xl text-sm outline-none focus:border-indigo-500" />
-                    <button id="set_addStoreBtn" class="bg-indigo-600 hover:bg-indigo-700 dark:hover:bg-indigo-500 text-white font-black px-6 py-3 rounded-xl text-xs uppercase tracking-widest transition-colors shadow-md">Add</button>
-                </div>
-
-                <div class="max-h-[200px] overflow-y-auto rounded-xl border border-slate-200 dark:border-slate-700">
-                    <table class="w-full text-left text-sm">
-                        <thead class="bg-slate-100 dark:bg-slate-950 text-slate-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest sticky top-0 border-b border-slate-200 dark:border-slate-700">
-                            <tr><th class="py-3 px-4">Store Name Match</th><th class="py-3 px-4">QR URL Target</th><th class="py-3 px-4 text-center">Delete</th></tr>
-                        </thead>
-                        <tbody id="set_storeList" class="divide-y divide-slate-200 dark:divide-slate-800/50 text-slate-800 dark:text-slate-200 font-medium"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- LABEL CUTTER -->
@@ -234,7 +241,7 @@
           </div>
         </div>
 
-        <div id="lc_results" class="hidden mb-10 p-8 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl rounded-3xl border border-emerald-400/50 dark:border-emerald-500/30 shadow-xl flex flex-col md:flex-row justify-between items-center gap-6">
+        <div id="lc_results" class="hidden mb-10 p-8 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl rounded-3xl border border-emerald-400 dark:border-emerald-500/30 shadow-xl flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="flex items-center gap-10">
               <div><span class="block text-[10px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-widest mb-1">Orders Parsed</span><span id="lc_metricTotal" class="text-5xl font-black text-slate-900 dark:text-white">0</span></div>
               <div class="h-16 w-[2px] bg-slate-200 dark:bg-slate-700 rounded-full"></div>
@@ -303,23 +310,23 @@
           </div>
           <div class="flex items-center gap-4 w-full sm:w-auto">
             <div class="relative w-full sm:w-56"><span class="absolute left-4 top-3.5 text-slate-500 font-black text-base">₹</span><input type="number" id="fk_lossInput" value="0" class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 pl-9 pr-4 py-3.5 rounded-xl font-black text-rose-600 dark:text-rose-400 outline-none focus:border-rose-500 shadow-inner text-lg" /></div>
-            <button id="fk_recalcBtn" class="bg-emerald-500 hover:bg-emerald-600 text-white font-black px-8 py-3.5 rounded-xl text-xs uppercase tracking-widest shadow-lg btn-hover transition-all">Update P&L</button>
+            <button id="fk_recalcBtn" class="bg-emerald-50 hover:bg-emerald-600 text-white font-black px-8 py-3.5 rounded-xl text-xs uppercase tracking-widest shadow-lg btn-hover transition-all">Update P&L</button>
           </div>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- Optimized Loader (Progress Bar for Extraction, Instant Yield for Generation) -->
+  <!-- Optimized Loader -->
   <div id="loader" class="hidden fixed bottom-10 left-1/2 transform -translate-x-1/2 z-[100] bg-white dark:bg-slate-900/95 backdrop-blur-2xl p-6 px-10 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-700 flex flex-col items-center gap-4 min-w-[340px] max-w-md">
     <div class="flex items-center justify-between w-full">
         <div class="flex items-center gap-3">
             <div class="inline-block animate-spin rounded-full h-5 w-5 border-[3px] border-slate-300 dark:border-slate-600 border-t-indigo-600 dark:border-t-indigo-500"></div>
             <p id="loaderText" class="text-xs font-black text-slate-800 dark:text-white tracking-widest uppercase">Processing...</p>
         </div>
-        <span id="loaderPercent" class="text-xs font-black text-indigo-600 dark:text-indigo-400"></span>
+        <span id="loaderPercent" class="text-xs font-black text-indigo-600 dark:text-indigo-400">0%</span>
     </div>
-    <div id="loaderBarContainer" class="hidden w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5 overflow-hidden p-0.5 border border-slate-200 dark:border-slate-700">
+    <div id="loaderBarContainer" class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5 overflow-hidden p-0.5 border border-slate-200 dark:border-slate-700">
         <div id="loaderProgressBar" class="bg-gradient-to-r from-indigo-500 to-blue-500 h-full rounded-full transition-all duration-150 ease-out" style="width: 0%"></div>
     </div>
   </div>
