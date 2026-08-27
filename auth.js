@@ -3,6 +3,7 @@ import { signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstati
 import { doc, getDoc, setDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const ADMIN_EMAIL = "vsshegur@gmail.com";
+
 window.appState = { userSkus: {}, isUnlocked: false, currentUser: null, currentApp: 'labelCutter' };
 
 document.getElementById('appSelector').addEventListener('change', (e) => {
@@ -11,11 +12,14 @@ document.getElementById('appSelector').addEventListener('change', (e) => {
     document.getElementById('authPanel').classList.add('hidden');
     document.getElementById('labelWorkspace').classList.add('hidden');
     document.getElementById('fkPnlWorkspace').classList.add('hidden');
-    document.getElementById('msPnlWorkspace').classList.add('hidden');
     
-    if (window.appState.currentApp === 'labelCutter') { document.getElementById('labelWorkspace').classList.remove('hidden'); window.dispatchEvent(new Event('appUnlocked')); } 
-    else if (window.appState.currentApp === 'fkPnlCalculator') { document.getElementById('fkPnlWorkspace').classList.remove('hidden'); } 
-    else if (window.appState.currentApp === 'msPnlCalculator') { document.getElementById('msPnlWorkspace').classList.remove('hidden'); }
+    if (window.appState.currentApp === 'labelCutter') { 
+        document.getElementById('labelWorkspace').classList.remove('hidden'); 
+        window.dispatchEvent(new Event('appUnlocked')); 
+    } 
+    else if (window.appState.currentApp === 'fkPnlCalculator') { 
+        document.getElementById('fkPnlWorkspace').classList.remove('hidden'); 
+    } 
 });
 
 document.getElementById('themeToggle').addEventListener('click', () => {
@@ -55,14 +59,14 @@ if(auth) {
         } else {
             window.appState.currentUser = null; window.appState.userSkus = {}; window.appState.isUnlocked = false;
             document.getElementById('authPanel').classList.remove('hidden'); document.getElementById('authWarning').classList.remove('hidden'); document.getElementById('authFeatures').classList.remove('hidden'); 
-            document.getElementById('expiredWarning').classList.add('hidden'); document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); document.getElementById('msPnlWorkspace').classList.add('hidden');
+            document.getElementById('expiredWarning').classList.add('hidden'); document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden');
             document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.add('hidden'); document.getElementById('userInfo').classList.add('hidden');
             document.getElementById('googleSignInBtn').innerHTML = `Secure Login`;
         }
     });
 
     document.getElementById('googleSignInBtn').addEventListener('click', () => { 
-        document.getElementById('googleSignInBtn').innerHTML = `Connecting...`;
+        document.getElementById('googleSignInBtn').innerHTML = `<svg class="animate-spin h-5 w-5 mr-3 text-indigo-500" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Connecting...`;
         signInWithPopup(auth, provider).catch(e => {
             alert("⚠️ LOGIN FAILED: \n\n" + e.message + "\n\nMake sure 'madhvishegur.vercel.app' is added to Authorized Domains in your Firebase Authentication Settings.");
             document.getElementById('googleSignInBtn').innerHTML = `Secure Login`;
@@ -74,13 +78,12 @@ if(auth) {
 
 document.getElementById('adminToggleBtn').addEventListener('click', async () => {
     if (document.getElementById('adminPanel').classList.contains('hidden')) {
-        document.getElementById('authPanel').classList.add('hidden'); document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); document.getElementById('msPnlWorkspace').classList.add('hidden');
+        document.getElementById('authPanel').classList.add('hidden'); document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden');
         document.getElementById('adminPanel').classList.remove('hidden'); document.getElementById('adminToggleBtn').textContent = "Back to App"; await loadAdminUsers();
     } else {
         document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('adminToggleBtn').textContent = "Admin Panel";
         if(window.appState.currentApp === 'labelCutter') document.getElementById('labelWorkspace').classList.remove('hidden'); 
         else if (window.appState.currentApp === 'fkPnlCalculator') document.getElementById('fkPnlWorkspace').classList.remove('hidden');
-        else document.getElementById('msPnlWorkspace').classList.remove('hidden');
     }
 });
 
