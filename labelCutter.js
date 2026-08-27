@@ -1,4 +1,5 @@
 import { db } from './firebase-config.js';
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 let lc_rawFiles = []; 
 let lc_parsedData = []; 
@@ -8,6 +9,7 @@ const DEFAULT_BRAND_LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAA
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
+// Visual Progress Updater
 function updateProgress(percent, statusText) {
     const pBar = document.getElementById('loaderProgressBar');
     const pText = document.getElementById('loaderPercent');
@@ -292,7 +294,9 @@ function lc_readFile(file) {
     }); 
 }
 
-// Optimized Parallel Extraction
+// =========================================================================
+// OPTIMIZED SEQUENTIAL EXTRACTION ENGINE (Safe for older i3 Processors)
+// =========================================================================
 document.getElementById('lc_processBtn').addEventListener('click', async () => {
   if (lc_rawFiles.length === 0) return;
   try {
@@ -305,6 +309,7 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
       const docs = [];
       let totalPages = 0;
 
+      // Load documents into memory
       for (let i = 0; i < lc_rawFiles.length; i++) {
           const buf = await lc_readFile(lc_rawFiles[i].file);
           const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
@@ -313,30 +318,29 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
       }
 
       let completedPages = 0;
-      const CHUNK_SIZE = 8; // Process 8 pages in parallel for speed
 
+      // Loop Sequentially ONE PAGE AT A TIME to save RAM
       for (let fIdx = 0; fIdx < docs.length; fIdx++) {
           const pdf = docs[fIdx];
-          const pageIndices = Array.from({ length: pdf.numPages }, (_, i) => i + 1);
+          for (let pIdx = 1; pIdx <= pdf.numPages; pIdx++) {
+              
+              // YIELD TO MAIN THREAD: This absolutely prevents the browser from hanging/freezing!
+              await new Promise(r => setTimeout(r, 5)); 
 
-          for (let c = 0; c < pageIndices.length; c += CHUNK_SIZE) {
-              const chunk = pageIndices.slice(c, c + CHUNK_SIZE);
-              const chunkResults = await Promise.all(chunk.map(async (pIdx) => {
-                  const page = await pdf.getPage(pIdx);
-                  const data = await lc_extract(page, currentPlatform);
-                  return {
-                      fileIndex: fIdx, pageIndex: pIdx - 1,
-                      w: data.pdfW, h: data.pdfH, splitY: data.splitY,
-                      lBox: data.lBox, iBox: data.iBox, fullBox: data.fullBox,
-                      fkPos: data.fkGstin, msPos: data.msGap,
-                      sku: data.sku, qty: data.qty, courier: data.courier, soldBy: data.soldBy
-                  };
-              }));
+              const page = await pdf.getPage(pIdx);
+              const data = await lc_extract(page, currentPlatform);
+              
+              lc_parsedData.push({
+                  fileIndex: fIdx, pageIndex: pIdx - 1,
+                  w: data.pdfW, h: data.pdfH, splitY: data.splitY,
+                  lBox: data.lBox, iBox: data.iBox, fullBox: data.fullBox,
+                  fkPos: data.fkGstin, msPos: data.msGap,
+                  sku: data.sku, qty: data.qty, courier: data.courier, soldBy: data.soldBy
+              });
 
-              lc_parsedData.push(...chunkResults);
-              completedPages += chunk.length;
+              completedPages++;
               const percent = (completedPages / totalPages) * 100;
-              updateProgress(percent, `Processing: ${Math.round(percent)}% (Page ${completedPages} of ${totalPages})`);
+              updateProgress(percent, `Extracting: ${Math.round(percent)}% (Page ${completedPages} of ${totalPages})`);
           }
       }
 
@@ -391,6 +395,10 @@ async function lc_generatePdf() {
   const sortedData = [...lc_parsedData.filter(i => !isMulti(i)).sort(sortFn), ...lc_parsedData.filter(i => isMulti(i)).sort(sortFn)];
 
   for (let i = 0; i < sortedData.length; i++) {
+      
+      // YIELD TO MAIN THREAD: Prevents rendering phase from freezing PC
+      if (i % 5 === 0) await new Promise(r => setTimeout(r, 5));
+
       const item = sortedData[i];
       const doc = srcDocs[item.fileIndex]; 
       const srcPage = doc.getPage(item.pageIndex);
@@ -466,7 +474,8 @@ async function lc_generatePdf() {
           }
       }
 
-      if (i % 10 === 0) {
+      // Update UI Progress for PDF Generation
+      if (i % 5 === 0) {
           const genPercent = 10 + (i / sortedData.length) * 85;
           updateProgress(genPercent, `Rendering PDF: ${Math.round(genPercent)}%`);
       }
