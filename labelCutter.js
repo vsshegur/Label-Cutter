@@ -9,7 +9,6 @@ const DEFAULT_BRAND_LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAA
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-// Visual Progress Updater
 function updateProgress(percent, statusText) {
     const pBar = document.getElementById('loaderProgressBar');
     const pText = document.getElementById('loaderPercent');
@@ -294,9 +293,6 @@ function lc_readFile(file) {
     }); 
 }
 
-// =========================================================================
-// FAST EXTRACTION ENGINE WITH MICRO-BATCHING (Safe for i3 Processors)
-// =========================================================================
 document.getElementById('lc_processBtn').addEventListener('click', async () => {
   if (lc_rawFiles.length === 0) return;
   try {
@@ -309,8 +305,10 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
       const docs = [];
       let totalPages = 0;
 
-      // Load sequentially
+      // Sequential Load to save RAM on i3
       for (let i = 0; i < lc_rawFiles.length; i++) {
+          updateProgress(10 + (i / lc_rawFiles.length) * 10, `Loading File ${i + 1}/${lc_rawFiles.length} into Memory...`);
+          await new Promise(r => setTimeout(r, 10)); // Yield
           const buf = await lc_readFile(lc_rawFiles[i].file);
           const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
           docs.push(pdf);
@@ -319,11 +317,11 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
 
       let completedPages = 0;
 
+      // Micro-Batching to prevent CPU hang
       for (let fIdx = 0; fIdx < docs.length; fIdx++) {
           const pdf = docs[fIdx];
           for (let pIdx = 1; pIdx <= pdf.numPages; pIdx++) {
               
-              // THE SPEED FIX: Process 12 pages instantly, then pause for 0ms to draw the progress bar.
               if (completedPages % 12 === 0 || completedPages === totalPages) {
                   const percent = (completedPages / totalPages) * 100;
                   updateProgress(percent, `Extracting: ${Math.round(percent)}% (Page ${completedPages} of ${totalPages})`);
@@ -340,7 +338,6 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
                   fkPos: data.fkGstin, msPos: data.msGap,
                   sku: data.sku, qty: data.qty, courier: data.courier, soldBy: data.soldBy
               });
-
               completedPages++;
           }
       }
@@ -373,9 +370,17 @@ async function lc_generatePdf() {
   const margin = 1 * 2.83465;
   
   document.getElementById('loader').classList.remove('hidden');
-  updateProgress(10, "Compiling Thermal Layout...");
+  updateProgress(5, "Initializing Compiler...");
 
-  const srcDocs = await Promise.all(lc_rawFiles.map(async f => await PDFDocument.load(await lc_readFile(f.file))));
+  // Load sequentially to prevent memory crash during generation
+  const srcDocs = [];
+  for (let i = 0; i < lc_rawFiles.length; i++) {
+      updateProgress(5 + (i / lc_rawFiles.length) * 5, `Compiling Engine: ${i + 1}/${lc_rawFiles.length}...`);
+      await new Promise(r => setTimeout(r, 0));
+      const buf = await lc_readFile(lc_rawFiles[i].file);
+      const doc = await PDFDocument.load(buf);
+      srcDocs.push(doc);
+  }
   
   let logo = null;
   try { 
@@ -397,8 +402,8 @@ async function lc_generatePdf() {
 
   for (let i = 0; i < sortedData.length; i++) {
       
-      // Update UI Progress for PDF Generation smoothly
-      if (i % 15 === 0 || i === sortedData.length - 1) {
+      // Micro-Yield to prevent UI Freeze
+      if (i % 10 === 0 || i === sortedData.length - 1) {
           const genPercent = 10 + ((i + 1) / sortedData.length) * 85;
           updateProgress(genPercent, `Rendering PDF: ${Math.round(genPercent)}%`);
           await new Promise(r => setTimeout(r, 0));
@@ -451,9 +456,6 @@ async function lc_generatePdf() {
           const xOff = margin + (sw - (embW*scale)) / 2; const yOff = margin + (sh - (embH*scale)) / 2; 
           p1.drawPage(embedded, { x: xOff, y: yOff, xScale: scale, yScale: scale });
           
-          // ==========================================
-          // BRAND WATERMARK FALLBACK FIX
-          // ==========================================
           if (currentPlatform === 'flipkart' && logo) { 
               if (item.fkPos) {
                   p1.drawImage(logo, { x: xOff + ((item.fkPos.x - embBox.left + 125)*scale), y: yOff + ((item.fkPos.y - embBox.bottom - 2)*scale), width: 60*scale, height: 18*scale }); 
@@ -488,6 +490,9 @@ async function lc_generatePdf() {
   }
 
   if (incSum) {
+    updateProgress(96, "Generating Master Packing Slips...");
+    await new Promise(r => setTimeout(r, 0));
+
     let sp = outDoc.addPage([216, 360]); let y = 345; const skus = {}; const couriers = {}; const sellers = {};
     lc_parsedData.forEach(item => {
         if (!couriers[item.courier]) { couriers[item.courier] = 0; } couriers[item.courier] += 1;
@@ -537,7 +542,9 @@ async function lc_generatePdf() {
     });
   }
 
-  updateProgress(98, "Saving Document...");
+  updateProgress(98, "Finalizing Document (This may take a moment)...");
+  await new Promise(r => setTimeout(r, 10)); // Yield before the heavy save operation
+  
   const pdfBytes = await outDoc.save(); 
   
   if(window.appState.currentUser && db) {
