@@ -362,7 +362,7 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
   }
 });
 
-// Instant Generation without PC hanging
+// Generation Phase (Memory Safe for i3 Processor)
 async function lc_generatePdf() {
   const { PDFDocument, rgb, StandardFonts } = PDFLib; 
   const outDoc = await PDFDocument.create(); 
@@ -377,31 +377,31 @@ async function lc_generatePdf() {
   const incSum = document.getElementById('lc_includeSummary').checked; 
   const margin = 1 * 2.83465;
   
-  showSimpleSpinner("Compiling PDF Engine (Please wait...)");
+  showSimpleSpinner("Compiling PDF Engine...");
   await new Promise(r => setTimeout(r, 50)); 
 
-  // Memory-Safe Sequential Loading (Stops i3 crashing)
+  // Sequential loading to prevent RAM spikes on old hardware
   const srcDocs = [];
   for (let i = 0; i < lc_rawFiles.length; i++) {
-      if (i % 2 === 0) await new Promise(r => setTimeout(r, 0)); // Micro-yield to keep UI alive
+      if (i % 2 === 0) await new Promise(r => setTimeout(r, 0)); 
       const buf = await lc_readFile(lc_rawFiles[i].file);
       const doc = await PDFDocument.load(buf);
       srcDocs.push(doc);
   }
   
   let logo = null;
-  try { 
-      // Bulletproof Logo Watermark fetch
-      if (lc_customLogoBase64) { 
-          const res = await fetch(lc_customLogoBase64);
-          const imgBytes = await res.arrayBuffer(); 
+  if (lc_customLogoBase64) {
+      try { 
+          // Parse Logo Safely
+          const base64Data = lc_customLogoBase64.split(',')[1];
+          const imgBytes = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
           if (lc_customLogoBase64.includes('jpeg') || lc_customLogoBase64.includes('jpg')) {
               logo = await outDoc.embedJpg(imgBytes);
           } else {
               logo = await outDoc.embedPng(imgBytes); 
           }
-      } 
-  } catch(e) { console.error("Logo fetch bypassed", e); }
+      } catch(e) { console.error("Logo fetch bypassed", e); }
+  }
 
   const isMulti = item => (item.qty > 1 || (item.sku && item.sku.includes('+'))); 
   const sortFn = (a, b) => { 
@@ -412,9 +412,8 @@ async function lc_generatePdf() {
   const sortedData = [...lc_parsedData.filter(i => !isMulti(i)).sort(sortFn), ...lc_parsedData.filter(i => isMulti(i)).sort(sortFn)];
 
   for (let i = 0; i < sortedData.length; i++) {
-      
-      // Micro-Yield to prevent UI Freeze during generation
-      if (i % 25 === 0) await new Promise(r => setTimeout(r, 0));
+      // Small yield to keep browser alive
+      if (i % 50 === 0) await new Promise(r => setTimeout(r, 0));
 
       const item = sortedData[i];
       const doc = srcDocs[item.fileIndex]; 
@@ -439,16 +438,24 @@ async function lc_generatePdf() {
           p.drawPage(embedded, { x: margin + (printableW - (eW*scale)) / 2, y: margin + bannerH + margin + (contentH - (eH*scale)) / 2, xScale: scale, yScale: scale });
           p.drawRectangle({ x: margin, y: margin, width: printableW, height: bannerH, color: rgb(0.97, 0.97, 0.97), borderColor: rgb(0.8, 0.8, 0.8), borderWidth: 1 });
           
-          let storeUrl = /VIPUL/i.test(item.soldBy) ? "https://www.meesho.com/vipultextiless" : "https://www.meesho.com/shegursvijayalaxmitextiles";
-          try { 
-              const qrDataUrl = await QRCode.toDataURL(storeUrl, { width: 150, margin: 1 }); 
-              const qrImage = await outDoc.embedPng(Uint8Array.from(atob(qrDataUrl.split(',')[1]), c => c.charCodeAt(0))); 
-              p.drawImage(qrImage, { x: margin + 12, y: margin + (bannerH - 75) / 2, width: 75, height: 75 }); 
-              const textX = margin + 12 + 75 + 15; 
-              p.drawText("Visit Store", { x: textX, y: margin + bannerH - 28, size: 11, font, color: rgb(0.1, 0.1, 0.1) }); 
-              p.drawText("Scan QR to open brand store.", { x: textX, y: margin + bannerH - 44, size: 8.5, font: fontReg, color: rgb(0.3, 0.3, 0.3) }); 
-              p.drawText(storeUrl, { x: textX, y: margin + bannerH - 60, size: 7, font: fontReg, color: rgb(0.4, 0.4, 0.4) }); 
-          } catch (e) {}
+          let storeUrl = "";
+          if (window.appState && window.appState.storeLinks) {
+              const matchedStore = window.appState.storeLinks.find(s => new RegExp(s.name, 'i').test(item.soldBy));
+              if (matchedStore) storeUrl = matchedStore.url;
+          }
+          
+          if (storeUrl) {
+              try { 
+                  const qrDataUrl = await QRCode.toDataURL(storeUrl, { width: 150, margin: 1 }); 
+                  const qrBytes = Uint8Array.from(atob(qrDataUrl.split(',')[1]), c => c.charCodeAt(0));
+                  const qrImage = await outDoc.embedPng(qrBytes); 
+                  p.drawImage(qrImage, { x: margin + 12, y: margin + (bannerH - 75) / 2, width: 75, height: 75 }); 
+                  const textX = margin + 12 + 75 + 15; 
+                  p.drawText("Visit Store", { x: textX, y: margin + bannerH - 28, size: 11, font, color: rgb(0.1, 0.1, 0.1) }); 
+                  p.drawText("Scan QR to open brand store.", { x: textX, y: margin + bannerH - 44, size: 8.5, font: fontReg, color: rgb(0.3, 0.3, 0.3) }); 
+                  p.drawText(storeUrl, { x: textX, y: margin + bannerH - 60, size: 7, font: fontReg, color: rgb(0.4, 0.4, 0.4) }); 
+              } catch (e) { console.error("QR Code Error:", e); }
+          }
       } else {
           const is4x6Standard = formatSelection.includes('4x6'); 
           const embBox = { left: item.lBox.left, bottom: item.lBox.bottom, right: item.lBox.right, top: item.lBox.top }; 
@@ -546,7 +553,8 @@ async function lc_generatePdf() {
     });
   }
 
-  await new Promise(r => setTimeout(r, 10)); // Yield before the heavy save operation
+  showSimpleSpinner("Finalizing PDF...");
+  await new Promise(r => setTimeout(r, 50)); 
   
   const pdfBytes = await outDoc.save(); 
   
