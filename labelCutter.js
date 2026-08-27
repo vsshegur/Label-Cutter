@@ -9,6 +9,7 @@ const DEFAULT_BRAND_LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAA
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
+// Visual Progress Updater
 function updateProgress(percent, statusText) {
     const pBar = document.getElementById('loaderProgressBar');
     const pText = document.getElementById('loaderPercent');
@@ -294,7 +295,7 @@ function lc_readFile(file) {
 }
 
 // =========================================================================
-// FAST EXTRACTION ENGINE WITH ZERO-DELAY YIELDING (Safe for i3 Processors)
+// FAST EXTRACTION ENGINE WITH MICRO-BATCHING (Safe for i3 Processors)
 // =========================================================================
 document.getElementById('lc_processBtn').addEventListener('click', async () => {
   if (lc_rawFiles.length === 0) return;
@@ -308,7 +309,7 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
       const docs = [];
       let totalPages = 0;
 
-      // Load documents into memory
+      // Load sequentially
       for (let i = 0; i < lc_rawFiles.length; i++) {
           const buf = await lc_readFile(lc_rawFiles[i].file);
           const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
@@ -318,13 +319,16 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
 
       let completedPages = 0;
 
-      // Loop Sequentially ONE PAGE AT A TIME to save RAM
       for (let fIdx = 0; fIdx < docs.length; fIdx++) {
           const pdf = docs[fIdx];
           for (let pIdx = 1; pIdx <= pdf.numPages; pIdx++) {
               
-              // YIELD TO MAIN THREAD: 0ms delay lets the browser draw the Progress Bar instantly without freezing!
-              if (completedPages % 5 === 0) await new Promise(r => setTimeout(r, 0)); 
+              // THE SPEED FIX: Process 12 pages instantly, then pause for 0ms to draw the progress bar.
+              if (completedPages % 12 === 0 || completedPages === totalPages) {
+                  const percent = (completedPages / totalPages) * 100;
+                  updateProgress(percent, `Extracting: ${Math.round(percent)}% (Page ${completedPages} of ${totalPages})`);
+                  await new Promise(r => setTimeout(r, 0)); 
+              }
 
               const page = await pdf.getPage(pIdx);
               const data = await lc_extract(page, currentPlatform);
@@ -338,8 +342,6 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
               });
 
               completedPages++;
-              const percent = (completedPages / totalPages) * 100;
-              updateProgress(percent, `Extracting: ${Math.round(percent)}% (Page ${completedPages} of ${totalPages})`);
           }
       }
 
@@ -395,11 +397,11 @@ async function lc_generatePdf() {
 
   for (let i = 0; i < sortedData.length; i++) {
       
-      // YIELD TO MAIN THREAD: Prevents rendering phase from freezing PC
-      if (i % 10 === 0) {
-          await new Promise(r => setTimeout(r, 0));
-          const genPercent = 10 + (i / sortedData.length) * 85;
+      // Update UI Progress for PDF Generation smoothly
+      if (i % 15 === 0 || i === sortedData.length - 1) {
+          const genPercent = 10 + ((i + 1) / sortedData.length) * 85;
           updateProgress(genPercent, `Rendering PDF: ${Math.round(genPercent)}%`);
+          await new Promise(r => setTimeout(r, 0));
       }
 
       const item = sortedData[i];
@@ -456,7 +458,6 @@ async function lc_generatePdf() {
               if (item.fkPos) {
                   p1.drawImage(logo, { x: xOff + ((item.fkPos.x - embBox.left + 125)*scale), y: yOff + ((item.fkPos.y - embBox.bottom - 2)*scale), width: 60*scale, height: 18*scale }); 
               } else {
-                  // If GSTIN line isn't found, safely place logo at the top right of the label box
                   p1.drawImage(logo, { x: xOff + (embW - 140) * scale, y: yOff + (embH - 30) * scale, width: 60*scale, height: 18*scale });
               }
           }
