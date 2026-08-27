@@ -301,6 +301,7 @@ function lc_readFile(file) {
     }); 
 }
 
+// Extraction Phase (Yields cleanly to not freeze)
 document.getElementById('lc_processBtn').addEventListener('click', async () => {
   if (lc_rawFiles.length === 0) return;
   try {
@@ -361,7 +362,7 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
   }
 });
 
-// Instant Generation without Progress Yielding Loop
+// INSTANT Generation Phase (No loops or yielding to stall the i3)
 async function lc_generatePdf() {
   const { PDFDocument, rgb, StandardFonts } = PDFLib; 
   const outDoc = await PDFDocument.create(); 
@@ -377,9 +378,16 @@ async function lc_generatePdf() {
   const margin = 1 * 2.83465;
   
   showSimpleSpinner("Compiling PDF Engine (Please wait...)");
-  await new Promise(r => setTimeout(r, 50)); // One single yield to paint the loading spinner
+  await new Promise(r => setTimeout(r, 50)); 
 
-  const srcDocs = await Promise.all(lc_rawFiles.map(async f => await PDFDocument.load(await lc_readFile(f.file))));
+  // Sequential loading to prevent RAM spikes on old hardware
+  const srcDocs = [];
+  for (let i = 0; i < lc_rawFiles.length; i++) {
+      if (i % 2 === 0) await new Promise(r => setTimeout(r, 0));
+      const buf = await lc_readFile(lc_rawFiles[i].file);
+      const doc = await PDFDocument.load(buf);
+      srcDocs.push(doc);
+  }
   
   let logo = null;
   try { 
@@ -399,8 +407,10 @@ async function lc_generatePdf() {
   };
   const sortedData = [...lc_parsedData.filter(i => !isMulti(i)).sort(sortFn), ...lc_parsedData.filter(i => isMulti(i)).sort(sortFn)];
 
-  // Fast loop, no interruptions
+  // Fast loop, no heavy interruptions
   for (let i = 0; i < sortedData.length; i++) {
+      if (i % 25 === 0) await new Promise(r => setTimeout(r, 0));
+
       const item = sortedData[i];
       const doc = srcDocs[item.fileIndex]; 
       const srcPage = doc.getPage(item.pageIndex);
@@ -531,6 +541,8 @@ async function lc_generatePdf() {
     });
   }
 
+  await new Promise(r => setTimeout(r, 10)); // Yield before the save operation
+  
   const pdfBytes = await outDoc.save(); 
   
   if(window.appState.currentUser && db) {
