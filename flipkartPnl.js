@@ -36,15 +36,16 @@ function fk_renderTable() {
   const tbody = document.getElementById('fk_skuTableBody'); tbody.innerHTML = '';
   fk_rawSkuData.sort((a, b) => { if (a.costOfProduct === 0 && b.costOfProduct !== 0) return -1; if (a.costOfProduct !== 0 && b.costOfProduct === 0) return 1; return b.bankSettlement - a.bankSettlement; });
   fk_rawSkuData.forEach((item, index) => {
-    const tr = document.createElement('tr'); const isMissing = item.costOfProduct === 0; tr.className = `border-b border-slate-800/50 ${isMissing ? 'bg-orange-500/10' : 'hover:bg-slate-800/30'} transition-colors`;
-    tr.innerHTML = `<td class="py-4 px-6 text-slate-500">${index + 1}</td><td class="py-4 px-6 font-bold ${isMissing ? 'text-orange-400' : 'text-slate-200'}">${item.skuId}</td><td class="py-4 px-6 text-right">${item.netUnits}</td><td class="py-4 px-6 text-right text-blue-400">₹${item.bankSettlement.toFixed(2)}</td><td class="py-4 px-6 text-center"><input type="number" step="0.01" value="${item.costOfProduct || ''}" placeholder="0.00" class="fk-cost-input w-24 bg-slate-900 border ${isMissing ? 'border-orange-500' : 'border-slate-600'} text-white px-3 py-2 rounded-xl text-center outline-none focus:border-indigo-500 transition-colors shadow-inner" data-index="${index}" /></td><td id="fk_pUnit_${index}" class="py-4 px-6 text-right font-bold text-slate-300">₹0.00</td><td id="fk_tProf_${index}" class="py-4 px-6 text-right font-bold text-slate-300">₹0.00</td>`;
+    const tr = document.createElement('tr'); const isMissing = item.costOfProduct === 0; 
+    tr.className = `border-b border-slate-200 dark:border-slate-800/50 ${isMissing ? 'bg-orange-50 dark:bg-orange-500/10' : 'hover:bg-slate-50 dark:hover:bg-slate-800/30'} transition-colors`;
+    tr.innerHTML = `<td class="py-4 px-6 text-slate-500">${index + 1}</td><td class="py-4 px-6 font-bold ${isMissing ? 'text-orange-600 dark:text-orange-400' : 'text-slate-800 dark:text-slate-200'}">${item.skuId}</td><td class="py-4 px-6 text-right text-slate-900 dark:text-white">${item.netUnits}</td><td class="py-4 px-6 text-right text-blue-600 dark:text-blue-400">₹${item.bankSettlement.toFixed(2)}</td><td class="py-4 px-6 text-center"><input type="number" step="0.01" value="${item.costOfProduct || ''}" placeholder="0.00" class="fk-cost-input w-24 bg-white dark:bg-slate-900 border ${isMissing ? 'border-orange-400 dark:border-orange-500' : 'border-slate-300 dark:border-slate-600'} text-slate-900 dark:text-white px-3 py-2 rounded-xl text-center outline-none focus:border-indigo-500 transition-colors shadow-inner" data-index="${index}" /></td><td id="fk_pUnit_${index}" class="py-4 px-6 text-right font-bold">₹0.00</td><td id="fk_tProf_${index}" class="py-4 px-6 text-right font-bold">₹0.00</td>`;
     tbody.appendChild(tr);
   });
   document.querySelectorAll('.fk-cost-input').forEach(input => {
     let tid; input.addEventListener('input', (e) => {
       const idx = parseInt(e.target.getAttribute('data-index')); const nCost = parseFloat(e.target.value) || 0; fk_rawSkuData[idx].costOfProduct = nCost;
       const tr = e.target.closest('tr'); const sc = tr.querySelector('td:nth-child(2)');
-      if(nCost === 0 || isNaN(nCost)) { tr.classList.add('bg-orange-500/10'); sc.classList.add('text-orange-400'); sc.classList.remove('text-slate-200'); e.target.classList.add('border-orange-500'); e.target.classList.remove('border-slate-600'); } else { tr.classList.remove('bg-orange-500/10'); sc.classList.remove('text-orange-400'); sc.classList.add('text-slate-200'); e.target.classList.remove('border-orange-500'); e.target.classList.add('border-slate-600'); }
+      if(nCost === 0 || isNaN(nCost)) { tr.classList.add('bg-orange-50', 'dark:bg-orange-500/10'); sc.classList.add('text-orange-600', 'dark:text-orange-400'); sc.classList.remove('text-slate-800', 'dark:text-slate-200'); e.target.classList.add('border-orange-400', 'dark:border-orange-500'); e.target.classList.remove('border-slate-300', 'dark:border-slate-600'); } else { tr.classList.remove('bg-orange-50', 'dark:bg-orange-500/10'); sc.classList.remove('text-orange-600', 'dark:text-orange-400'); sc.classList.add('text-slate-800', 'dark:text-slate-200'); e.target.classList.remove('border-orange-400', 'dark:border-orange-500'); e.target.classList.add('border-slate-300', 'dark:border-slate-600'); }
       fk_updateCalculations(); clearTimeout(tid); tid = setTimeout(() => { window.appState.userSkus[fk_rawSkuData[idx].skuId] = nCost; if(window.appState.currentUser && db) setDoc(doc(db, 'users', window.appState.currentUser.uid, 'skus', 'memory'), { [fk_rawSkuData[idx].skuId]: nCost }, { merge: true }); }, 1000);
     });
   });
@@ -55,7 +56,7 @@ function fk_applyBulkCost() {
   fk_rawSkuData.forEach((item, index) => { 
       if(item.costOfProduct === 0 || isNaN(item.costOfProduct)) {
           item.costOfProduct = val; bulkUpdates[item.skuId] = val; const inputEl = document.querySelector(`.fk-cost-input[data-index="${index}"]`);
-          if(inputEl) { inputEl.value = val; inputEl.classList.remove('border-orange-500'); inputEl.classList.add('border-slate-600'); const tr = inputEl.closest('tr'); tr.classList.remove('bg-orange-500/10'); tr.querySelector('td:nth-child(2)').classList.remove('text-orange-400'); tr.querySelector('td:nth-child(2)').classList.add('text-slate-200'); }
+          if(inputEl) { inputEl.value = val; inputEl.classList.remove('border-orange-400', 'dark:border-orange-500'); inputEl.classList.add('border-slate-300', 'dark:border-slate-600'); const tr = inputEl.closest('tr'); tr.classList.remove('bg-orange-50', 'dark:bg-orange-500/10'); tr.querySelector('td:nth-child(2)').classList.remove('text-orange-600', 'dark:text-orange-400'); tr.querySelector('td:nth-child(2)').classList.add('text-slate-800', 'dark:text-slate-200'); }
       }
   });
   fk_updateCalculations(); Object.assign(window.appState.userSkus, bulkUpdates); if(window.appState.currentUser && db) setDoc(doc(db, 'users', window.appState.currentUser.uid, 'skus', 'memory'), bulkUpdates, { merge: true });
@@ -65,13 +66,13 @@ function fk_updateCalculations() {
   let tU = 0; let tS = 0; let tG = 0;
   fk_rawSkuData.forEach((item, index) => {
     const pU = document.getElementById(`fk_pUnit_${index}`); const tP = document.getElementById(`fk_tProf_${index}`);
-    if (item.costOfProduct === 0 || isNaN(item.costOfProduct)) { if (pU && tP) { pU.innerHTML = `<span class="text-[10px] text-orange-400 font-black uppercase">Missing Cost</span>`; tP.innerHTML = `<span class="text-[10px] text-orange-400 font-black uppercase">Excluded</span>`; } return; }
+    if (item.costOfProduct === 0 || isNaN(item.costOfProduct)) { if (pU && tP) { pU.innerHTML = `<span class="text-[10px] text-orange-600 dark:text-orange-400 font-black uppercase">Missing Cost</span>`; tP.innerHTML = `<span class="text-[10px] text-orange-600 dark:text-orange-400 font-black uppercase">Excluded</span>`; } return; }
     tU += item.netUnits; tS += item.bankSettlement;
     const prof = (item.netUnits > 0 ? (item.bankSettlement / item.netUnits) : 0) - item.costOfProduct; const tProf = prof * item.netUnits; tG += tProf;
-    if (pU && tP) { pU.textContent = `₹${prof.toFixed(2)}`; pU.className = `py-4 px-6 text-right font-black ${prof >= 0 ? 'text-emerald-400' : 'text-rose-400'}`; tP.textContent = `₹${tProf.toFixed(2)}`; tP.className = `py-4 px-6 text-right font-black ${tProf >= 0 ? 'text-emerald-400' : 'text-rose-400'}`; }
+    if (pU && tP) { pU.textContent = `₹${prof.toFixed(2)}`; pU.className = `py-4 px-6 text-right font-black ${prof >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`; tP.textContent = `₹${tProf.toFixed(2)}`; tP.className = `py-4 px-6 text-right font-black ${tProf >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`; }
   });
   const fnP = tG - (parseFloat(document.getElementById('fk_lossInput').value) || 0);
   document.getElementById('fk_kpiUnits').textContent = tU.toLocaleString(); document.getElementById('fk_kpiSettlement').textContent = `₹${tS.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-  document.getElementById('fk_kpiGross').textContent = `₹${tG.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; document.getElementById('fk_kpiGross').className = `text-4xl font-black mt-2 ${tG >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
-  document.getElementById('fk_kpiNet').textContent = `₹${fnP.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; document.getElementById('fk_kpiNet').className = `text-4xl font-black mt-2 ${fnP >= 0 ? 'text-emerald-300' : 'text-rose-400'}`;
+  document.getElementById('fk_kpiGross').textContent = `₹${tG.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; document.getElementById('fk_kpiGross').className = `text-4xl font-black mt-2 ${tG >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`;
+  document.getElementById('fk_kpiNet').textContent = `₹${fnP.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; document.getElementById('fk_kpiNet').className = `text-4xl font-black mt-2 ${fnP >= 0 ? 'text-emerald-600 dark:text-emerald-300' : 'text-rose-600 dark:text-rose-400'}`;
 }
