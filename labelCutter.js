@@ -18,6 +18,14 @@ function updateProgress(percent, statusText) {
     if (lText && statusText) lText.textContent = statusText;
 }
 
+function showSimpleSpinner(text) {
+    document.getElementById('loaderProgressBar').style.width = '100%';
+    document.getElementById('loaderPercent').textContent = '';
+    document.getElementById('loaderText').textContent = text;
+    document.getElementById('loaderBarContainer').classList.add('hidden');
+    document.getElementById('loader').classList.remove('hidden');
+}
+
 window.addEventListener('appUnlocked', () => {
     lc_setPlatform('flipkart');
     try { 
@@ -59,18 +67,18 @@ function lc_setPlatform(platform) {
   lc_parsedData = [];
   
   if (platform === 'flipkart') {
-    document.getElementById('lc_tabFk').className = "bg-blue-600 text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(37,99,235,0.4)] cursor-pointer";
-    document.getElementById('lc_tabMs').className = "text-slate-400 bg-transparent hover:text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all cursor-pointer";
+    document.getElementById('lc_tabFk').className = "bg-blue-600 text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-md";
+    document.getElementById('lc_tabMs').className = "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all cursor-pointer";
     document.getElementById('lc_platformName').textContent = "Flipkart"; 
-    document.getElementById('lc_platformName').className = "text-blue-400 relative z-10";
-    document.getElementById('lc_dropzone').className = "border-[3px] border-dashed rounded-3xl p-8 transition-all text-center flex flex-col justify-center items-center relative border-blue-500/40 bg-blue-500/5 hover:bg-blue-500/10 cursor-pointer min-h-[280px]";
+    document.getElementById('lc_platformName').className = "text-blue-600 dark:text-blue-400 relative z-10";
+    document.getElementById('lc_dropzone').className = "border-[3px] border-dashed rounded-3xl p-8 transition-all text-center flex flex-col justify-center items-center relative border-blue-300 dark:border-blue-500/40 bg-blue-50 dark:bg-blue-500/5 hover:bg-blue-100 dark:hover:bg-blue-500/10 cursor-pointer min-h-[280px]";
     document.getElementById('lc_printFormat').innerHTML = `<option value="fk-4x6-no-inv" selected>4" x 6" Without Invoice</option><option value="fk-4x6-with-inv">4" x 6" With Invoice</option><option value="fk-3x5-no-inv">3" x 5" Without Invoice</option><option value="fk-3x5-with-inv">3" x 5" With Invoice</option>`;
   } else {
-    document.getElementById('lc_tabMs').className = "bg-pink-600 text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(219,39,119,0.4)] cursor-pointer";
-    document.getElementById('lc_tabFk').className = "text-slate-400 bg-transparent hover:text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all cursor-pointer";
+    document.getElementById('lc_tabMs').className = "bg-pink-600 text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-md";
+    document.getElementById('lc_tabFk').className = "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all cursor-pointer";
     document.getElementById('lc_platformName').textContent = "Meesho"; 
-    document.getElementById('lc_platformName').className = "text-pink-400 relative z-10";
-    document.getElementById('lc_dropzone').className = "border-[3px] border-dashed rounded-3xl p-8 transition-all text-center flex flex-col justify-center items-center relative border-pink-500/40 bg-pink-500/5 hover:bg-pink-500/10 cursor-pointer min-h-[280px]";
+    document.getElementById('lc_platformName').className = "text-pink-600 dark:text-pink-400 relative z-10";
+    document.getElementById('lc_dropzone').className = "border-[3px] border-dashed rounded-3xl p-8 transition-all text-center flex flex-col justify-center items-center relative border-pink-300 dark:border-pink-500/40 bg-pink-50 dark:bg-pink-500/5 hover:bg-pink-100 dark:hover:bg-pink-500/10 cursor-pointer min-h-[280px]";
     document.getElementById('lc_printFormat').innerHTML = `<option value="ms-3x5-no-inv" selected>3" x 5" Without Invoice</option><option value="ms-3x5-with-inv">3" x 5" With Invoice</option><option value="ms-4x4-with-inv">4" x 4" With Invoice</option><option value="ms-4x6-with-inv">4" x 6" With Store Link</option>`;
   }
 }
@@ -94,8 +102,8 @@ function lc_updateUI() {
       document.getElementById('lc_processBtnText').textContent = `Process ${lc_rawFiles.length} File(s)`;
       lc_rawFiles.forEach(item => {
           const div = document.createElement('div'); 
-          div.className = "flex items-center justify-between bg-slate-950 px-3 py-2 rounded-lg text-xs border border-slate-700 shadow-sm";
-          div.innerHTML = `<span class="truncate font-bold text-white max-w-[200px]">${item.name}</span><button type="button" onclick="lc_removeFile('${item.id}')" class="text-rose-400 px-2 py-0.5 rounded bg-rose-500/10 border border-rose-500/20">✕</button>`; 
+          div.className = "flex items-center justify-between bg-white dark:bg-slate-950 px-3 py-2 rounded-lg text-xs border border-slate-200 dark:border-slate-700 shadow-sm";
+          div.innerHTML = `<span class="truncate font-bold text-slate-800 dark:text-white max-w-[200px]">${item.name}</span><button type="button" onclick="lc_removeFile('${item.id}')" class="text-rose-500 dark:text-rose-400 px-2 py-0.5 rounded bg-rose-100 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20">✕</button>`; 
           list.appendChild(div);
       });
   } else { 
@@ -298,6 +306,7 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
   try {
       lc_parsedData = []; 
       document.getElementById('lc_results').classList.add('hidden'); 
+      document.getElementById('loaderBarContainer').classList.remove('hidden');
       document.getElementById('loader').classList.remove('hidden'); 
       document.getElementById('lc_processBtn').disabled = true;
       updateProgress(0, "Loading PDF documents...");
@@ -305,10 +314,7 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
       const docs = [];
       let totalPages = 0;
 
-      // Sequential Load to save RAM on i3
       for (let i = 0; i < lc_rawFiles.length; i++) {
-          updateProgress(10 + (i / lc_rawFiles.length) * 10, `Loading File ${i + 1}/${lc_rawFiles.length} into Memory...`);
-          await new Promise(r => setTimeout(r, 10)); // Yield
           const buf = await lc_readFile(lc_rawFiles[i].file);
           const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
           docs.push(pdf);
@@ -317,7 +323,6 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
 
       let completedPages = 0;
 
-      // Micro-Batching to prevent CPU hang
       for (let fIdx = 0; fIdx < docs.length; fIdx++) {
           const pdf = docs[fIdx];
           for (let pIdx = 1; pIdx <= pdf.numPages; pIdx++) {
@@ -338,6 +343,7 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
                   fkPos: data.fkGstin, msPos: data.msGap,
                   sku: data.sku, qty: data.qty, courier: data.courier, soldBy: data.soldBy
               });
+
               completedPages++;
           }
       }
@@ -355,6 +361,7 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
   }
 });
 
+// Instant Generation without Progress Yielding Loop
 async function lc_generatePdf() {
   const { PDFDocument, rgb, StandardFonts } = PDFLib; 
   const outDoc = await PDFDocument.create(); 
@@ -369,18 +376,10 @@ async function lc_generatePdf() {
   const incSum = document.getElementById('lc_includeSummary').checked; 
   const margin = 1 * 2.83465;
   
-  document.getElementById('loader').classList.remove('hidden');
-  updateProgress(5, "Initializing Compiler...");
+  showSimpleSpinner("Compiling PDF Engine (Please wait...)");
+  await new Promise(r => setTimeout(r, 50)); // One single yield to paint the loading spinner
 
-  // Load sequentially to prevent memory crash during generation
-  const srcDocs = [];
-  for (let i = 0; i < lc_rawFiles.length; i++) {
-      updateProgress(5 + (i / lc_rawFiles.length) * 5, `Compiling Engine: ${i + 1}/${lc_rawFiles.length}...`);
-      await new Promise(r => setTimeout(r, 0));
-      const buf = await lc_readFile(lc_rawFiles[i].file);
-      const doc = await PDFDocument.load(buf);
-      srcDocs.push(doc);
-  }
+  const srcDocs = await Promise.all(lc_rawFiles.map(async f => await PDFDocument.load(await lc_readFile(f.file))));
   
   let logo = null;
   try { 
@@ -400,15 +399,8 @@ async function lc_generatePdf() {
   };
   const sortedData = [...lc_parsedData.filter(i => !isMulti(i)).sort(sortFn), ...lc_parsedData.filter(i => isMulti(i)).sort(sortFn)];
 
+  // Fast loop, no interruptions
   for (let i = 0; i < sortedData.length; i++) {
-      
-      // Micro-Yield to prevent UI Freeze
-      if (i % 10 === 0 || i === sortedData.length - 1) {
-          const genPercent = 10 + ((i + 1) / sortedData.length) * 85;
-          updateProgress(genPercent, `Rendering PDF: ${Math.round(genPercent)}%`);
-          await new Promise(r => setTimeout(r, 0));
-      }
-
       const item = sortedData[i];
       const doc = srcDocs[item.fileIndex]; 
       const srcPage = doc.getPage(item.pageIndex);
@@ -490,9 +482,6 @@ async function lc_generatePdf() {
   }
 
   if (incSum) {
-    updateProgress(96, "Generating Master Packing Slips...");
-    await new Promise(r => setTimeout(r, 0));
-
     let sp = outDoc.addPage([216, 360]); let y = 345; const skus = {}; const couriers = {}; const sellers = {};
     lc_parsedData.forEach(item => {
         if (!couriers[item.courier]) { couriers[item.courier] = 0; } couriers[item.courier] += 1;
@@ -542,9 +531,6 @@ async function lc_generatePdf() {
     });
   }
 
-  updateProgress(98, "Finalizing Document (This may take a moment)...");
-  await new Promise(r => setTimeout(r, 10)); // Yield before the heavy save operation
-  
   const pdfBytes = await outDoc.save(); 
   
   if(window.appState.currentUser && db) {
@@ -624,10 +610,10 @@ function lc_renderRecoveryList(items) {
     panel.classList.remove('hidden');
     items.forEach(item => {
         const timeStr = new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); 
-        const pColor = item.platform === 'flipkart' ? 'text-blue-400' : 'text-pink-400'; 
+        const pColor = item.platform === 'flipkart' ? 'text-blue-600 dark:text-blue-400' : 'text-pink-600 dark:text-pink-400'; 
         const li = document.createElement('li'); 
-        li.className = "flex justify-between items-center bg-slate-900 border border-slate-700 shadow-sm p-4 rounded-xl";
-        li.innerHTML = `<div><span class="font-black text-sm uppercase ${pColor}">${item.platform}</span><span class="text-[10px] font-bold text-slate-400 ml-2 bg-slate-800 px-2 py-0.5 rounded">${timeStr}</span><div class="text-xs font-bold text-slate-300 mt-1">${item.totalOrders} Orders | ${item.totalPieces} Items</div></div><div class="flex gap-2"><button onclick="lc_handleRecovery(${item.id}, 'preview')" class="bg-slate-800 text-white text-[10px] font-black uppercase px-3 py-2 rounded-lg border border-slate-600 hover:bg-slate-700 transition-colors">Preview</button><button onclick="lc_handleRecovery(${item.id}, 'download')" class="bg-emerald-500 text-white text-[10px] font-black uppercase px-3 py-2 rounded-lg hover:bg-emerald-400 transition-colors">Save</button><button onclick="lc_handleRecovery(${item.id}, 'delete')" class="bg-rose-500/20 text-rose-400 text-[10px] font-black uppercase px-3 py-2 rounded-lg border border-rose-500/30 hover:bg-rose-500 hover:text-white transition-colors">✕</button></div>`; 
+        li.className = "flex justify-between items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-sm p-4 rounded-xl";
+        li.innerHTML = `<div><span class="font-black text-sm uppercase ${pColor}">${item.platform}</span><span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 ml-2 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded">${timeStr}</span><div class="text-xs font-bold text-slate-800 dark:text-slate-300 mt-1">${item.totalOrders} Orders | ${item.totalPieces} Items</div></div><div class="flex gap-2"><button onclick="lc_handleRecovery(${item.id}, 'preview')" class="bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-white text-[10px] font-black uppercase px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">Preview</button><button onclick="lc_handleRecovery(${item.id}, 'download')" class="bg-emerald-500 text-white text-[10px] font-black uppercase px-3 py-2 rounded-lg hover:bg-emerald-600 dark:hover:bg-emerald-400 transition-colors">Save</button><button onclick="lc_handleRecovery(${item.id}, 'delete')" class="bg-rose-100 dark:bg-rose-500/20 text-rose-500 dark:text-rose-400 text-[10px] font-black uppercase px-3 py-2 rounded-lg border border-rose-200 dark:border-rose-500/30 hover:bg-rose-500 hover:text-white transition-colors">✕</button></div>`; 
         list.appendChild(li);
     });
 }
