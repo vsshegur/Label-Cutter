@@ -362,7 +362,7 @@ document.getElementById('lc_processBtn').addEventListener('click', async () => {
   }
 });
 
-// Generation Phase (Memory Safe for i3 Processor)
+// RAM-Safe Generation Phase 
 async function lc_generatePdf() {
   const { PDFDocument, rgb, StandardFonts } = PDFLib; 
   const outDoc = await PDFDocument.create(); 
@@ -377,15 +377,18 @@ async function lc_generatePdf() {
   const incSum = document.getElementById('lc_includeSummary').checked; 
   const margin = 1 * 2.83465;
   
-  showSimpleSpinner("Compiling PDF Engine...");
-  await new Promise(r => setTimeout(r, 50)); 
+  document.getElementById('loaderBarContainer').classList.remove('hidden');
+  document.getElementById('loader').classList.remove('hidden');
+  updateProgress(0, "Loading Memory Safely...");
 
-  // Sequential loading to prevent RAM spikes on old hardware
+  // Sequential loading with UI updates to prevent RAM crashing and browser freezing
   const srcDocs = [];
   for (let i = 0; i < lc_rawFiles.length; i++) {
-      if (i % 2 === 0) await new Promise(r => setTimeout(r, 0)); 
+      updateProgress((i / lc_rawFiles.length) * 10, `Loading File ${i + 1} of ${lc_rawFiles.length}...`);
+      await new Promise(r => setTimeout(r, 10)); // Force UI to update
+      
       const buf = await lc_readFile(lc_rawFiles[i].file);
-      const doc = await PDFDocument.load(buf);
+      const doc = await PDFDocument.load(buf, { ignoreEncryption: true }); 
       srcDocs.push(doc);
   }
   
@@ -412,8 +415,12 @@ async function lc_generatePdf() {
   const sortedData = [...lc_parsedData.filter(i => !isMulti(i)).sort(sortFn), ...lc_parsedData.filter(i => isMulti(i)).sort(sortFn)];
 
   for (let i = 0; i < sortedData.length; i++) {
-      // Small yield to keep browser alive
-      if (i % 50 === 0) await new Promise(r => setTimeout(r, 0));
+      // Light yield to prevent UI Freeze during generation
+      if (i % 25 === 0) {
+          const genPercent = 10 + ((i + 1) / sortedData.length) * 85;
+          updateProgress(genPercent, `Rendering PDF: ${Math.round(genPercent)}%`);
+          await new Promise(r => setTimeout(r, 0));
+      }
 
       const item = sortedData[i];
       const doc = srcDocs[item.fileIndex]; 
@@ -439,8 +446,9 @@ async function lc_generatePdf() {
           p.drawRectangle({ x: margin, y: margin, width: printableW, height: bannerH, color: rgb(0.97, 0.97, 0.97), borderColor: rgb(0.8, 0.8, 0.8), borderWidth: 1 });
           
           let storeUrl = "";
-          if (window.appState && window.appState.storeLinks) {
-              const matchedStore = window.appState.storeLinks.find(s => new RegExp(s.name, 'i').test(item.soldBy));
+          if (window.appState && window.appState.storeLinks && item.soldBy) {
+              const cleanedSeller = item.soldBy.toLowerCase();
+              const matchedStore = window.appState.storeLinks.find(s => cleanedSeller.includes(s.name.toLowerCase()));
               if (matchedStore) storeUrl = matchedStore.url;
           }
           
@@ -504,6 +512,9 @@ async function lc_generatePdf() {
   }
 
   if (incSum) {
+    updateProgress(96, "Generating Master Packing Slips...");
+    await new Promise(r => setTimeout(r, 0));
+
     let sp = outDoc.addPage([216, 360]); let y = 345; const skus = {}; const couriers = {}; const sellers = {};
     lc_parsedData.forEach(item => {
         if (!couriers[item.courier]) { couriers[item.courier] = 0; } couriers[item.courier] += 1;
@@ -553,8 +564,8 @@ async function lc_generatePdf() {
     });
   }
 
-  showSimpleSpinner("Finalizing PDF...");
-  await new Promise(r => setTimeout(r, 50)); 
+  updateProgress(98, "Finalizing Document (This may take a moment)...");
+  await new Promise(r => setTimeout(r, 10)); // Yield before heavy save operation
   
   const pdfBytes = await outDoc.save(); 
   
