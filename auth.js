@@ -3,7 +3,7 @@ import { signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstati
 import { doc, getDoc, setDoc, updateDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 const ADMIN_EMAIL = "vsshegur@gmail.com";
-window.appState = { userSkus: {}, isUnlocked: false, currentUser: null, currentApp: 'labelCutter' };
+window.appState = { userSkus: {}, storeLinks: [], isUnlocked: false, currentUser: null, currentApp: 'labelCutter', userPlan: {} };
 
 document.getElementById('appSelector').addEventListener('change', (e) => {
     if (!window.appState.isUnlocked) return;
@@ -11,6 +11,7 @@ document.getElementById('appSelector').addEventListener('change', (e) => {
     document.getElementById('authPanel').classList.add('hidden');
     document.getElementById('labelWorkspace').classList.add('hidden');
     document.getElementById('fkPnlWorkspace').classList.add('hidden');
+    document.getElementById('settingsWorkspace').classList.add('hidden');
     
     if (window.appState.currentApp === 'labelCutter') { 
         document.getElementById('labelWorkspace').classList.remove('hidden'); 
@@ -19,6 +20,10 @@ document.getElementById('appSelector').addEventListener('change', (e) => {
     else if (window.appState.currentApp === 'fkPnlCalculator') { 
         document.getElementById('fkPnlWorkspace').classList.remove('hidden'); 
     } 
+    else if (window.appState.currentApp === 'settings') { 
+        document.getElementById('settingsWorkspace').classList.remove('hidden'); 
+        renderSettings();
+    }
 });
 
 document.getElementById('themeToggle').addEventListener('click', () => {
@@ -39,7 +44,12 @@ if(auth) {
             if (!userSnap.exists()) await setDoc(userRef, uData);
             else if (user.email === ADMIN_EMAIL && uData.role !== 'admin') { uData.role = 'admin'; await updateDoc(userRef, { role: 'admin' }); }
             
-            try { const memSnap = await getDoc(doc(db, 'users', user.uid, 'skus', 'memory')); if(memSnap.exists()) window.appState.userSkus = memSnap.data() || {}; } catch(e){}
+            try { 
+                const memSnap = await getDoc(doc(db, 'users', user.uid, 'skus', 'memory')); 
+                if(memSnap.exists()) window.appState.userSkus = memSnap.data() || {}; 
+                const storeSnap = await getDoc(doc(db, 'users', user.uid, 'stores', 'memory'));
+                if(storeSnap.exists() && storeSnap.data().links) window.appState.storeLinks = storeSnap.data().links;
+            } catch(e){}
             
             window.appState.currentUser = user;
             document.getElementById('userAvatar').src = user.photoURL || 'https://via.placeholder.com/32';
@@ -51,27 +61,21 @@ if(auth) {
             const isExpired = !isAdmin && (now > uData.expiresAt || !uData.isActive);
             const daysLeft = Math.ceil((uData.expiresAt - now) / (1000 * 60 * 60 * 24));
             
+            window.appState.userPlan = { planType: isAdmin ? "ADMIN" : uData.planType, daysLeft: isAdmin ? '∞' : daysLeft };
+            
             if (isAdmin || !isExpired) {
-                // Shows the plan AND days left for everyone
-                const planText = isAdmin ? "ADMIN" : uData.planType;
-                document.getElementById('userPlan').textContent = `${planText} • ${daysLeft} Days Left`;
-                
+                document.getElementById('userPlan').textContent = `${window.appState.userPlan.planType} • ${daysLeft} Days Left`;
                 if(isAdmin) document.getElementById('adminToggleBtn').classList.remove('hidden');
                 
-                window.appState.isUnlocked = true; 
-                document.getElementById('authPanel').classList.add('hidden'); 
-                document.getElementById('appSelectorContainer').classList.remove('hidden');
-                document.getElementById('appSelector').value = "labelCutter"; 
-                document.getElementById('labelWorkspace').classList.remove('hidden'); 
-                window.dispatchEvent(new Event('appUnlocked'));
+                window.appState.isUnlocked = true; document.getElementById('authPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.remove('hidden');
+                document.getElementById('appSelector').value = "labelCutter"; document.getElementById('labelWorkspace').classList.remove('hidden'); window.dispatchEvent(new Event('appUnlocked'));
             } else {
-                document.getElementById('userPlan').textContent = "PLAN EXPIRED"; 
-                document.getElementById('expiredWarning').classList.remove('hidden');
+                document.getElementById('userPlan').textContent = "PLAN EXPIRED"; document.getElementById('expiredWarning').classList.remove('hidden');
             }
         } else {
-            window.appState.currentUser = null; window.appState.userSkus = {}; window.appState.isUnlocked = false;
+            window.appState.currentUser = null; window.appState.userSkus = {}; window.appState.storeLinks = []; window.appState.isUnlocked = false;
             document.getElementById('authPanel').classList.remove('hidden'); document.getElementById('authWarning').classList.remove('hidden'); document.getElementById('authFeatures').classList.remove('hidden'); 
-            document.getElementById('expiredWarning').classList.add('hidden'); document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); 
+            document.getElementById('expiredWarning').classList.add('hidden'); document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); document.getElementById('settingsWorkspace').classList.add('hidden');
             document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('appSelectorContainer').classList.add('hidden'); document.getElementById('userInfo').classList.add('hidden');
             document.getElementById('googleSignInBtn').innerHTML = `Secure Login`;
         }
@@ -88,14 +92,46 @@ if(auth) {
     document.getElementById('expiredLogoutBtn').addEventListener('click', () => { signOut(auth).then(()=>location.reload()); });
 }
 
+// Settings Logic
+function renderSettings() {
+    document.getElementById('set_userName').textContent = window.appState.currentUser.displayName;
+    document.getElementById('set_userEmail').textContent = window.appState.currentUser.email;
+    document.getElementById('set_planType').textContent = window.appState.userPlan.planType;
+    document.getElementById('set_daysLeft').textContent = window.appState.userPlan.daysLeft;
+    
+    const list = document.getElementById('set_storeList');
+    list.innerHTML = '';
+    window.appState.storeLinks.forEach((store, idx) => {
+        list.innerHTML += `<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50"><td class="py-3 px-4">${store.name}</td><td class="py-3 px-4 text-blue-500">${store.url}</td><td class="py-3 px-4 text-center"><button onclick="removeStore(${idx})" class="text-rose-500 hover:text-white bg-rose-100 hover:bg-rose-500 dark:bg-rose-500/20 px-3 py-1 rounded text-[10px] font-black uppercase transition-colors">Del</button></td></tr>`;
+    });
+}
+
+document.getElementById('set_addStoreBtn').addEventListener('click', async () => {
+    const name = document.getElementById('set_storeName').value.trim();
+    const url = document.getElementById('set_storeUrl').value.trim();
+    if (name && url) {
+        window.appState.storeLinks.push({ name, url });
+        await setDoc(doc(db, 'users', window.appState.currentUser.uid, 'stores', 'memory'), { links: window.appState.storeLinks });
+        document.getElementById('set_storeName').value = ''; document.getElementById('set_storeUrl').value = '';
+        renderSettings();
+    }
+});
+
+window.removeStore = async function(idx) {
+    window.appState.storeLinks.splice(idx, 1);
+    await setDoc(doc(db, 'users', window.appState.currentUser.uid, 'stores', 'memory'), { links: window.appState.storeLinks });
+    renderSettings();
+};
+
 document.getElementById('adminToggleBtn').addEventListener('click', async () => {
     if (document.getElementById('adminPanel').classList.contains('hidden')) {
-        document.getElementById('authPanel').classList.add('hidden'); document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden');
+        document.getElementById('authPanel').classList.add('hidden'); document.getElementById('labelWorkspace').classList.add('hidden'); document.getElementById('fkPnlWorkspace').classList.add('hidden'); document.getElementById('settingsWorkspace').classList.add('hidden');
         document.getElementById('adminPanel').classList.remove('hidden'); document.getElementById('adminToggleBtn').textContent = "Back to App"; await loadAdminUsers();
     } else {
         document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('adminToggleBtn').textContent = "Admin Panel";
         if(window.appState.currentApp === 'labelCutter') document.getElementById('labelWorkspace').classList.remove('hidden'); 
         else if (window.appState.currentApp === 'fkPnlCalculator') document.getElementById('fkPnlWorkspace').classList.remove('hidden');
+        else if (window.appState.currentApp === 'settings') document.getElementById('settingsWorkspace').classList.remove('hidden');
     }
 });
 
